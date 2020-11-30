@@ -13,8 +13,8 @@
     "smtp_emails_from_email": "info@{{cookiecutter.domain_main}}",
 
     "sentry_dsn": "",
+    "_copy_without_render": [
+        "app/templates/**"
+    ]
 
-    "docker_image_prefix": "",
-
-    "docker_image_backend": "{{cookiecutter.docker_image_prefix}}backend"
 }
