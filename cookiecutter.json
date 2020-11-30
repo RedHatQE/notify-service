@@ -13,6 +13,7 @@
     "smtp_emails_from_email": "info@{{cookiecutter.domain_main}}",
 
     "sentry_dsn": "",
+    "cookiecutter.template_mount_dir": "/var/tmp",
     "_copy_without_render": [
         "app/templates/**"
     ]
