@@ -4,4 +4,4 @@ LABEL maintainer="Wayne Sun <gsun@redhat.com>"
 
 RUN pip install --no-cache-dir fastapi
 
-COPY ./app /app
+COPY ./notify-service/app /app
