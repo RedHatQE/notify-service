@@ -1,9 +1,9 @@
 from fastapi import FastAPI, Security
 from starlette.middleware.cors import CORSMiddleware
 
-from app.api.api import api_router
-from app.core.config import settings
-from app.core.security import get_api_key
+from api.api import api_router
+from core.config import settings
+from core.security import get_api_key
 
 app = FastAPI(
     title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"

@@ -5,11 +5,16 @@ name = "pypi"
 
 [packages]
 fastapi = {extras = ["all"], version = "*"}
-cookiecutter = "*"
 pydantic = "*"
 flake8 = "*"
+requests = "*"
+httpx = "*"
+gunicorn = "*"
+emails = "*"
+uvicorn = "*"
+python-jose = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.9"
+python_version = "3.8"

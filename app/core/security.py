@@ -1,7 +1,9 @@
 from fastapi import Security, status, HTTPException
 from fastapi.security.api_key import APIKeyHeader
 
-API_KEY = "1234567asdfgh"
+from core.config import settings
+
+API_KEY = settings.SECRET_KEY
 API_KEY_NAME = "X-API-KEY"
 
 api_key_header_auth = APIKeyHeader(name=API_KEY_NAME, auto_error=True)

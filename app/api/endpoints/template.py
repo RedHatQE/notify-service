@@ -7,7 +7,7 @@ from typing import Any
 
 from fastapi import APIRouter, File, UploadFile, HTTPException
 
-from app.core.config import settings
+from core.config import settings
 from app import schemas
 
 router = APIRouter()
