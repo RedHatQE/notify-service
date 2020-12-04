@@ -6,6 +6,23 @@ _pipenv () {
 	    echo "Exited with error, make sure pipenv is installed"
 }
 
+while [ $# -gt 0 ]
+do
+    case $1 in
+        --dev )
+            DEV=true
+            ;;
+        -h | --help )
+            echo "usage: start.sh [-h] [--dev]
+            options:
+            --dev       Start with --reload app dir.
+            "
+            exit 0
+            ;;
+    esac
+    shift
+done
+
 if [ -f /app/app/main.py ]; then
     DEFAULT_MODULE_NAME=app.main
 elif [ -f /app/main.py ]; then
@@ -36,4 +53,8 @@ else
 fi
 
 # Start Gunicorn
-_pipenv run gunicorn -k "$WORKER_CLASS" -c "$GUNICORN_CONF" "$APP_MODULE"
+if [[ $DEV == 'true' ]]; then
+    _pipenv run gunicorn --log-level debug --reload -k "$WORKER_CLASS" -c "$GUNICORN_CONF" "$APP_MODULE"
+else
+    _pipenv run gunicorn -k "$WORKER_CLASS" -c "$GUNICORN_CONF" "$APP_MODULE"
+fi
