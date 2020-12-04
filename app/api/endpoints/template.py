@@ -18,10 +18,11 @@ def get_template_list() -> Any:
     """
     Get template list
     """
-    tmplt_list = os.listdir(settings.EMAIL_TEMPLATES_DIR)
+    default = os.listdir(settings.EMAIL_TEMPLATES_DIR)
+    extra = []
     if settings.TEMPLATE_MOUNT_DIR:
-        tmplt_list.append(os.listdir(settings.TEMPLATE_MOUNT_DIR))
-    return {"filenames": tmplt_list}
+        extra = os.listdir(settings.TEMPLATE_MOUNT_DIR)
+    return {"default": default, "customized": extra}
 
 
 def get_file_path(path_name: str, tmplt_name: str) -> str:
@@ -45,7 +46,7 @@ def read_file(path_name: str) -> str:
 
 
 @router.get("/{tmplt_name}")
-def get_template() -> Any:
+def get_template(tmplt_name: str) -> Any:
     """
     Get template content with tmplate name without postfix
     """
@@ -63,7 +64,7 @@ def get_template() -> Any:
 
 
 @router.put("/{tmplt_name}")
-def update_template(tmplt: UploadFile = File(...)) -> Any:
+def update_template(tmplt_name: str, tmplt: UploadFile = File(...)) -> Any:
     """
     Create or update a template under template mount dir
     """
