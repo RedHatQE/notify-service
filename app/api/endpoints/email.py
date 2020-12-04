@@ -23,6 +23,9 @@ def send_email(
     """
     Send email with template
     """
+    if "project_name" not in environment:
+        environment["project_name"] = settings.PROJECT_NAME
+
     if template_url:
         r = requests.get(template_url)
         r.raise_for_status()
@@ -33,18 +36,16 @@ def send_email(
             template_dir.append(settings.TEMPLATE_MOUNT_DIR)
         jinja_env = jinja2.Environment(
             loader=jinja2.FileSystemLoader(template_dir))
-        template = jinja_env.get_template(template_name + '.html')
+        template = jinja_env.get_template(template_name + '.html').render(environment)
+        environment = {}
 
     if not template:
         raise HTTPException(
             status_code=400,
             detail="The given template is empty")
 
-    if "project_name" not in environment:
-        environment["project_name"] = settings.PROJECT_NAME
-
     utils.send_email(
             email_to=email_to, subject_template=subject,
-            html_template=template.render(environment))
+            html_template=template, environment=environment)
 
     return {"msg": "Email have been sent"}
