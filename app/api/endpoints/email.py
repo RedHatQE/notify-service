@@ -17,11 +17,15 @@ def send_email(
     email_to: EmailStr,
     subject: str = "",
     template_name: str = "default",
-    environment: Dict[str, Any] = {},
+    environment: Dict[str, Any] = {"body": {}},
     template_url: Optional[AnyHttpUrl] = None
         ) -> Any:
     """
     Send email with template
+
+    - **email_to**: email address, required
+    - **template_name**: template name in local template list, default is "default"
+    - **template_url**: template url, optional
     """
     if "project_name" not in environment:
         environment["project_name"] = settings.PROJECT_NAME
