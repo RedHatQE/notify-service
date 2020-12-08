@@ -8,7 +8,7 @@ from typing import Any
 from fastapi import APIRouter, File, UploadFile, HTTPException
 
 from core.config import settings
-from app import schemas
+from app.utils import get_file_path, read_file
 
 router = APIRouter()
 
@@ -23,26 +23,6 @@ def get_template_list() -> Any:
     if settings.TEMPLATE_MOUNT_DIR:
         extra = os.listdir(settings.TEMPLATE_MOUNT_DIR)
     return {"default": default, "customized": extra}
-
-
-def get_file_path(path_name: str, tmplt_name: str) -> str:
-    """
-    Check file exist and return file path
-    """
-    for root, _, files in os.walk(path_name, topdown=False):
-        file_list = [i.split(".")[0] for i in files]
-        if tmplt_name in file_list:
-            return os.path.join(root, files[file_list.index(tmplt_name)])
-    return None
-
-
-def read_file(path_name: str) -> str:
-    """
-    Read file with given path
-    """
-    with open(path_name) as f:
-        tmplt = f.read()
-    return tmplt
 
 
 @router.get("/{tmplt_name}")

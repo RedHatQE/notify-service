@@ -1,3 +1,4 @@
+import os
 import logging
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -16,6 +17,26 @@ from core.config import settings
 async def request_get(url: HttpUrl):
     async with httpx.AsyncClient() as client:
         return await client.get(url)
+
+
+def get_file_path(path_name: str, tmplt_name: str) -> str:
+    """
+    Check file exist and return file path
+    """
+    for root, _, files in os.walk(path_name, topdown=False):
+        file_list = [i.split(".")[0] for i in files]
+        if tmplt_name in file_list:
+            return os.path.join(root, files[file_list.index(tmplt_name)])
+    return None
+
+
+def read_file(path_name: str) -> str:
+    """
+    Read file with given path
+    """
+    with open(path_name) as f:
+        tmplt = f.read()
+    return tmplt
 
 
 def send_email(
