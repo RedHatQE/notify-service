@@ -19,7 +19,7 @@ def send_email(
     template_name: str = "default",
     environment: Dict[str, Any] = {"body": {}},
     template_url: Optional[AnyHttpUrl] = None
-        ) -> Any:
+) -> Any:
     """
     Send email with template
 
@@ -49,7 +49,7 @@ def send_email(
             detail="The given template is empty")
 
     utils.send_email(
-            email_to=email_to, subject_template=subject,
-            html_template=template, environment=environment)
+        email_to=email_to, subject_template=subject,
+        html_template=template, environment=environment)
 
     return {"msg": "Email have been sent"}
