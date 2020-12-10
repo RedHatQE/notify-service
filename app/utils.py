@@ -11,7 +11,7 @@ from jose import jwt
 
 import httpx
 
-from core.config import settings
+from app.core.config import settings
 
 
 async def request_get(url: HttpUrl):

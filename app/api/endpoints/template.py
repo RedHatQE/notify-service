@@ -7,7 +7,7 @@ from typing import Any
 
 from fastapi import APIRouter, File, UploadFile, HTTPException
 
-from core.config import settings
+from app.core.config import settings
 from app.utils import get_file_path, read_file
 
 router = APIRouter()

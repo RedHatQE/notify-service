@@ -1,3 +1,4 @@
+import os
 import secrets
 from typing import Any, Dict, List, Optional, Union
 
@@ -48,7 +49,8 @@ class Settings(BaseSettings):
         return v
 
     EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
-    EMAIL_TEMPLATES_DIR: str = "/app/templates/build"
+    os.getcwdb()
+    EMAIL_TEMPLATES_DIR: str = os.path.join(os.getcwdb().decode(), "app/templates/build")
     EMAILS_ENABLED: bool = True
 
     TEMPLATE_MOUNT_DIR: Optional[str] = None

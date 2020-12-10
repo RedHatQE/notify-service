@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from api.endpoints import email, chat, irc, message_bus, sms, template, utils
+from app.api.endpoints import email, chat, irc, message_bus, sms, template, utils
 
 api_router = APIRouter()
 api_router.include_router(email.router, prefix="/email", tags=["email"])
