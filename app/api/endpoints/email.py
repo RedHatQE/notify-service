@@ -1,4 +1,3 @@
-import requests
 import jinja2
 
 from typing import Any, Optional, Dict
@@ -31,9 +30,7 @@ def send_email(
         environment["project_name"] = settings.PROJECT_NAME
 
     if template_url:
-        r = requests.get(template_url)
-        r.raise_for_status()
-        template = r.text
+        template = utils._request_get(template_url)
     else:
         template_dir = [settings.EMAIL_TEMPLATES_DIR]
         if settings.TEMPLATE_MOUNT_DIR:

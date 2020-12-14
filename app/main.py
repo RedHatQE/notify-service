@@ -1,4 +1,8 @@
+import aioredis
+
 from fastapi import FastAPI, Security
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
 from starlette.middleware.cors import CORSMiddleware
 
 from app.api.api import api_router
@@ -20,3 +24,8 @@ if settings.BACKEND_CORS_ORIGINS:
     )
 
 app.include_router(api_router, prefix=settings.API_V1_STR, dependencies=[Security(get_api_key)])
+
+@app.on_event("startup")
+async def startup():
+    redis = await aioredis.create_redis_pool(settings.REDIS_URI, password=settings.REDIS_PASSWORD, encoding="utf8")
+    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")

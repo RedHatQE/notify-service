@@ -13,6 +13,8 @@ gunicorn = "*"
 emails = "*"
 uvicorn = "*"
 python-jose = "*"
+fastapi-cache2 = {extras = ["redis"], version = "*"}
+aioredis = "*"
 
 [dev-packages]
 

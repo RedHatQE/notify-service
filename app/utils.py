@@ -1,15 +1,17 @@
-import os
-import logging
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Any, Dict, Optional
-from pydantic import HttpUrl
-
 import emails
-from emails.template import JinjaTemplate
-from jose import jwt
-
 import httpx
+import logging
+import os
+import requests
+
+from datetime import datetime, timedelta
+from emails.template import JinjaTemplate
+from fastapi_cache.decorator import cache
+from jose import jwt
+from pathlib import Path
+from pydantic import HttpUrl
+from typing import Any, Dict, Optional
+
 
 from app.core.config import settings
 
@@ -17,6 +19,16 @@ from app.core.config import settings
 async def request_get(url: HttpUrl):
     async with httpx.AsyncClient() as client:
         return await client.get(url)
+
+
+@cache(expire=300)
+def _request_get(url: HttpUrl) -> str:
+    """
+    Request url and return body text
+    """
+    r = requests.get(url)
+    r.raise_for_status()
+    return r.text
 
 
 def get_file_path(path_name: str, tmplt_name: str) -> str:

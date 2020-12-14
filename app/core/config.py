@@ -2,7 +2,7 @@ import os
 import secrets
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr, HttpUrl, validator
+from pydantic import AnyHttpUrl, BaseSettings, EmailStr, HttpUrl, validator, RedisDsn
 
 
 class Settings(BaseSettings):
@@ -64,6 +64,9 @@ class Settings(BaseSettings):
         )
 
     EMAIL_TEST_USER: EmailStr = "test@example.com"  # type: ignore
+
+    REDIS_URI: RedisDsn
+    REDIS_PASSWORD: Optional[str] = None
 
     class Config:
         case_sensitive = True
