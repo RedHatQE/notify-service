@@ -12,7 +12,7 @@ router = APIRouter()
 
 
 @router.post("/", response_model=schemas.Msg)
-def send_email(
+async def send_email(
     email_to: EmailStr,
     subject: str = "",
     template_name: str = "default",
@@ -30,7 +30,7 @@ def send_email(
         environment["project_name"] = settings.PROJECT_NAME
 
     if template_url:
-        template = utils._request_get(template_url)
+        template = await utils.request_get_text(template_url)
     else:
         template_dir = [settings.EMAIL_TEMPLATES_DIR]
         if settings.TEMPLATE_MOUNT_DIR:
