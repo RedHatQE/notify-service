@@ -30,7 +30,7 @@ async def send_email(
         environment["project_name"] = settings.PROJECT_NAME
 
     if template_url:
-        template = await utils.request_get_text(template_url)
+        template = await utils.request_get_text(url=template_url)
     else:
         template_dir = [settings.EMAIL_TEMPLATES_DIR]
         if settings.TEMPLATE_MOUNT_DIR:
