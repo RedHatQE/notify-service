@@ -9,6 +9,7 @@ This is a backend service build with FastAPI.
   - Python 3.8
   - Pipenv
   - Podman, buildah on Linux host
+  - Redis
 
 Check Pipfile for python packages.
 
@@ -42,15 +43,27 @@ SMTP related config:
     EMAILS_FROM_NAME: str, service name, e.g. Notify Service
     EMAILS_FROM_EMAIL: email address, required
 
+Redis config:
+
+    REDIS_URI: redis uri, required, e.g. redis://${host_ip}:${redis_port}
+    REDIS_PASSWORD: redis password if server is configured with password, default to None
+
 Template mount dir:
 
     TEMPLATE_MOUNT_DIR: target dir where extra templates could be provided or uploaded to, default to /var/tmp
 
 # Run with Podman
 
+Start Redis server at local:
+
+    $ buildah pull centos7/redis-5-centos7
+    $ podman run -d --name redis -e REDIS_PASSWORD=${REDIS_PASSWORD} -p 35525:6379 quay.io/centos7/redis-5-centos7
+
+**Note**: 35525 is the redis port exposed on the host, and for rootless container to access the redis, the Redis URI will be redis://${host_ip}:35525
+
 Run with production image:
 
-    $ podman run --name notify --env-file dev.env --volume ./extra-template:/var/tmp:Z --volume ./app:/app:Z -p 8080:80 -t localhost/notify-service:base
+    $ podman run -d --name notify --env-file dev.env --volume ./extra-template:/var/tmp:Z -p 8080:80 -t localhost/notify-service:base
 
 Run dev image:
 
