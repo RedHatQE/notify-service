@@ -44,11 +44,11 @@ def get_template(tmplt_name: str) -> Any:
 
 
 @router.put("/{tmplt_name}")
-def update_template(tmplt_name: str, tmplt: UploadFile = File(...)) -> Any:
+def update_template(tmplt_name: str, suffix: str = '.html', tmplt: UploadFile = File(...)) -> Any:
     """
     Create or update a template under template mount dir
     """
-    destination = Path(settings.TEMPLATE_MOUNT_DIR).joinpath(tmplt_name + '.html')
+    destination = Path(settings.TEMPLATE_MOUNT_DIR).joinpath(tmplt_name + suffix)
     try:
         with destination.open("wb") as f:
             shutil.copyfileobj(tmplt.file, f)
