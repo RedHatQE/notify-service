@@ -15,6 +15,9 @@ uvicorn = "*"
 python-jose = "*"
 fastapi-cache2 = {extras = ["redis"], version = "*"}
 aioredis = "*"
+aiofile = "*"
+pytest = "*"
+pytest-dotenv = "*"
 
 [dev-packages]
 
