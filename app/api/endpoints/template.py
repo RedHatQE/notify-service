@@ -26,17 +26,17 @@ def get_template_list() -> Any:
 
 
 @router.get("/{tmplt_name}")
-def get_template(tmplt_name: str) -> Any:
+async def get_template(tmplt_name: str) -> Any:
     """
     Get template content with tmplate name without postfix
     """
     file_path = get_file_path(settings.TEMPLATE_MOUNT_DIR, tmplt_name)
     if file_path:
-        return {tmplt_name: read_file(file_path)}
+        return {tmplt_name: await read_file(file_path)}
 
     file_path = get_file_path(settings.EMAIL_TEMPLATES_DIR, tmplt_name)
     if file_path:
-        return {tmplt_name: read_file(file_path)}
+        return {tmplt_name: await read_file(file_path)}
 
     raise HTTPException(
         status_code=400,

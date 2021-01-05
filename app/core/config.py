@@ -68,6 +68,8 @@ class Settings(BaseSettings):
     REDIS_URI: RedisDsn
     REDIS_PASSWORD: Optional[str] = None
 
+    CHAT_WEBHOOK_URL: Optional[AnyHttpUrl] = None
+
     class Config:
         case_sensitive = True
 

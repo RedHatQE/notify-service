@@ -1,3 +1,4 @@
+import aiofile
 import emails
 import httpx
 import logging
@@ -6,18 +7,19 @@ import os
 from datetime import datetime, timedelta
 from emails.template import JinjaTemplate
 from fastapi_cache.decorator import cache
+from fastapi import HTTPException
 from jose import jwt
+from jinja2 import BaseLoader, Environment, FileSystemLoader
 from pathlib import Path
-from pydantic import HttpUrl
+from pydantic.networks import AnyHttpUrl
 from typing import Any, Dict, Optional
-
 
 from app.core.config import settings
 
 
 @cache(expire=300)
-async def request_get_text(url: HttpUrl):
-    async with httpx.AsyncClient() as client:
+async def request_get_text(url: AnyHttpUrl):
+    async with httpx.AsyncClient(verify=False) as client:
         r = await client.get(url)
         return r.text
 
@@ -33,12 +35,37 @@ def get_file_path(path_name: str, tmplt_name: str) -> str:
     return None
 
 
-def read_file(path_name: str) -> str:
+async def get_template(name: str, url: Optional[AnyHttpUrl] = None,
+                       suffix: str = '.html', env: Optional[Dict] = None) -> str:
+    """
+    Get template from http url or local file and render
+    """
+    if url:
+        r = await request_get_text(url=url)
+        template = Environment(loader=BaseLoader()).from_string(r).render(env)
+    else:
+        template_dir = [settings.EMAIL_TEMPLATES_DIR]
+        if settings.TEMPLATE_MOUNT_DIR:
+            template_dir.append(settings.TEMPLATE_MOUNT_DIR)
+        jinja_env = Environment(
+            loader=FileSystemLoader(template_dir))
+        template = jinja_env.get_template(name + suffix).render(env)
+
+    if not template:
+        raise HTTPException(
+            status_code=400,
+            detail="The given template is empty")
+
+    return template
+
+
+@cache(expire=5)
+async def read_file(path_name: str) -> str:
     """
     Read file with given path
     """
-    with open(path_name) as f:
-        tmplt = f.read()
+    async with aiofile.async_open(path_name, 'r') as f:
+        tmplt = await f.read()
     return tmplt
 
 
