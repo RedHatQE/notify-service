@@ -13,6 +13,7 @@ router = APIRouter()
 
 @router.post("/", response_model=schemas.Msg)
 async def send_message(
+    target: Optional[str] = "gchat",
     subject: str = "",
     template_name: str = "chat_default",
     environment: Dict[str, Any] = {"body": ""},
@@ -22,16 +23,21 @@ async def send_message(
     """
     Send chat message with template
 
+    - **subject**: chat message subject
+    - **target**: target chat app, gchat or slack, optional, default is "gchat"
     - **webhook_url**: chat webhook url address, optional
     - **template_name**: template name in local template list, default is "default"
     - **template_url**: template url, optional
     """
     if "project_name" not in environment:
-        subject = "*" + settings.PROJECT_NAME + "* " + subject
+        subject = " ".join((settings.PROJECT_NAME, subject))
     else:
-        subject = "*" + environment["project_name"] + "* " + subject
+        subject = " ".join((environment["project_name"], subject))
 
-    environment["body"] = "\n".join((subject, environment["body"]))
+    if "body" in environment:
+        environment["body"] = "\n".join((subject, environment["body"]))
+    else:
+        environment["subject"] = subject
 
     headers = {'Content-Type': 'application/json; charset=UTF-8'}
     data = await utils.get_template(template_name, template_url, '.jinja', environment)
@@ -39,8 +45,15 @@ async def send_message(
 
     if webhook_url:
         url = webhook_url
+    elif target.upper() == "GCHAT":
+        url = settings.GCHAT_WEBHOOK_URL
+    elif target.upper() == "SLACK":
+        url = settings.SLACK_WEBHOOK_URL
     else:
-        url = settings.CHAT_WEBHOOK_URL
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="webhook_url, GCHAT_WEBHOOK_URL or SLACK_WEBHOOK_URL is not provided."
+        )
 
     async with httpx.AsyncClient() as client:
         r = await client.post(url, headers=headers, data=data)
