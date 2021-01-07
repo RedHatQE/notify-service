@@ -11,4 +11,6 @@ RUN pip install pip pipenv && \
     pipenv install --deploy --ignore-pipfile
 
 COPY ./app /app
+EXPOSE 80
+EXPOSE 443
 CMD ["/start.sh", "--dev"]
