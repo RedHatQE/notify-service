@@ -1,8 +1,6 @@
-import jinja2
-
 from typing import Any, Optional, Dict
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from pydantic.networks import AnyHttpUrl, EmailStr
 
 from app.core.config import settings
@@ -29,24 +27,10 @@ async def send_email(
     if "project_name" not in environment:
         environment["project_name"] = settings.PROJECT_NAME
 
-    if template_url:
-        template = await utils.request_get_text(url=template_url)
-    else:
-        template_dir = [settings.EMAIL_TEMPLATES_DIR]
-        if settings.TEMPLATE_MOUNT_DIR:
-            template_dir.append(settings.TEMPLATE_MOUNT_DIR)
-        jinja_env = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(template_dir))
-        template = jinja_env.get_template(template_name + '.html').render(environment)
-        environment = {}
-
-    if not template:
-        raise HTTPException(
-            status_code=400,
-            detail="The given template is empty")
+    data = await utils.get_template(template_name, template_url, '.html', environment)
 
     utils.send_email(
         email_to=email_to, subject_template=subject,
-        html_template=template, environment=environment)
+        html_template=data, environment={})
 
     return {"msg": "Email have been sent"}
