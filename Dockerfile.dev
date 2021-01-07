@@ -1,4 +1,4 @@
-FROM tiangolo/uvicorn-gunicorn:python3.8
+FROM quay.io/waynesun09/uvicorn-gunicorn:python3.8
 
 LABEL maintainer="Wayne Sun <gsun@redhat.com>"
 
