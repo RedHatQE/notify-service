@@ -4,87 +4,75 @@ Notify service with multiple supported target
 
 This is a backend service build with FastAPI.
 
-# Requirement
+## Requirement
 
   - Python 3.8
   - Pipenv
   - Podman, buildah on Linux host
+  - Helm 3
   - Redis
 
 Check Pipfile for python packages.
 
-# Setup
+## Deploy with Helm
 
-## Build container image
+### Update Helm chart value
 
-Build production image with:
+Make a copy of the `chart/values.yaml`, e.g. dev.value.yaml and update.
 
-    $ buildah bud -f Dockerfile -t notify-service:base
+Update api key:
 
-Build dev image with:
-
-    $ buildah bud -f Dockerfile.dev -t notify-service:dev
-
-## Update .env
-
-Make a copy of the env file and update the parameters.
-
-Auth API key:
-
-    SECRET_KEY: The API key to authenticate and access the apis, you could generate one with cmd `$openssl rand -hex 32`
+    apiKeyValue: The API key to authenticate and access the apis, you could generate one with cmd `$openssl rand -hex 32`
 
 SMTP related config:
 
-    SMTP_TLS: default to True
-    SMTP_PORT: str, required
-    SMTP_HOST: str, required
-    SMTP_USER: str, optional
-    SMTP_PASSWORD: str, optional
-    EMAILS_FROM_NAME: str, service name, e.g. Notify Service
-    EMAILS_FROM_EMAIL: email address, required
+    smtp.endpoint.enableTls: default to True
+    smtp.endpoint.port: int, required
+    smtp.endpoint.host: str, required
+    smtp.endpoint.user: str, optional
+    smtp.endpoint.password: str, optional
 
-Redis config:
+Email related config:
 
-    REDIS_URI: redis uri, required, e.g. redis://${host_ip}:${redis_port}
-    REDIS_PASSWORD: redis password if server is configured with password, default to None
+    fromName: str, service name, e.g. Notify Service
+    fromEmail: str, the email from
 
-Template mount dir:
+Chat Webhook URL:
 
-    TEMPLATE_MOUNT_DIR: target dir where extra templates could be provided or uploaded to, default to /var/tmp
+    chatWebhook.gchat:
+    chatWebhook.slack:
 
-# Run with Podman
+If deploy to Openshift (default) update OpenShift route url:
 
-Start Redis server at local:
+    openshift.enable: true
+    openshift.hosts:
 
-    $ buildah pull centos7/redis-5-centos7
-    $ podman run -d --name redis -e REDIS_PASSWORD=${REDIS_PASSWORD} -p 35525:6379 quay.io/centos7/redis-5-centos7
+or else update the ingress part.
 
-**Note**: 35525 is the redis port exposed on the host, and for rootless container to access the redis, the Redis URI will be redis://${host_ip}:35525
+### Run helm install
 
-Run with production image:
+Make sure you have login your cluster, run with updated chart values:
 
-    $ podman run -d --name notify --env-file dev.env --volume ./extra-template:/var/tmp:Z -p 8080:80 -t localhost/notify-service:base
+    $ helm install ns chart/ -f dev.value.yaml
 
-Run dev image:
+After deploy done access the app Swagger UI:
 
-    $ podman run --name notify --env-file dev.env --rm --volume ./extra-template:/var/tmp:Z --volume ./app:/app:Z -p 8080:80 -t localhost/notify-service:dev
+    http://${ openshift.hosts }:8080/docs
 
-Stop the container:
+## Development
 
-    $ podman stop notify
+For develop, build, test and debug, please check [Development Doc](docs/development.md) for more info.
 
-# Check Swagger UI
+## Contributing
+You can contribute by:
 
-Open browser and access:
-http://localhost:8080/docs
+- Raising any issues you find using notify-service
+- Fixing issues by opening [Pull Requests](https://github.com/waynesun09/notify-service/pulls)
+- Submitting a patch or opening a PR
+- Improving documentation
+- Talking about notify-service
 
-# Run pytest
+All bugs, tasks or enhancements are tracked as [GitHub issues](https://github.com/waynesun09/notify-service/issues).
 
-Install pytest:
-
-    $ pipenv shell
-    $ pip install pytest py pytest-dotenv
-
-Tests are added under app/tests, make sure you have updated parameters or export them in env, then run:
-
-    $ py.test --rootdir app/ --envfile dev.env
+## CI
+The Github Action will run flake8 against .py files.
