@@ -5,31 +5,37 @@
 maxWorkers: 20
 httpPort: 8080
 sentryDSN:
-apiKeyValue:
+apiKeyValue: ""
 
 redis:
-  secretName:
   installdep:
     enable: true
-  endpoint:
-    host:
-    port:
+  password:
+  image:
+    registry: quay.io
+  cluster:
+    enabled: false
+  securityContext:
+    fsGroup: null
+  containerSecurityContext:
+    runAsUser: null
+  redisPort: 6379
 
 smtp:
   endpoint:
-    host:
-    port:
-    user:
-    password:
-    enableTls:
+    host: ""
+    port: 25
+    user: ""
+    password: ""
+    enableTls: true
 
 fromName: Notify
 fromEmail: noreply@example.com
 templateMountDir: /var/tmp
 
 chatWebhook:
-  gchat:
-  slack:
+  gchat: "https://"
+  slack: "https://"
 
 replicaCount: 1
 

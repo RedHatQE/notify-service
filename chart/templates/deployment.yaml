@@ -40,61 +40,61 @@ spec:
         - name: SECRET_KEY
           valueFrom:
             secretKeyRef:
-              key: key
+              key: "key"
               name: {{ include "..fullname" . }}-secret
         - name: SENTRY_DSN
           value: {{ .Values.sentryDSN | quote }}
         - name: SMTP_HOST
           valueFrom:
             secretKeyRef:
-              key: host
+              key: "host"
               name: {{ include "..fullname" . }}-smtp
         - name: SMTP_PORT
           valueFrom:
             secretKeyRef:
-              key: port
+              key: "port"
               name: {{ include "..fullname" . }}-smtp
         - name: SMTP_TLS
           valueFrom:
             secretKeyRef:
-              key: tls
+              key: "tls"
               name: {{ include "..fullname" . }}-smtp
-{{- if .Values.smtp.endpoint.user }}
+        {{- if .Values.smtp.endpoint.user }}
         - name: SMTP_USER
           valueFrom:
             secretKeyRef:
-              key: user
+              key: "user"
               name: {{ include "..fullname" . }}-smtp
-{{- end }}
-{{- if .Values.smtp.endpoint.password }}
+        {{- end }}
+        {{- if .Values.smtp.endpoint.password }}
         - name: SMTP_PASSWORD
           valueFrom:
             secretKeyRef:
-              key: password
+              key: "password"
               name: {{ include "..fullname" . }}-smtp
-{{- end }}
+        {{- end }}
         - name: EMAILS_FROM_NAME
           value: {{ .Values.fromName | quote }}
         - name: EMAILS_FROM_EMAIL
           value: {{ .Values.fromEmail | quote }}
         - name: REDIS_URI
-          value: redis://{{ .Values.redis.endpoint.host }}:{{ .Values.redis.endpoint.port }}
+          value: redis://{{ .Release.Name }}-redis-master:{{ .Values.redis.redisPort }}
         - name: REDIS_PASSWORD
           valueFrom:
             secretKeyRef:
-              key: redis-password
-              name: {{ .Values.redis.secretName | quote }}
+              key: "redis-password"
+              name: {{ .Release.Name }}-redis
         - name: TEMPLATE_MOUNT_DIR
           value: /var/tmp
         - name: GCHAT_WEBHOOK_URL
           valueFrom:
             secretKeyRef:
-              key: gchat
+              key: "gchat"
               name: {{ include "..fullname" . }}-chat
         - name: SLACK_WEBHOOK_URL
           valueFrom:
             secretKeyRef:
-              key: slack
+              key: "slack"
               name: {{ include "..fullname" . }}-chat
         name: {{ .Chart.Name }}
         securityContext:
