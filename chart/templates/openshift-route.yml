@@ -1,5 +1,5 @@
 {{- $fullName := include "..fullname" . -}}
-{{- if .Values.openshift.enable }}
+{{- if .Values.openshift.enabled }}
 {{- range $host := .Values.openshift.hosts }}
 kind: Route
 apiVersion: route.openshift.io/v1

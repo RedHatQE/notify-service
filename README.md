@@ -44,7 +44,7 @@ Chat Webhook URL:
 
 If deploy to Openshift (default) update OpenShift route url:
 
-    openshift.enable: true
+    openshift.enabled: true
     openshift.hosts:
 
 or else update the ingress part.

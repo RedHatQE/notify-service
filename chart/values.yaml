@@ -85,7 +85,7 @@ ingress:
 # to enable deploying to an openshift environment
 # this will create openshift Route resources
 openshift:
-  enable: true
+  enabled: true
   hosts:
 
 resources: {}
