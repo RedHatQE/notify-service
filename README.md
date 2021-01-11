@@ -42,6 +42,16 @@ Chat Webhook URL:
     chatWebhook.gchat:
     chatWebhook.slack:
 
+Persistent volume config:
+
+    persistence.enabled: true
+    persistence.subPath: str, sub path
+    persistence.existingClaim, str, using existing pvc
+    persistence.accessMode: str, ReadWriteOnce, ReadWriteMany or ReadOnlyOnce
+    persistence.size: str, volume size, e.g. 1G
+    persistence.storageClass: str, storage class name
+    persistence.VolumeName: str, volume name
+
 If deploy to Openshift (default) update OpenShift route url:
 
     openshift.enabled: true
