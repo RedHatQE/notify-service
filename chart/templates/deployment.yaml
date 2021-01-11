@@ -115,6 +115,14 @@ spec:
             port: http
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
+        volumeMounts:
+          {{- if and .Values.persistence.enabled }}
+          - name: templates
+            mountPath: {{ .Values.templateMountDir }}
+            {{- if .Values.persistence.subPath }}
+            subPath: "{{ .Values.persistence.subPath }}"
+            {{- end }}
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -127,3 +135,12 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+        - name: templates
+        {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (include "..fullname" .) }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
+
