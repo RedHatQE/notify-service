@@ -107,12 +107,12 @@ spec:
             protocol: TCP
         livenessProbe:
           httpGet:
-            path: /docs
+            path: /status
             port: http
           timeoutSeconds: 10
         readinessProbe:
           httpGet:
-            path: /docs
+            path: /status
             port: http
           timeoutSeconds: 10
         resources:
