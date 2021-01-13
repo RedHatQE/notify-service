@@ -5,8 +5,9 @@ from typing import Any, Optional, Dict
 from fastapi import APIRouter, status, HTTPException
 from pydantic.networks import AnyHttpUrl
 
+from app import schemas
+from app.utils import utils
 from app.core.config import settings
-from app import utils, schemas
 
 router = APIRouter()
 
