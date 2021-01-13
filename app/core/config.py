@@ -71,6 +71,16 @@ class Settings(BaseSettings):
     GCHAT_WEBHOOK_URL: Optional[AnyHttpUrl] = None
     SLACK_WEBHOOK_URL: Optional[AnyHttpUrl] = None
 
+    CERT_PATH: Optional[str] = None
+    KEY_FILE_NAME: Optional[str] = None
+    CERT_FILE_NAME: Optional[str] = None
+    CA_CERTS_NAME: Optional[str] = None
+
+    MSG_BUS_HOST_1: Optional[str] = None
+    MSG_BUS_PORT_1: Optional[int] = None
+    MSG_BUS_HOST_2: Optional[str] = None
+    MSG_BUS_PORT_2: Optional[int] = None
+
     class Config:
         case_sensitive = True
 
