@@ -36,7 +36,7 @@ persistence:
   enabled: true
   subPath:
   existingClaim:
-  accessMode: ReadWriteOnce
+  accessMode: ReadWriteMany
   size: 1G
   storageClass:
   VolumeName:
