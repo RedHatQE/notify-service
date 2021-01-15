@@ -9,14 +9,6 @@ from app.utils.utils import send_test_email
 router = APIRouter()
 
 
-@router.get("/status", response_model=schemas.Msg)
-def test_status() -> Any:
-    """
-    Check status.
-    """
-    return {"msg": "App is running"}
-
-
 @router.post("/test-email/", response_model=schemas.Msg, status_code=201)
 def test_email(
     email_to: EmailStr,

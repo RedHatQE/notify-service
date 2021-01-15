@@ -9,6 +9,8 @@ from app.api.api import api_router
 from app.core.config import settings
 from app.core.security import get_api_key
 
+from app.api.endpoints.status import router
+
 app = FastAPI(
     title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
@@ -23,6 +25,7 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_headers=["*"],
     )
 
+app.include_router(router, prefix="/status")
 app.include_router(api_router, prefix=settings.API_V1_STR, dependencies=[Security(get_api_key)])
 
 @app.on_event("startup")
