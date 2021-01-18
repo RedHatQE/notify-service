@@ -39,12 +39,25 @@ Email related config:
 
 Chat Webhook URL:
 
-    chatWebhook.gchat:
-    chatWebhook.slack:
+    chatWebhook.enabled: boolen, enable or disable chat webhook
+    chatWebhook.gchat: str, Google Chat room webhook
+    chatWebhook.slack: str, Slack room webhook
+
+ActiveMQ message bus:
+
+    activeMQ.enabled: boolen, enable or disable ActiveMQ message bus config
+    activeMQ.cert_mount_path: str, specify where the certs will be mounted in the container
+    activeMQ.ca_certs: multiline str, the CA server certificate
+    activeMQ.client_cert: multiline str, the message bus client certificate
+    activeMQ.client_key: multiline str, the message bus client key
+    activeMQ.msg_bus_host_1: str, the message bus host name
+    activeMQ.msg_bus_host_1: int, the message bus host port
+    activeMQ.msg_bus_host_2: str, optional, the second message bus host name
+    activeMQ.msg_bus_host_2: int, optional, the second message bus host port
 
 Persistent volume config:
 
-    persistence.enabled: true
+    persistence.enabled: boolen, true or false
     persistence.subPath: str, sub path
     persistence.existingClaim, str, using existing pvc
     persistence.accessMode: str, ReadWriteOnce, ReadWriteMany or ReadOnlyOnce
@@ -54,8 +67,8 @@ Persistent volume config:
 
 If deploy to Openshift (default) update OpenShift route url:
 
-    openshift.enabled: true
-    openshift.hosts:
+    openshift.enabled: boolen, true or false
+    openshift.hosts: str, the full app host name
 
 or else update the ingress part.
 

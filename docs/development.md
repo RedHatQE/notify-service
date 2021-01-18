@@ -34,6 +34,23 @@ SMTP related config:
     EMAILS_FROM_NAME: str, service name, e.g. Notify Service
     EMAILS_FROM_EMAIL: email address, required
 
+Chat webhook config:
+
+    GCHAT_WEBHOOK_URL: str, optional, Google Chat room webhook url
+    SLACK_WEBHOOK_URL: str, optional, Slack room webhook url
+
+ActiveMQ message bus config:
+
+    CERT_PATH: str, the message bus cert dir path
+    KEY_FILE_NAME: str, the message bus client cert key file name
+    CERT_FILE_NAME: str, the message bus client cert file name
+    CA_CERTS_NAME: str, the CA server cert file name
+
+    MSG_BUS_HOST_1: str, the ActiveMQ message host name
+    MSG_BUS_PORT_1: int, the ActiveMQ message host port
+    MSG_BUS_HOST_2: str, optional, the second ActiveMQ message host name
+    MSG_BUS_PORT_2: int, optional, the second ActiveMQ message host port
+
 Redis config:
 
     REDIS_URI: redis uri, required, e.g. redis://${host_ip}:${redis_port}
@@ -54,11 +71,13 @@ Start Redis server at local:
 
 Run with production image:
 
-    $ podman run -d --name notify --env-file dev.env --volume ./extra-template:/var/tmp:Z -p 8080:80 -t quay.io/waynesun09/notify-service:latest
+    $ podman run -d --name notify --env-file dev.env --volume ./extra-template:/var/tmp:Z --volume ./certs/:/var/certs:Z -p 8080:80 -t quay.io/waynesun09/notify-service:latest
 
 Run dev image:
 
-    $ podman run --name notify --env-file dev.env --rm --volume ./extra-template:/var/tmp:Z --volume ./app:/app:Z -p 8080:80 -t localhost/notify-service:dev
+    $ podman run --name notify --env-file dev.env --rm --volume ./extra-template:/var/tmp:Z --volume ./certs/:/var/certs:Z --volume ./app:/app:Z -p 8080:80 -t localhost/notify-service:dev
+
+**Note**: Copy the cert files to the ./certs dir if enalbed ActiveMQ config
 
 Stop the container:
 
