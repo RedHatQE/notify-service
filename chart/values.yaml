@@ -16,6 +16,8 @@ redis:
   cluster:
     enabled: false
   securityContext:
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
     fsGroup: null
   containerSecurityContext:
     runAsUser: null
@@ -101,7 +103,9 @@ podAnnotations: {}
 podSecurityContext: {}
   # fsGroup: 2000
 
-securityContext: {}
+securityContext:
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
 
 service:
   type: ClusterIP
