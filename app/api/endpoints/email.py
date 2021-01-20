@@ -3,8 +3,9 @@ from typing import Any, Optional, Dict
 from fastapi import APIRouter
 from pydantic.networks import AnyHttpUrl, EmailStr
 
+from app import schemas
+from app.utils import utils
 from app.core.config import settings
-from app import utils, schemas
 
 router = APIRouter()
 

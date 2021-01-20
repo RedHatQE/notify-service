@@ -86,6 +86,7 @@ spec:
               name: {{ .Release.Name }}-redis
         - name: TEMPLATE_MOUNT_DIR
           value: /var/tmp
+        {{- if .Values.chatWebhook.enabled }}
         - name: GCHAT_WEBHOOK_URL
           valueFrom:
             secretKeyRef:
@@ -96,6 +97,25 @@ spec:
             secretKeyRef:
               key: "slack"
               name: {{ include "..fullname" . }}-chat
+        {{- end }}
+        {{- if .Values.activeMQ.enabled }}
+        - name: CERT_PATH
+          value: {{ .Values.activeMQ.cert_mount_path | quote }}
+        - name: KEY_FILE_NAME
+          value: client_key
+        - name: CERT_FILE_NAME
+          value: client_cert
+        - name: CA_CERTS_NAME
+          value: ca_certs
+        - name: MSG_BUS_HOST_1
+          value: {{ .Values.activeMQ.msg_bus_host_1 | quote }}
+        - name: MSG_BUS_PORT_1
+          value: {{ .Values.activeMQ.msg_bus_port_1 | quote }}
+        - name: MSG_BUS_HOST_2
+          value: {{ .Values.activeMQ.msg_bus_host_2 | quote }}
+        - name: MSG_BUS_PORT_2
+          value: {{ .Values.activeMQ.msg_bus_port_2 | quote }}
+        {{- end }}
         name: {{ .Chart.Name }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
@@ -107,12 +127,12 @@ spec:
             protocol: TCP
         livenessProbe:
           httpGet:
-            path: /docs
+            path: /status
             port: http
           timeoutSeconds: 10
         readinessProbe:
           httpGet:
-            path: /docs
+            path: /status
             port: http
           timeoutSeconds: 10
         resources:
@@ -124,6 +144,11 @@ spec:
             {{- if .Values.persistence.subPath }}
             subPath: "{{ .Values.persistence.subPath }}"
             {{- end }}
+          {{- end }}
+          {{- if and .Values.activeMQ.enabled }}
+          - name: msg-certs
+            mountPath: {{ .Values.activeMQ.cert_mount_path }}
+            readOnly: true
           {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
@@ -145,4 +170,8 @@ spec:
         {{- else }}
           emptyDir: {}
         {{- end }}
-
+        {{- if and .Values.activeMQ.enabled }}
+        - name: msg-certs
+          secret:
+            secretName: {{ include "..fullname" . }}-msg-certs
+        {{- end }}

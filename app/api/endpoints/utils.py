@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from pydantic.networks import EmailStr
 
 from app import schemas
-from app.utils import send_test_email
+from app.utils.utils import send_test_email
 
 router = APIRouter()
 

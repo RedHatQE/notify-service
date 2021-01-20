@@ -18,6 +18,7 @@ aioredis = "*"
 aiofile = "*"
 pytest = "*"
 pytest-dotenv = "*"
+"stomp.py" = "*"
 
 [dev-packages]
 
