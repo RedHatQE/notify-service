@@ -16,7 +16,7 @@ redis:
   cluster:
     enabled: false
   securityContext:
-    readOnlyRootFilesystem: true
+    # readOnlyRootFilesystem: true
     runAsNonRoot: true
     fsGroup: null
   containerSecurityContext:
