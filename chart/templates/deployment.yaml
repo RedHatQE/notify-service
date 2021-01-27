@@ -117,6 +117,10 @@ spec:
         - name: MSG_BUS_PORT_2
           value: {{ .Values.activeMQ.msg_bus_port_2 | quote }}
           {{- end }}
+          {{- if .Values.activeMQ.msg_default_topic }}
+        - name: MSG_DEFAULT_TOPIC
+          value: {{ .Values.activeMQ.msg_default_topic | quote }}
+          {{- end }}
         {{- end }}
         name: {{ .Chart.Name }}
         securityContext:

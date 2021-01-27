@@ -13,7 +13,7 @@ router = APIRouter()
 
 @router.post("/", response_model=schemas.Msg)
 def send_message(
-        topic: str,
+        topic: str = settings.MSG_DEFAULT_TOPIC,
         environment: Dict[str, Any] = {"headers": {}, "body": {}}
 ) -> Any:
     if not settings.MSG_BUS_HOST_1 and not settings.MSG_BUS_HOST_2:

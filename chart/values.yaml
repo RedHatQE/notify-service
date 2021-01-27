@@ -76,6 +76,7 @@ activeMQ:
   msg_bus_port_1:
   msg_bus_host_2:
   msg_bus_port_2:
+  msg_default_topic:
 
 replicaCount: 1
 

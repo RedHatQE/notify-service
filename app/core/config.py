@@ -80,6 +80,7 @@ class Settings(BaseSettings):
     MSG_BUS_PORT_1: Optional[int] = None
     MSG_BUS_HOST_2: Optional[str] = None
     MSG_BUS_PORT_2: Optional[int] = None
+    MSG_DEFAULT_TOPIC: Optional[str] = None
 
     class Config:
         case_sensitive = True
