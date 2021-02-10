@@ -19,6 +19,7 @@ aiofile = "*"
 pytest = "*"
 pytest-dotenv = "*"
 "stomp.py" = "*"
+irc = "*"
 
 [dev-packages]
 
