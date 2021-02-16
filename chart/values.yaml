@@ -78,6 +78,14 @@ activeMQ:
   msg_bus_port_2:
   msg_default_topic:
 
+irc:
+  enabled: false
+  server:
+  port: 6667
+  nickname: notify-service-noreply
+  password:
+  default_target:
+
 replicaCount: 1
 
 image:
