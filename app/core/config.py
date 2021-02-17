@@ -84,7 +84,9 @@ class Settings(BaseSettings):
 
     IRC_SERVER: Optional[str] = None
     IRC_SERVER_PORT: Optional[int] = 6667
+    IRC_SSL: Optional[bool] = False
     IRC_NICKNAME: Optional[str] = "notify-service-noreply"
+    # Default channel name start with '#' or username
     IRC_TARGET: Optional[str] = None
     IRC_PASSWORD: Optional[str] = None
 

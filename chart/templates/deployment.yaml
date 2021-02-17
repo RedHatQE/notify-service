@@ -127,6 +127,8 @@ spec:
           value: {{ .Values.irc.server | quote }}
         - name: IRC_SERVER_PORT
           value: {{ .Values.irc.port | quote }}
+        - name: IRC_SSL
+          value: {{ .Values.irc.ssl | quote }}
         - name: IRC_NICKNAME
           value: {{ .Values.irc.nickname | quote }}
           {{- if .Values.irc.password }}
