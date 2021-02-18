@@ -139,8 +139,8 @@ class AioSimpleIRCClient(client.SimpleIRCClient):
 
     reactor_class = AioReactor
 
-    def connect(self, *args, **kwargs):
-        asyncio.ensure_future(self.connection.connect(*args, **kwargs))
+    async def connect(self, *args, **kwargs):
+        await asyncio.gather(self.connection.connect(*args, **kwargs))
 
 
 class AioIRCCat(AioSimpleIRCClient):
@@ -190,7 +190,7 @@ async def send_message(message: str, target: Optional[str]) -> Any:
         target = settings.IRC_TARGET
 
     c = AioIRCCat(target, message)
-    c.connect(server, port, nickname, password=password, ssl=ssl)
+    await c.connect(server, port, nickname, password=password, ssl=ssl)
 
     try:
         c.start()
