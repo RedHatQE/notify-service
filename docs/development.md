@@ -51,6 +51,15 @@ ActiveMQ message bus config:
     MSG_BUS_HOST_2: str, optional, the second ActiveMQ message host name
     MSG_BUS_PORT_2: int, optional, the second ActiveMQ message host port
 
+IRC config:
+
+    IRC_SERVER: str, optional, the IRC server host name
+    IRC_SERVER_PORT, int, optional, the IRC server host port
+    IRC_SSL: boolen, optional, enable or disable ssl, make sure set the right port if is enabled
+    IRC_NICKNAME: str, optional, irc nickname
+    IRC_PASSWORD: str, optional, set if password not empty
+    IRC_TARGET: str, optional, default channel name start with '#' or username
+
 Redis config:
 
     REDIS_URI: redis uri, required, e.g. redis://${host_ip}:${redis_port}

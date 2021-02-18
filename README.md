@@ -55,6 +55,16 @@ ActiveMQ message bus:
     activeMQ.msg_bus_host_2: str, optional, the second message bus host name
     activeMQ.msg_bus_host_2: int, optional, the second message bus host port
 
+IRC config:
+
+    irc.enabled: boolen, enable or disable IRC config
+    irc.server: str, IRC host name
+    irc.port: int, the IRC host port
+    irc.ssl: boolen, enable or disable ssl, make sure set the right port if is enabled
+    irc.nickname: str, IRC username
+    irc.password: str, set if password exist
+    irc.default_target: str, the default channel name start with '#' or username
+
 Persistent volume config:
 
     persistence.enabled: boolen, true or false
