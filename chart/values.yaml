@@ -78,6 +78,16 @@ activeMQ:
   msg_bus_port_2:
   msg_default_topic:
 
+irc:
+  enabled: false
+  server:
+  port: 6667
+  ssl: false
+  nickname: notify-service-noreply
+  password:
+  # The default channel name start with '#' or a username
+  default_target:
+
 replicaCount: 1
 
 image:

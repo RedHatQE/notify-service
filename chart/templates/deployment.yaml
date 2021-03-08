@@ -122,6 +122,24 @@ spec:
           value: {{ .Values.activeMQ.msg_default_topic | quote }}
           {{- end }}
         {{- end }}
+        {{- if .Values.irc.enabled }}
+        - name: IRC_SERVER
+          value: {{ .Values.irc.server | quote }}
+        - name: IRC_SERVER_PORT
+          value: {{ .Values.irc.port | quote }}
+        - name: IRC_SSL
+          value: {{ .Values.irc.ssl | quote }}
+        - name: IRC_NICKNAME
+          value: {{ .Values.irc.nickname | quote }}
+          {{- if .Values.irc.password }}
+        - name: IRC_PASSWORD
+          value: {{ .Values.irc.password | quote}}
+          {{- end }}
+          {{- if .Values.irc.default_target }}
+        - name: IRC_TARGET
+          value: {{ .Values.irc.default_target | quote }}
+          {{- end }}
+        {{- end }}
         name: {{ .Chart.Name }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
