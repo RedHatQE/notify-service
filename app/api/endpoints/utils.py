@@ -1,6 +1,6 @@
 from typing import Any
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 from pydantic.networks import EmailStr
 
 from app import schemas
@@ -11,7 +11,7 @@ router = APIRouter()
 
 @router.post("/test-email/", response_model=schemas.Msg, status_code=201)
 def test_email(
-    email_to: EmailStr,
+    email_to: EmailStr = Query(..., description="The test email address, e.g. abc@example.com"),
 ) -> Any:
     """
     Test emails.

@@ -1,6 +1,6 @@
 from typing import Any
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 
 from app import schemas
 from app.core.config import settings
@@ -12,7 +12,10 @@ router = APIRouter()
 
 
 @router.post("/", response_model=schemas.Msg)
-async def send_message(channel: str, message: str) -> Any:
+async def send_message(
+    channel: str = Query(..., description="IRC channel name start with '#' or a user name, e.g. channel #test or user john"),
+    message: str = Query(None, description="The text message")
+) -> Any:
     """
     Send message to irc channel or user
 
