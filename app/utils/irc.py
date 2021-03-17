@@ -83,12 +83,14 @@ class AioConnection(client_aio.AioConnection):
         self.password = password
         self.ssl = ssl
         if not connect_factory:
+            # Add ssl option for socket connection
             self.connect_factory = AioFactory(ssl=ssl)
         else:
             self.connect_factory = connect_factory
 
         protocol_instance = self.protocol_class(self, self.reactor.loop)
         connection = self.connect_factory(protocol_instance, self.server_address)
+        # Exception will be raised if IRC server is not accessible
         transport, protocol = await connection
 
         self.transport = transport
@@ -129,7 +131,7 @@ class AioSimpleIRCClient(client.SimpleIRCClient):
     """Replace the irc.client_aio.AioSimpleIRCClient class.
 
     The difference is using the override AioReactor for
-    asyncio-based loops. Also the use `asyncio.ensure_future` for the
+    asyncio-based loops. Also the use `asyncio.create_task` for the
     connection rather than start the loop with `run_until_complete` as
     the loop have already been started.
 
@@ -140,13 +142,16 @@ class AioSimpleIRCClient(client.SimpleIRCClient):
     reactor_class = AioReactor
 
     async def connect(self, *args, **kwargs):
-        await asyncio.gather(self.connection.connect(*args, **kwargs))
+        t = asyncio.create_task(self.connection.connect(*args, **kwargs))
+        t.add_done_callback(_handle_task_exception)
+        # wait connection finish
+        await t
 
 
 class AioIRCCat(AioSimpleIRCClient):
     def __init__(self, target, message):
         client.SimpleIRCClient.__init__(self)
-        self.future = None
+        self.task = None
         self.target = target
         self.message = message
 
@@ -155,25 +160,35 @@ class AioIRCCat(AioSimpleIRCClient):
         if client.is_channel(self.target):
             connection.join(self.target)
         else:
-            self.future = asyncio.ensure_future(
-                self.send_it(), loop=connection.reactor.loop
+            self.task = asyncio.create_task(
+                self.send_it()
             )
 
 
     def on_join(self, connection, event):
-        self.future = asyncio.ensure_future(
-            self.send_it(), loop=connection.reactor.loop
+        self.task = asyncio.create_task(
+            self.send_it()
         )
 
 
     def on_disconnect(self, connection, event):
-        if self.future:
-            self.future.cancel()
+        if self.task:
+            self.task.cancel()
 
 
     async def send_it(self):
         self.connection.privmsg(self.target, self.message)
         self.connection.quit("Notify done, Ciao!")
+
+
+def _handle_task_exception(task: asyncio.Task) -> None:
+    try:
+        task.result()
+    except asyncio.CancelledError:
+        pass  # Task cancellation should not be logged as an error.
+    except Exception as e:  # pylint: disable=broad-except
+        logger.exception(f'Exception raised by task = {task}')
+        return e
 
 
 async def send_message(message: str, target: Optional[str]) -> Any:
@@ -190,9 +205,17 @@ async def send_message(message: str, target: Optional[str]) -> Any:
         target = settings.IRC_TARGET
 
     c = AioIRCCat(target, message)
-    await c.connect(server, port, nickname, password=password, ssl=ssl)
+    t = asyncio.create_task(c.connect(server, port, nickname, password=password, ssl=ssl))
+    t.add_done_callback(_handle_task_exception)
+    await t
 
     try:
         c.start()
+        # Direct run join and send message rather than wait event dispatch to
+        # the target functions, because event dispatch is not working in the
+        # coroutine.
+        if client.is_channel(target):
+            c.connection.join(target)
+        await c.send_it()
     finally:
         c.connection.disconnect()

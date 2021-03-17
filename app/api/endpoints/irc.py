@@ -32,6 +32,6 @@ async def send_message(
     except OSError as err:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"{err}")
+            detail=f"{err}. Please check IRC config is right and server:port is accessible.")
 
     return {"msg": "Message have been sent"}
