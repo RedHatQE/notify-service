@@ -1,6 +1,6 @@
 from typing import Any, Optional, Dict
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Query, Body
 from pydantic.networks import AnyHttpUrl, EmailStr
 
 from app import schemas
@@ -12,11 +12,11 @@ router = APIRouter()
 
 @router.post("/", response_model=schemas.Msg)
 async def send_email(
-    email_to: EmailStr,
-    subject: str = "",
-    template_name: str = "default",
-    environment: Dict[str, Any] = {"body": {}},
-    template_url: Optional[AnyHttpUrl] = None
+    email_to: EmailStr = Query(..., description="Email address, e.g. abc@example.com"),
+    subject: str = Query("", description="The email subject"),
+    template_name: str = Query("default", description="The template name without subfix, e.g. default"),
+    environment: Dict[str, Any] = Body({"body": {}}, description="The body values for parse with the template"),
+    template_url: Optional[AnyHttpUrl] = Query(None, description="The remote teamplate url, it will overide the template_name if given")
 ) -> Any:
     """
     Send email with template

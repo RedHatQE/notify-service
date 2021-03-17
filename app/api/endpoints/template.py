@@ -1,11 +1,10 @@
 import os
 import shutil
-
-from pathlib import Path
+import pathlib
 
 from typing import Any
 
-from fastapi import APIRouter, File, UploadFile, HTTPException
+from fastapi import APIRouter, Path, Query, File, UploadFile, HTTPException
 
 from app.core.config import settings
 from app.utils.utils import get_file_path, read_file
@@ -26,7 +25,9 @@ def get_template_list() -> Any:
 
 
 @router.get("/{tmplt_name}")
-async def get_template(tmplt_name: str) -> Any:
+async def get_template(
+    tmplt_name: str = Path(None, description="The template name without suffix, e.g. default")
+) -> Any:
     """
     Get template content with tmplate name without postfix
     """
@@ -44,11 +45,15 @@ async def get_template(tmplt_name: str) -> Any:
 
 
 @router.put("/{tmplt_name}")
-def update_template(tmplt_name: str, suffix: str = '.html', tmplt: UploadFile = File(...)) -> Any:
+def update_template(
+    tmplt_name: str = Query(None, description="The template name without suffix, e.g. test"),
+    suffix: str = Query('.html', description="The file suffix, e.g. '.html'"),
+    tmplt: UploadFile = File(..., description="The local file name to be uploaded")
+) -> Any:
     """
     Create or update a template under template mount dir
     """
-    destination = Path(settings.TEMPLATE_MOUNT_DIR).joinpath(tmplt_name + suffix)
+    destination = pathlib.Path(settings.TEMPLATE_MOUNT_DIR).joinpath(tmplt_name + suffix)
     try:
         with destination.open("wb") as f:
             shutil.copyfileobj(tmplt.file, f)

@@ -2,7 +2,7 @@ import httpx
 
 from typing import Any, Optional, Dict
 
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter, Query, Body, status, HTTPException
 from pydantic.networks import AnyHttpUrl
 
 from app import schemas
@@ -14,12 +14,12 @@ router = APIRouter()
 
 @router.post("/", response_model=schemas.Msg)
 async def send_message(
-    target: Optional[str] = "gchat",
-    subject: str = "",
-    template_name: str = "chat_default",
-    environment: Dict[str, Any] = {"body": ""},
-    webhook_url: Optional[AnyHttpUrl] = None,
-    template_url: Optional[AnyHttpUrl] = None
+    target: str = Query(..., description="The message target, 'gchat' or 'slack'"),
+    subject: str = Query("", description="The message subject"),
+    template_name: str = Query("chat_default", description="The template name without suffix, e.g. chat_default, default to 'chat_default' for gchat"),
+    environment: Dict[str, Any] = Body({"body": ""}, description="The body values for parse with the template"),
+    webhook_url: Optional[AnyHttpUrl] = Query(None, description="The gchat or slack webhook url"),
+    template_url: Optional[AnyHttpUrl] = Query(None, description="The remote template url, it will overide the template_name if given")
 ) -> Any:
     """
     Send chat message with template
