@@ -1,3 +1,7 @@
+<img src="docs/static/notify-logo.svg" height="75px"></img>
+
+[![Actions Status](https://github.com/waynesun09/notify-service/workflows/CI/badge.svg)](https://github.com/waynesun09/notify-service/actions)
+
 # notify-service
 
 Notify service with multiple supported target
