@@ -2,6 +2,7 @@
 
 [![Flake8 Status](https://github.com/waynesun09/notify-service/workflows/Flake8/badge.svg)](https://github.com/waynesun09/notify-service/actions)
 [![Helm Chart Lint and Test](https://github.com/waynesun09/notify-service/workflows/Lint%20and%20Test%20Charts/badge.svg)](https://github.com/waynesun09/notify-service/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 # notify-service
 
