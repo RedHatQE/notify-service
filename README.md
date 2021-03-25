@@ -1,6 +1,7 @@
 <img src="docs/static/notify-logo.svg" height="75px"></img>
 
-[![Actions Status](https://github.com/waynesun09/notify-service/workflows/CI/badge.svg)](https://github.com/waynesun09/notify-service/actions)
+[![Flake8 Status](https://github.com/waynesun09/notify-service/workflows/Flake8/badge.svg)](https://github.com/waynesun09/notify-service/actions)
+[![Helm Chart Lint and Test](https://github.com/waynesun09/notify-service/workflows/Lint%20and%20Test%20Charts/badge.svg)](https://github.com/waynesun09/notify-service/actions)
 
 # notify-service
 
