@@ -13,8 +13,12 @@ router = APIRouter()
 
 @router.post("/", response_model=schemas.Msg)
 def send_message(
-        topic: str = Query(settings.MSG_DEFAULT_TOPIC, description="The message topic or queue value, e.g. /topic/VirtualTopic.qe.ci.test.abc.test.complete"),
-        environment: Dict[str, Any] = Body({"headers": {}, "body": {}}, description="The message body with message headers and body value")
+        topic: str = Query(
+            settings.MSG_DEFAULT_TOPIC,
+            description="The message topic or queue value, e.g. /topic/VirtualTopic.qe.ci.test.abc.test.complete"),
+        environment: Dict[str, Any] = Body(
+            {"headers": {}, "body": {}},
+            description="The message body with message headers and body value")
 ) -> Any:
     if not settings.MSG_BUS_HOST_1 and not settings.MSG_BUS_HOST_2:
         raise HTTPException(

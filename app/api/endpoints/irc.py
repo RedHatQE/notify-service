@@ -13,7 +13,9 @@ router = APIRouter()
 
 @router.post("/", response_model=schemas.Msg)
 async def send_message(
-    channel: str = Query(..., description="IRC channel name start with '#' or a user name, e.g. channel #test or user john"),
+    channel: str = Query(
+        ...,
+        description="IRC channel name start with '#' or a user name, e.g. channel #test or user john"),
     message: str = Query(None, description="The text message")
 ) -> Any:
     """

@@ -26,7 +26,9 @@ def get_template_list() -> Any:
 
 @router.get("/{tmplt_name}")
 async def get_template(
-    tmplt_name: str = Path(None, description="The template name without suffix, e.g. default")
+    tmplt_name: str = Path(
+        None,
+        description="The template name without suffix, e.g. default")
 ) -> Any:
     """
     Get template content with tmplate name without postfix
@@ -46,9 +48,15 @@ async def get_template(
 
 @router.put("/{tmplt_name}")
 def update_template(
-    tmplt_name: str = Query(None, description="The template name without suffix, e.g. test"),
-    suffix: str = Query('.html', description="The file suffix, e.g. '.html'"),
-    tmplt: UploadFile = File(..., description="The local file name to be uploaded")
+    tmplt_name: str = Query(
+        None,
+        description="The template name without suffix, e.g. test"),
+    suffix: str = Query(
+        '.html',
+        description="The file suffix, e.g. '.html'"),
+    tmplt: UploadFile = File(
+        ...,
+        description="The local file name to be uploaded")
 ) -> Any:
     """
     Create or update a template under template mount dir
