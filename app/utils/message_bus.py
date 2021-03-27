@@ -1,5 +1,4 @@
 import logging
-import sys
 import stomp
 
 from pathlib import Path
@@ -64,7 +63,7 @@ def make_connection(on_message_fn=None, on_error_fn=None):
                 logger.info('Trying to reconnect')
                 self._connect()
             else:
-                sys.exit(0)
+                self.conn.disconnect()
 
         def _connect(self):
             if not self.conn:
