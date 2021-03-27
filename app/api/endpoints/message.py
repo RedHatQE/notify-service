@@ -82,33 +82,33 @@ async def msg_multi_tgts(
         detail = "The message bus topic have not been provided"
         param_err(detail)
 
-    if 'gchat' in target or 'slack' in target:
-        if 'gchat' in target:
-            await chat.send_message(
-                'gchat',
-                subject=subject,
-                environment=environment,
-                template_name="chat_default",
-                webhook_url=gchat_webhook_url,
-                template_url=None
-            )
-        if 'slack' in target:
-            await chat.send_message(
-                'slack',
-                subject=subject,
-                environment=environment,
-                template_name="chat_default",
-                webhook_url=slack_webhook_url,
-                template_url=None
-            )
+    if 'gchat' in target:
+        await chat.send_message(
+            'gchat',
+            subject=subject,
+            environment=environment,
+            template_name="chat_default",
+            webhook_url=gchat_webhook_url,
+            template_url=None
+        )
+
+    if 'slack' in target:
+        await chat.send_message(
+            'slack',
+            subject=subject,
+            environment=environment,
+            template_name="chat_default",
+            webhook_url=slack_webhook_url,
+            template_url=None
+        )
 
     if 'irc' in target:
         text = None
         body = environment['body']
         if isinstance(body, dict):
-            text = json.dumps(environment['body'])
+            text = "{}:\n{}".format(subject, json.dumps(environment['body']))
         else:
-            text = str(body)
+            text = "{}:\n{}".format(subject, str(body))
         await irc.send_message(
             channel=irc_channel,
             message=text
