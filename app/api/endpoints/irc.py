@@ -11,6 +11,18 @@ from fastapi import status, HTTPException
 router = APIRouter()
 
 
+async def _send_message(message, channel) -> Any:
+    """
+    Call irc send_message
+    """
+    try:
+        await irc.send_message(message, channel)
+    except OSError as err:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"{err}. Please check IRC config is right and server:port is accessible.")
+
+
 @router.post("/", response_model=schemas.Msg)
 async def send_message(
     channel: str = Query(
@@ -29,11 +41,13 @@ async def send_message(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="The IRC Server is not configured."
         )
-    try:
-        await irc.send_message(message, channel)
-    except OSError as err:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"{err}. Please check IRC config is right and server:port is accessible.")
+    # Avoid text limit for 512 bytes, split message with length greater than 450
+    if len(message) > 420:
+        n = 420
+        chunks = [message[i:i + n] for i in range(0, len(message), n)]
+        for i in chunks:
+            await _send_message(i, channel)
+    else:
+        await _send_message(message, channel)
 
     return {"msg": "Message have been sent"}
