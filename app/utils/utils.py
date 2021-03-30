@@ -3,6 +3,9 @@ import emails
 import httpx
 import logging
 import os
+import json
+import subprocess
+import uuid
 
 from datetime import datetime, timedelta
 from emails.template import JinjaTemplate
@@ -22,6 +25,33 @@ async def request_get_text(url: AnyHttpUrl):
     async with httpx.AsyncClient(verify=False) as client:
         r = await client.get(url)
         return r.text
+
+
+def add_examples(openapi_schema: dict) -> dict:
+    """
+    Generate openapi schema with x-code-samples by snippet-enricher-cli command
+    """
+    lans = "shell_curl,python_python3,go_native,java_unirest,node_native,javascript_xhr"
+    uid = str(uuid.uuid4())[:8]
+    tmp_json = Path(f"{settings.TEMPLATE_MOUNT_DIR}/openapi_{uid}.json")
+    example_json = Path(f"{settings.TEMPLATE_MOUNT_DIR}/openapi_{uid}_example.json")
+    try:
+        if tmp_json.is_file():
+            tmp_json.unlink()
+
+        with open(tmp_json, 'w', encoding='utf-8') as f:
+            json.dump(openapi_schema, f)
+
+        cmd = f"snippet-enricher-cli --targets='{lans}' --input={tmp_json} > {example_json}"
+        subprocess.run(cmd, shell=True, check=True)
+
+        with open(example_json, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    finally:
+        if tmp_json.is_file():
+            tmp_json.unlink()
+        if example_json.is_file():
+            example_json.unlink()
 
 
 def get_file_path(path_name: str, tmplt_name: str) -> str:
