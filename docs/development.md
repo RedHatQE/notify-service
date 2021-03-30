@@ -92,10 +92,13 @@ Stop the container:
 
     $ podman stop notify
 
-### Check Swagger UI
+### Check Swagger UI and Redoc
 
 Open browser and access:
-http://localhost:8080/docs
+
+    http://localhost:8080/docs
+
+    http://localhost:8080/redoc
 
 ## Run pytest
 

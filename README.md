@@ -98,6 +98,10 @@ After deploy done access the app Swagger UI:
 
     http://${ openshift.hosts }:8080/docs
 
+And Redoc UI with different code examples:
+
+    http://${ openshift.hosts }:8080/redoc
+
 ## Development
 
 For develop, build, test and debug, please check [Development Doc](docs/development.md) for more info.
