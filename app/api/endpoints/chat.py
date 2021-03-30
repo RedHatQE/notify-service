@@ -45,7 +45,7 @@ async def send_message(
     else:
         subject = " ".join((environment["project_name"], subject))
 
-    if "body" in environment:
+    if "body" in environment and isinstance(environment["body"], str):
         environment["body"] = "\n".join((subject, environment["body"]))
     else:
         environment["subject"] = subject

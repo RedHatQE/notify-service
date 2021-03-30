@@ -191,6 +191,25 @@ def _handle_task_exception(task: asyncio.Task) -> None:
         return e
 
 
+async def process_lines(message: str) -> Any:
+    """
+    Process message for carriage return '\n' and length limit
+    """
+    lines = []
+    new_lines = []
+    lines = message.split('\n')
+    new_lines = lines
+    for line in lines:
+        # Avoid text limit for 512 bytes, split message with length greater than 420
+        if len(line) > 420:
+            n = 420
+            chunks = [line[i:i + n] for i in range(0, len(line), n)]
+            index = lines.index(line)
+            new_lines = new_lines[:index] + chunks + new_lines[index + 1:]
+
+    return new_lines
+
+
 async def send_message(message: str, target: Optional[str]) -> Any:
     """
     Connect to the IRC server and send out message
