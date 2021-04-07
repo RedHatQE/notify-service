@@ -50,26 +50,6 @@ async def send_message(
     - **template_name**: template name in local template list, default is "default"
     - **template_url**: template url, optional
     """
-    env = {}
-    # Concatenate project name and subject
-    if environment.project_name:
-        subject = f"[{environment.project_name}] {subject}"
-    else:
-        subject = f"[{settings.PROJECT_NAME}] {subject}"
-
-    if isinstance(environment.body, str):
-        # Pure text message, put the subject into body and add new line
-        # Set 'body' value in env dict, this will work with chat default template
-        env["body"] = "\n".join((subject, environment.body))
-    else:
-        # Pass the body dict value to the env dict, it will be parsed by specific template
-        env = environment.body
-        env["subject"] = subject
-
-    headers = {'Content-Type': 'application/json; charset=UTF-8'}
-    data = await utils.get_template(template_name, template_url, '.jinja', env)
-
-
     if webhook_url:
         url = webhook_url
     elif target.upper() == "GCHAT":
@@ -82,13 +62,52 @@ async def send_message(
             detail="webhook_url, GCHAT_WEBHOOK_URL or SLACK_WEBHOOK_URL is not provided."
         )
 
-    async with httpx.AsyncClient() as client:
-        r = await client.post(url, headers=headers, data=data)
+    env = {}
+    # Concatenate project name and subject
+    if environment.project_name:
+        subject = f"[{environment.project_name}] {subject}"
+    else:
+        subject = f"[{settings.PROJECT_NAME}] {subject}"
 
-    if r.status_code != status.HTTP_200_OK:
-        raise HTTPException(
-            status_code=r.status_code,
-            detail=r.text,
-        )
+    chunks = []
+    n = 4095
+    if (isinstance(environment.body, str) or
+            (template_name == "chat_default" and isinstance(environment.body, dict)
+                and not hasattr(environment.body, "body"))):
+        # Pure text message, put the subject into body and add new line
+        # Set 'body' value in env dict, this will work with chat default template
+        text = "\n".join((subject, str(environment.body)))
+        # Gchat webhook 4096 characters limitation
+        if target.upper() == "GCHAT" and len(text) > 4095:
+            chunks = [text[i:i + n] for i in range(0, len(text), n)]
+        else:
+            env["body"] = text
+    else:
+        # Pass the body dict value to the env dict, it will be parsed by specific template
+        # Can't split data with parsed jinja template, return client the GChat error if
+        # the parsed jinja template character is greater than 4095
+        env = environment.body
+        env["subject"] = subject
+
+    headers = {'Content-Type': 'application/json; charset=UTF-8'}
+    data_list = []
+    # Process chunks to text data list
+    if chunks:
+        for i in chunks:
+            env["body"] = str(i)
+            data = await utils.get_template(template_name, template_url, '.jinja', env)
+            data_list.append(data)
+    else:
+        data = await utils.get_template(template_name, template_url, '.jinja', env)
+        data_list.append(data)
+
+    async with httpx.AsyncClient() as client:
+        for i in data_list:
+            r = await client.post(url, headers=headers, data=i)
+            if r.status_code != status.HTTP_200_OK:
+                raise HTTPException(
+                    status_code=r.status_code,
+                    detail=r.text,
+                )
 
     return {"msg": r.text}
