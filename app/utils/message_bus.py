@@ -19,6 +19,65 @@ if settings.MSG_BUS_HOST_1:
 elif settings.MSG_BUS_HOST_2:
     MSG_BUS_HOSTS.append((settings.MSG_BUS_HOST_2, settings.MSG_BUS_PORT_2))
 
+# Message body example from https://pagure.io/fedora-ci/messages/blob/master/f/examples/container-image.test.complete.json
+MESSAGE_BODY_EXAMPLE = {
+    "contact": {
+        "name": "C3I Jenkins",
+        "team": "DevOps",
+        "url": "https://example.com",
+        "docs": "https://example.com/user-documentation",
+        "irc": "#some-channel",
+        "email": "someone@example.com"
+    },
+    "run": {
+        "url": "https://somewhere.com/job/ci-job/4794",
+        "log": "https://somewhere.com/job/ci-job/4794/console",
+        "log_raw": "https://somewhere.com/job/ci-job/4794/consoleText",
+        "log_stream": "https://somewhere.com/job/ci-job/4794/consoleText",
+        "debug": "https://somewhere.com/job/ci-job/4794/artifacts/debug.txt",
+        "rebuild": "https://somewhere.com/job/ci-job/4794/rebuild/parametrized"
+    },
+    "artifact": {
+        "type": "container-image",
+        "repository": "someapp",
+        "digest": "sha256:017eb7de7927da933a04a6c1ff59da0c41dcea194aaa6b5dd7148df286b92433",
+        "pull_ref": "docker://registry.fedoraproject.org/someapp@sha256:017eb7de7927da933a04a6c1ff59da0c41dcea194aaa6b5dd7148df286b92433",
+        "source": "git+https://src.fedoraproject.org/rpms/setup.git?#5e0ae23a",
+        "id": "someapp@sha256:017eb7de7927da933a04a6c1ff59da0c41dcea194aaa6b5dd7148df286b92433"
+    },
+    "pipeline": {
+        "id": "ac11dcddf99a",
+        "name": "ci-job"
+    },
+    "test": {
+        "type": "tier1",
+        "category": "functional",
+        "result": "failed",
+        "namespace": "factory2.c3i-ci",
+        "note": "Some notes.",
+        "label": [
+            "fast",
+            "aarch64"
+        ],
+        "xunit": "https://somewhere.com/job/ci-openstack/4794/artifacts/results.xml"
+    },
+    "system": [
+        {
+            "os": "docker.io/openshift/jenkins-slave-base-centos7:latest",
+            "provider": "openshift",
+            "architecture": "x86_64"
+        }
+    ],
+    "notification": {
+        "recipients": [
+            "ovasik",
+            "mvadkert"
+        ]
+    },
+    "generated_at": "2018-05-10 08:58:31.222602",
+    "version": "0.2.1"
+}
+
 
 def make_connection(on_message_fn=None, on_error_fn=None):
     """

@@ -1,6 +1,6 @@
 import httpx
 
-from typing import Any, Optional, Dict
+from typing import Any, Optional, Union
 
 from fastapi import APIRouter, Query, Body, status, HTTPException
 from pydantic.networks import AnyHttpUrl
@@ -16,20 +16,30 @@ router = APIRouter()
 async def send_message(
     target: str = Query(
         ...,
-        description="The message target, 'gchat' or 'slack'"),
+        description="The message target, 'gchat' or 'slack'"
+    ),
     subject: str = Query("", description="The message subject"),
     template_name: str = Query(
         "chat_default",
-        description="The template name without suffix, e.g. chat_default, default to 'chat_default' for gchat"),
-    environment: Dict[str, Any] = Body(
-        {"body": ""},
-        description="The body values for parse with the template"),
+        description="The jinja template name without suffix, e.g. chat_default, default to 'chat_default' for gchat. "
+        "Check sample url at https://raw.githubusercontent.com/waynesun09/notify-service/main/app/templates/build/chat_default.jinja, "
+    ),
+    environment: Union[schemas.DictBody, schemas.TxtBody] = Body(
+        ...,
+        example={
+            "body": "SAMPLE MESSAGE."
+        },
+        description="The body values for parse with the template, "
+        "check sample url at https://raw.githubusercontent.com/waynesun09/notify-service/main/app/templates/build/chat_default.jinja, "
+    ),
     webhook_url: Optional[AnyHttpUrl] = Query(
         None,
-        description="The gchat or slack webhook url"),
+        description="The gchat or slack webhook url"
+    ),
     template_url: Optional[AnyHttpUrl] = Query(
         None,
-        description="The remote template url, it will overide the template_name if given")
+        description="The remote template url, it will overide the template_name if given"
+    )
 ) -> Any:
     """
     Send chat message with template
@@ -40,18 +50,24 @@ async def send_message(
     - **template_name**: template name in local template list, default is "default"
     - **template_url**: template url, optional
     """
-    if "project_name" not in environment:
-        subject = " ".join((settings.PROJECT_NAME, subject))
+    env = {}
+    # Concatenate project name and subject
+    if environment.project_name:
+        subject = f"[{environment.project_name}] {subject}"
     else:
-        subject = " ".join((environment["project_name"], subject))
+        subject = f"[{settings.PROJECT_NAME}] {subject}"
 
-    if "body" in environment and isinstance(environment["body"], str):
-        environment["body"] = "\n".join((subject, environment["body"]))
+    if isinstance(environment.body, str):
+        # Pure text message, put the subject into body and add new line
+        # Set 'body' value in env dict, this will work with chat default template
+        env["body"] = "\n".join((subject, environment.body))
     else:
-        environment["subject"] = subject
+        # Pass the body dict value to the env dict, it will be parsed by specific template
+        env = environment.body
+        env["subject"] = subject
 
     headers = {'Content-Type': 'application/json; charset=UTF-8'}
-    data = await utils.get_template(template_name, template_url, '.jinja', environment)
+    data = await utils.get_template(template_name, template_url, '.jinja', env)
 
 
     if webhook_url:

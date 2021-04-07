@@ -1,4 +1,4 @@
-from typing import Any, Optional, Dict
+from typing import Any, Optional, Union
 
 from fastapi import APIRouter, Query, Body
 from pydantic.networks import AnyHttpUrl, EmailStr
@@ -13,17 +13,26 @@ router = APIRouter()
 @router.post("/", response_model=schemas.Msg)
 async def send_email(
     email_to: EmailStr = Query(
-        ..., description="Email address, e.g. abc@example.com"),
+        ..., description="Email address, e.g. abc@example.com"
+    ),
     subject: str = Query("", description="The email subject"),
     template_name: str = Query(
         "default",
-        description="The template name without subfix, e.g. default"),
-    environment: Dict[str, Any] = Body(
-        {"body": {}},
-        description="The body values for parse with the template"),
+        description="The jinja html template name without subfix, e.g. default. "
+        "Check jinja mjml sample url at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/default.mjml"
+    ),
+    environment: Union[schemas.DictBody, schemas.TxtBody] = Body(
+        ...,
+        example={
+            "body": "SAMPLE MESSAGE"
+        },
+        description="The body values for parse with the template. "
+        "Check jinja mjml sample url at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/default.mjml"
+    ),
     template_url: Optional[AnyHttpUrl] = Query(
         None,
-        description="The remote teamplate url, it will overide the template_name if given")
+        description="The remote teamplate url, it will overide the template_name if given"
+    )
 ) -> Any:
     """
     Send email with template
@@ -32,10 +41,20 @@ async def send_email(
     - **template_name**: template name in local template list, default is "default"
     - **template_url**: template url, optional
     """
-    if "project_name" not in environment:
-        environment["project_name"] = settings.PROJECT_NAME
+    env = {}
+    if isinstance(environment.body, str):
+        # Set 'body' in env dict, this will work with default template
+        env["body"] = environment.body
+    else:
+        # Pass the body dict value to the env dict, it will be parsed by specific template
+        env = environment.body
 
-    data = await utils.get_template(template_name, template_url, '.html', environment)
+    if environment.project_name:
+        env["project_name"] = environment.project_name
+    else:
+        env["project_name"] = settings.PROJECT_NAME
+
+    data = await utils.get_template(template_name, template_url, '.html', env)
 
     utils.send_email(
         email_to=email_to, subject_template=subject,
