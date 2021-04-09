@@ -1,0 +1,19 @@
+{
+	"body":
+	{
+		"pre_header": "NOTIFY TEST RESULT",
+		"begin": "THIS IS A TEST SAMPLE NOTIFICATION",
+	        "content": {
+	        	"title": "TEST RESULTS",
+	        	"cases": [
+				{ "name": "TEST-1", "href": "https://github.com/waynesun09/notify-service/", "result": "PASS"},
+				{ "name": "TEST-2", "href": "", "result": "FAILED"},
+				{ "name": "TEST-3", "href": "", "result": "SKIPPED"}
+			],
+	        	"name": "LINK",
+	        	"link": "https://github.com/waynesun09/notify-service/",
+	        	"more": ""
+	        },
+		"end": "PLEASE VISIT NOTIFY-SERVICE FOR MORE INFO"
+        }
+}
