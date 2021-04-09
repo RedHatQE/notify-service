@@ -3,17 +3,19 @@
 	{
 		"pre_header": "NOTIFY TEST RESULT",
 		"begin": "THIS IS A TEST SAMPLE NOTIFICATION",
-	        "content": {
+	        "content": [
+			{
 	        	"title": "TEST RESULTS",
 	        	"cases": [
-				{ "name": "TEST-1", "href": "https://github.com/waynesun09/notify-service/", "result": "PASS"},
-				{ "name": "TEST-2", "href": "", "result": "FAILED"},
-				{ "name": "TEST-3", "href": "", "result": "SKIPPED"}
+				{ "name": "TEST-1", "href": "https://github.com/waynesun09/notify-service/", "status": "PASS"},
+				{ "name": "TEST-2", "href": "", "status": "FAILED"},
+				{ "name": "TEST-3", "href": "", "status": "SKIPPED"}
 			],
 	        	"name": "LINK",
 	        	"link": "https://github.com/waynesun09/notify-service/",
 	        	"more": ""
-	        },
+	        }
+		],
 		"end": "PLEASE VISIT NOTIFY-SERVICE FOR MORE INFO"
         }
 }

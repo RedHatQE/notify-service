@@ -76,7 +76,9 @@
 </head>
 
 <body style="background-color:#E7E7E7;">
-	<div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;"> {{ pre_header }} </div>
+  <div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+    {{ pre_header }}
+  </div>
   <div style="background-color:#E7E7E7;">
     <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#c4fdff;background-color:#c4fdff;width:100%;">
       <tbody>
@@ -125,7 +127,7 @@
                                   <tr>
                                     <td style="width:600px;">
                                       <a href="https://github.com/waynesun09/notify-service/" target="_blank">
-                                        <img alt height="auto" src="https://res.cloudinary.com/dheck1ubc/image/upload/v1544156968/Email/Images/AnnouncementOffset/header-top.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" width="600">
+                                        <img alt height="200" src="https://images.pexels.com/photos/1655166/pexels-photo-1655166.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" style="border:0;display:block;outline:none;text-decoration:none;height:200px;width:100%;font-size:13px;" width="600">
                                       </a>
                                     </td>
                                   </tr>
@@ -157,47 +159,6 @@
       </tbody>
     </table>
     <!--[if mso | IE]>
-      <table
-         align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600"
-      >
-        <tr>
-          <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
-      <![endif]-->
-    <div style="background:#1f2e78;background-color:#1f2e78;margin:0px auto;max-width:600px;">
-      <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#1f2e78;background-color:#1f2e78;width:100%;">
-        <tbody>
-          <tr>
-            <td style="direction:ltr;font-size:0px;padding:20px 0;text-align:center;">
-              <!--[if mso | IE]>
-                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                
-        <tr>
-      
-            <td
-               class="" style="vertical-align:top;width:600px;"
-            >
-          <![endif]-->
-              <div class="mj-column-per-100 mj-outlook-group-fix" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
-                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
-                </table>
-              </div>
-              <!--[if mso | IE]>
-            </td>
-          
-        </tr>
-      
-                  </table>
-                <![endif]-->
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <!--[if mso | IE]>
-          </td>
-        </tr>
-      </table>
-      
       <table
          align="center" border="0" cellpadding="0" cellspacing="0" class="body-section-outlook" style="width:600px;" width="600"
       >
@@ -256,23 +217,19 @@
                             </tr>
                             <tr>
                               <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                                <div style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:24px;text-align:left;color:#637381;">{{ content.title }}:</div>
+                                <div style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:24px;text-align:left;color:#637381;">{% for item in content %}{{ item.title }}:</div>
                               </td>
                             </tr>
                             <tr>
                               <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
                                 <div style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:24px;text-align:left;color:#637381;">
-                                  <ul>
-                                    {% for item in content.cases %}
-                                    <li style="padding-bottom: 20px"><a href="{{ item.href }}"> {{ item.name }}:</a>  {{ item.result }}</li>
-                                    {% endfor %}
-                                  </ul>
+                                  <ul> {% for case in item.cases %} <li style="padding-bottom: 20px"><a href="{{ item.href }}"> {{ case.name }}:</a> {{ case.status }}</li> {% endfor %} </ul>
                                 </div>
                               </td>
                             </tr>
                             <tr>
                               <td align="left" style="font-size:0px;padding:10px 25px;padding-bottom:30px;word-break:break-word;">
-                                <div style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:24px;text-align:left;color:#637381;">Find more info at <a class="text-link" href="{{ content.link }}" style="color: #5e6ebf;"> {{ content.name }} </a>. {{ content.more }}</div>
+                                <div style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:24px;text-align:left;color:#637381;">Find more info at <a class="text-link" href="{{ item.link }}" style="color: #5e6ebf;"> {{ item.name }} </a>. {{ item.more }}{% endfor %}</div>
                               </td>
                             </tr>
                             <tr>

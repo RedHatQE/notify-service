@@ -23,28 +23,24 @@
     <mj-section full-width="full-width" background-color="#c4fdff" padding-bottom="0px">
       <mj-column width="100%">
         <mj-image src="https://github.com/waynesun09/notify-service/raw/main/docs/static/notify-logo.png" alt="" align="center" width="150px"></mj-image>
-        <mj-image src="https://res.cloudinary.com/dheck1ubc/image/upload/v1544156968/Email/Images/AnnouncementOffset/header-top.png" width="600px" alt="" padding="0px" href="https://github.com/waynesun09/notify-service/"></mj-image>
-      </mj-column>
-    </mj-section>
-    <mj-section background-color="#1f2e78">
-      <mj-column width="100%">
+        <mj-image src="https://images.pexels.com/photos/1655166/pexels-photo-1655166.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" width="600px" height="200px" alt="" padding="0px" href="https://github.com/waynesun09/notify-service/"></mj-image>
       </mj-column>
     </mj-section>
     <mj-wrapper padding-top="0" padding-bottom="0px" css-class="body-section">
-      <mj-section background-color="#ffffff" padding-left="15px" padding-right="15px">
+     <mj-section background-color="#ffffff" padding-left="15px" padding-right="15px">
         <mj-column width="100%">
           <mj-text color="#212b35" font-weight="bold" font-size="20px">{{ subject }}</mj-text>
           <mj-text color="#637381" font-size="16px">Hi,</mj-text>
           <mj-text color="#637381" font-size="16px">{{ begin }}</mj-text>
-          <mj-text color="#637381" font-size="16px">{{ content.title }}:</mj-text>
+          <mj-text color="#637381" font-size="16px">{% for item in content %}{{ item.title }}:</mj-text>
           <mj-text color="#637381" font-size="16px">
             <ul>
-              {% for item in content.cases %}
-              <li style="padding-bottom: 20px"><a href="{{ item.href }}"> {{ item.name }}:</a>  {{ item.result }}</li>
+              {% for case in item.cases %}
+              <li style="padding-bottom: 20px"><a href="{{ item.href }}"> {{ case.name }}:</a>  {{ case.status }}</li>
               {% endfor %}
             </ul>
           </mj-text>
-          <mj-text color="#637381" font-size="16px" padding-bottom="30px">Find more info at <a class="text-link" href="{{ content.link }}"> {{ content.name }} </a>. {{ content.more }} </mj-text>
+          <mj-text color="#637381" font-size="16px" padding-bottom="30px">Find more info at <a class="text-link" href="{{ item.link }}"> {{ item.name }} </a>. {{ item.more }}{% endfor %}</mj-text>
           <mj-text color="#637381" font-size="16px" padding-top="30px">{{ end }}</mj-text>
           <mj-text color="#637381" font-size="16px" padding-bottom="0px">Thanks!</mj-text>
         </mj-column>
@@ -65,7 +61,7 @@
           </mj-social>
           <mj-text color="#445566" font-size="11px" font-weight="bold" align="center">View this email in your browser</mj-text>
           <mj-text color="#445566" font-size="11px" align="center" line-height="16px">This is an auto generated email by notify-service</mj-text>
-          <mj-text color="#445566" font-size="11px" align="center" line-height="16px">&#169; Red Hat Inc., All Rights Reserved.</mj-text>
+          <mj-text color="#445566" font-size="11px" align="center" line-height="16px">&copy; Red Hat Inc., All Rights Reserved.</mj-text>
         </mj-column>
       </mj-section>
       <mj-section padding-top="0">
