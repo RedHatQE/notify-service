@@ -19,7 +19,7 @@ async def send_email(
     template_name: str = Query(
         "default",
         description="The jinja html template name without subfix, e.g. default. "
-        "Check jinja mjml sample url at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/default.mjml"
+        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/"
     ),
     environment: Union[
         schemas.DictBody,
@@ -32,7 +32,7 @@ async def send_email(
             "body": "SAMPLE MESSAGE"
         },
         description="The body values for parse with the template. "
-        "Check jinja mjml sample url at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/default.mjml"
+        "Check sample at: https://github.com/waynesun09/notify-service/tree/main/docs/sample"
     ),
     template_url: Optional[AnyHttpUrl] = Query(
         None,

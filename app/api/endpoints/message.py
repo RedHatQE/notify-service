@@ -34,7 +34,7 @@ async def msg_multi_tgts(
     email_template_name: str = Query(
         "default",
         description="The jinja template name without subfix, e.g. default. "
-        "Check jinja mjml sample url at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/default.mjml"
+        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/"
     ),
     subject: str = Query(
         f"Notification from {settings.PROJECT_NAME}",
@@ -50,7 +50,7 @@ async def msg_multi_tgts(
             "body": "SAMPLE PLAIN TEXT MESSAGE OR JSON DICT."
         },
         description="The body values for parse with template or send "
-        "Check jinja sample at https://raw.githubusercontent.com/waynesun09/notify-service/main/app/templates/build/chat_default.jinja"
+        "Check sample at https://github.com/waynesun09/notify-service/tree/main/docs/sample"
     ),
     gchat_webhook_url: Optional[AnyHttpUrl] = Query(
         settings.GCHAT_WEBHOOK_URL,
