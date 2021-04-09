@@ -21,7 +21,12 @@ async def send_email(
         description="The jinja html template name without subfix, e.g. default. "
         "Check jinja mjml sample url at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/default.mjml"
     ),
-    environment: Union[schemas.DictBody, schemas.TxtBody] = Body(
+    environment: Union[
+        schemas.DictBody,
+        schemas.TxtBody,
+        schemas.EmailResult,
+        schemas.BaseResultBody
+    ] = Body(
         ...,
         example={
             "body": "SAMPLE MESSAGE"

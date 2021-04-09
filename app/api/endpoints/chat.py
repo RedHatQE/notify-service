@@ -24,7 +24,7 @@ async def send_message(
         description="The jinja template name without suffix, e.g. chat_default, default to 'chat_default' for gchat. "
         "Check sample url at https://raw.githubusercontent.com/waynesun09/notify-service/main/app/templates/build/chat_default.jinja, "
     ),
-    environment: Union[schemas.DictBody, schemas.TxtBody] = Body(
+    environment: Union[schemas.DictBody, schemas.TxtBody, schemas.BaseResultBody] = Body(
         ...,
         example={
             "body": "SAMPLE MESSAGE."

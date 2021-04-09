@@ -44,7 +44,7 @@ async def msg_multi_tgts(
         settings.MSG_DEFAULT_TOPIC,
         description="The message topic or queue value, e.g. /topic/VirtualTopic.qe.ci.test.abc.test.complete"
     ),
-    environment: Union[schemas.DictBody, schemas.TxtBody] = Body(
+    environment: Union[schemas.DictBody, schemas.TxtBody, schemas.BaseResultBody] = Body(
         ...,
         example={
             "body": "SAMPLE PLAIN TEXT MESSAGE OR JSON DICT."
@@ -97,10 +97,6 @@ async def msg_multi_tgts(
     body = environment.body
     env = environment.copy()
 
-    # Dict body might fail with template parsing for some targets, so convert it to str
-    if isinstance(body, dict):
-        environment.body = str(body)
-
     if 'gchat' in target:
         await chat.send_message(
             'gchat',
@@ -122,7 +118,8 @@ async def msg_multi_tgts(
         )
 
     if 'irc' in target:
-        text = "{}:\n{}".format(subject, environment.body)
+        # Only text is supported, so convert body to str
+        text = "{}:\n{}".format(subject, str(environment.body))
         await irc.send_message(
             channel=irc_channel,
             message=text
@@ -132,7 +129,7 @@ async def msg_multi_tgts(
         await email.send_email(
             email_to,
             subject=subject,
-            template_name='default',
+            template_name=email_template_name,
             environment=environment,
             template_url=None
         )
