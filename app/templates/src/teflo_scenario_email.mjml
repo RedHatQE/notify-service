@@ -1,0 +1,112 @@
+<!-- Edit online at https://mjml.io/try-it-live/bqiaLdOc2O2 -->
+<mjml>
+  <mj-head>
+    <mj-title>Notify-service Teflo Scenairo Result</mj-title>
+    <mj-preview>{{ pre_header }}</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"></mj-all>
+      <mj-text font-weight="400" font-size="16px" color="#000000" line-height="24px" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"></mj-text>
+    </mj-attributes>
+    <mj-style inline="inline">.body-section {
+      -webkit-box-shadow: 1px 4px 11px 0px rgba(0, 0, 0, 0.15);
+      -moz-box-shadow: 1px 4px 11px 0px rgba(0, 0, 0, 0.15);
+      box-shadow: 1px 4px 11px 0px rgba(0, 0, 0, 0.15);
+      }</mj-style>
+    <mj-style inline="inline">.text-link {
+      color: #5e6ebf
+      }</mj-style>
+    <mj-style inline="inline">.footer-link {
+      color: #888888
+      }</mj-style>
+  </mj-head>
+  <mj-body background-color="#E7E7E7" width="600px">
+    <mj-section full-width="full-width" background-color="#c4fdff" padding-bottom="0px">
+      <mj-column width="100%">
+        <mj-image src="https://github.com/waynesun09/notify-service/raw/main/docs/static/notify-logo.png" alt="" align="center" width="150px"></mj-image>
+        <mj-image src="https://images.pexels.com/photos/1655166/pexels-photo-1655166.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" width="600px" height="200px" alt="" padding="0px" href="https://github.com/waynesun09/notify-service/"></mj-image>
+      </mj-column>
+    </mj-section>
+    <mj-wrapper padding-top="0" padding-bottom="0px" css-class="body-section">
+     <mj-section background-color="#ffffff" padding-left="15px" padding-right="15px" padding-top="0px">
+        <mj-column width="100%">
+          <mj-text color="#212b35" font-weight="bold" font-size="20px">{{ subject }}</mj-text>
+          <mj-text color="#637381" font-size="16px">Hi,</mj-text>
+          <mj-text color="#637381" font-size="16px">Overall Status: {% if scenario.overall_status == 0 %}Passed{% else %}Failed{% endif %}
+          </mj-text>
+          <mj-text color="#637381" font-size="16px">
+            <ul>
+              {% if passed_tasks %}
+              <li style="padding-bottom: 1px"> Passed Tasks:  {{ passed_tasks }}</li>
+              {% endif %}
+              {% if failed_tasks %}
+              <li style="padding-bottom: 1px"> Passed Tasks:  {{ failed_tasks }}</li>
+              {% endif %}
+            </ul>
+          </mj-text>
+          <mj-text color="#637381" font-size="16px" padding-top="0px" padding-bottom="0px">Execute Task Testrun Results:{% if scenario.executes %}{% for execute in scenario.executes %}</mj-text>
+      </mj-column>>
+      </mj-section>
+      <mj-section background-color="#ffffff" padding-left="15px" padding-right="15px" padding-top="0px" padding-bottom="0px">
+        <mj-column width="100%">
+          <mj-divider border-color="#DFE3E8" border-width="1px"></mj-divider>
+        </mj-column>
+      </mj-section>
+      <mj-section background-color="#ffffff" padding-left="15px" padding-right="15px" padding-top="0px">
+      <mj-column width="100%">
+          <mj-text color="#637381" font-size="16px">Task Name : {{ execute.name }}{% if execute.testrun_results %}</mj-text>
+          <mj-text color="#637381" font-size="16px">
+            <ul>
+              <li style="padding-bottom: 1px"> Total Tests: {{ execute.testrun_results.aggregate_testrun_results.total_tests }}</li>
+              <li style="padding-bottom: 1px">Passed Tests: {{ execute.testrun_results.aggregate_testrun_results.passed_tests }}</li>
+              <li style="padding-bottom: 1px">Failed Tests: {{ execute.testrun_results.aggregate_testrun_results.failed_tests }}</li>
+              <li style="padding-bottom: 1px">Skipped Tests: {{ execute.testrun_results.aggregate_testrun_results.skipped_tests }}</li>
+            </ul>
+          </mj-text>
+          <mj-text color="#637381" font-size="16px" padding-top="0px" padding-bottom="0px">{% else %}No testrun results{% endif %}{% endfor %}</mj-text>
+          <mj-text color="#637381" font-size="16px" padding-top="0px" padding-bottom="0px">{% else %}Execute Task: No Execute tasks{% endif %}</mj-text>
+      </mj-column>>
+      </mj-section>
+      <mj-section background-color="#ffffff" padding-left="15px" padding-right="15px" padding-top="0px" padding-bottom="0px">
+        <mj-column width="100%">
+          <mj-divider border-color="#DFE3E8" border-width="1px"></mj-divider>
+        </mj-column>
+      </mj-section>
+      <mj-section background-color="#ffffff" padding-left="15px" padding-right="15px" padding-top="0px" padding-bottom="0px">
+      <mj-column width="100%">  
+          <mj-text color="#637381" font-size="16px" padding-bottom="0px">{% if scenario.reports %}{% for report in scenario.reports %}{% if (report.provider == 'reportportal' or report.importer_plugin_name == 'reportportal') and (report.import_results) %}Task name: {{ report.name }}</mj-text>
+        <mj-text color="#637381" font-size="16px" padding-bottom="0px"><a class="text-link" href="{{ report.import_results['dashboard_url'] }}"> Report_Portal_Dashboard_Url </a>{% else %}</mj-text>
+          <mj-text color="#637381" font-size="16px" padding-top="0px">Report Task: {{ report.name }}</mj-text>
+          <mj-text color="#637381" font-size="16px" padding-top="0px">No imports generated{% endif %}{% endfor %}{% else %}</mj-text>
+          <mj-text color="#637381" font-size="16px" padding-top="0px">Report Task: No Report tasks{% endif %}</mj-text>
+          <mj-text color="#637381" font-size="16px" padding-top="30px">Thanks!</mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-section background-color="#ffffff" padding-left="15px" padding-right="15px" padding-top="0">
+        <mj-column width="100%">
+          <mj-divider border-color="#DFE3E8" border-width="1px"></mj-divider>
+        </mj-column>
+      </mj-section>
+    </mj-wrapper>
+    <mj-wrapper full-width="full-width">
+      <mj-section>
+        <mj-column width="100%" padding="0px">
+          <mj-social font-size="15px" icon-size="30px" mode="horizontal" padding="0px" align="center">
+            <mj-social-element href="https://www.linkedin.com/showcase/red-hat-developer" name="linkedin-noshare"></mj-social-element>
+            <mj-social-element href="https://twitter.com/rhdevelopers" name="twitter-noshare"></mj-social-element>
+            <mj-social-element href="https://www.youtube.com/channel/UC7noUdfWp-ukXUlAsJnSm-Q" name="youtube"></mj-social-element>
+          </mj-social>
+          <mj-text color="#445566" font-size="11px" font-weight="bold" align="center">View this email in your browser</mj-text>
+          <mj-text color="#445566" font-size="11px" align="center" line-height="16px">This is an auto generated email by notify-service</mj-text>
+          <mj-text color="#445566" font-size="11px" align="center" line-height="16px">&copy; Red Hat Inc., All Rights Reserved.</mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-section padding-top="0">
+        <mj-group>
+          <mj-column width="100%" padding-right="0px">
+            <mj-text color="#445566" font-size="11px" align="center" line-height="16px" font-weight="bold"><a class="footer-link" href="https://www.redhat.com/en/about/privacy-policy">Privacy</a></mj-text>
+          </mj-column>
+        </mj-group>
+      </mj-section>
+    </mj-wrapper>
+  </mj-body>
+</mjml>

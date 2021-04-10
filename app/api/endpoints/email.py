@@ -49,7 +49,7 @@ async def send_email(
     - **Request Body**: Check samples at https://github.com/waynesun09/notify-service/tree/main/docs/sample
     """
     env = {}
-    if isinstance(environment.body, str):
+    if isinstance(environment.body, str) or (template_name == 'default' and "body" not in environment.body):
         # Set 'body' in env dict, this will work with default template
         env["body"] = environment.body
     else:
