@@ -100,6 +100,7 @@ async def send_message(
             data_list.append(data)
     else:
         data = await utils.get_template(template_name, template_url, '.jinja', env)
+        data = str(data).replace('\n', '').replace('\t', '')
         data_list.append(data)
 
     async with httpx.AsyncClient() as client:
