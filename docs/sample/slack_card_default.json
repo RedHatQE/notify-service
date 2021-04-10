@@ -1,0 +1,9 @@
+{
+	"body":
+	{
+		"item": "ITEM UPDATE",
+		"label": "NEW STATUS",
+		"detail": "STATUS CHANGED READY -> SHIPPED"
+
+	}
+}

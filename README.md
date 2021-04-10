@@ -102,6 +102,12 @@ And Redoc UI with different code examples:
 
     http://${ openshift.hosts }:8080/redoc
 
+### Request body template and samples
+
+For each API, both Swagger UI and Redoc UI provide request body schema, while Redoc UI with more details and provide drop list with different supported schemas and details.
+
+Check [sample](docs/sample) dir under doc for some request body with the matching template names under [app/templates/build](app/templates/build) or [app/templates/src](app/templates/src).
+
 ## Development
 
 For develop, build, test and debug, please check [Development Doc](docs/development.md) for more info.

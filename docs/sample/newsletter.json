@@ -1,0 +1,25 @@
+{
+	"body":
+	{
+		"pre_header": "NOTIFY ITEM STATUS",
+		"begin": "THIS IS A SAMPLE NOTIFICATION",
+	        "content": [
+			{
+	                "title": "ITEM RESULTS",
+	        	"cases": [
+				{ "name": "ITEM-1", "href": "https://github.com/waynesun09/notify-service/", "status": "PASS"},
+				{ "name": "ITEM-2", "href": "", "status": "FAILED"},
+				{ "name": "ITEM-3", "href": "", "status": "SKIPPED"},
+				{ "name": "ITEM-4", "href": "", "status": "READY"},
+				{ "name": "ITEM-5", "href": "", "status": "SHIPPED"},
+				{ "name": "ITEM-6", "href": "", "status": "CANCELLED"},
+				{ "name": "ITEM-7", "href": "", "status": "RETURNED"}
+			],
+	        	"name": "LINK",
+	        	"link": "https://github.com/waynesun09/notify-service/",
+	        	"more": ""
+	        }
+		],
+		"end": "PLEASE VISIT NOTIFY-SERVICE FOR MORE INFO"
+        }
+}

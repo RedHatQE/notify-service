@@ -34,7 +34,7 @@ async def msg_multi_tgts(
     email_template_name: str = Query(
         "default",
         description="The jinja template name without subfix, e.g. default. "
-        "Check jinja mjml sample url at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/default.mjml"
+        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/"
     ),
     subject: str = Query(
         f"Notification from {settings.PROJECT_NAME}",
@@ -44,13 +44,13 @@ async def msg_multi_tgts(
         settings.MSG_DEFAULT_TOPIC,
         description="The message topic or queue value, e.g. /topic/VirtualTopic.qe.ci.test.abc.test.complete"
     ),
-    environment: Union[schemas.DictBody, schemas.TxtBody] = Body(
+    environment: Union[schemas.DictBody, schemas.TxtBody, schemas.BaseResultBody] = Body(
         ...,
         example={
             "body": "SAMPLE PLAIN TEXT MESSAGE OR JSON DICT."
         },
         description="The body values for parse with template or send "
-        "Check jinja sample at https://raw.githubusercontent.com/waynesun09/notify-service/main/app/templates/build/chat_default.jinja"
+        "Check sample at https://github.com/waynesun09/notify-service/tree/main/docs/sample"
     ),
     gchat_webhook_url: Optional[AnyHttpUrl] = Query(
         settings.GCHAT_WEBHOOK_URL,
@@ -97,10 +97,6 @@ async def msg_multi_tgts(
     body = environment.body
     env = environment.copy()
 
-    # Dict body might fail with template parsing for some targets, so convert it to str
-    if isinstance(body, dict):
-        environment.body = str(body)
-
     if 'gchat' in target:
         await chat.send_message(
             'gchat',
@@ -122,7 +118,8 @@ async def msg_multi_tgts(
         )
 
     if 'irc' in target:
-        text = "{}:\n{}".format(subject, environment.body)
+        # Only text is supported, so convert body to str
+        text = "{}:\n{}".format(subject, str(environment.body))
         await irc.send_message(
             channel=irc_channel,
             message=text
@@ -132,7 +129,7 @@ async def msg_multi_tgts(
         await email.send_email(
             email_to,
             subject=subject,
-            template_name='default',
+            template_name=email_template_name,
             environment=environment,
             template_url=None
         )
