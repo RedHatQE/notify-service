@@ -1,0 +1,142 @@
+{# TEFLO slack card template: https://github.com/RedHatQE/teflo_webhooks_notification_plugin/blob/master/teflo_webhooks_notification_plugin/templates/slack_template.jinja #}
+{
+    "blocks": [
+        {
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": "Teflo Notification : Scenario Name : {{ scenario.name }}"
+            }
+        },
+        {
+            "type": "divider"
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                {% if scenario.overall_status == 0 %}
+                "text": "*Overall Status* : Passed"
+                {% else %}
+                "text": "*Overall Status* : Failed"
+                {% endif %}
+
+            }
+        },
+        {% if  passed_tasks  %}
+            {
+                "type": "divider"
+            },
+            {
+                "type": "section",
+                "fields": [
+                    {
+                        "type": "mrkdwn",
+                        "text": "*Passed Tasks* : {{ passed_tasks }} "
+                    }
+
+                ]
+            },
+        {% endif %}
+        {% if failed_tasks %}
+            {
+                "type": "divider"
+            },
+            {
+                "type": "section",
+                "fields": [
+                    {
+                        "type": "mrkdwn",
+                        "text": "*Failed Tasks* : {{ failed_tasks }} "
+                    }
+
+                ]
+            },
+        {% endif %}
+        {
+            "type": "divider"
+        },
+        {
+            "type": "section",
+            "fields": [
+                {% if scenario.executes %}
+                    {% for execute in scenario.executes %}
+                        {
+                        "type": "mrkdwn",
+                        "text": "*Execute task :* {{ execute.name }} "
+                        },
+                        {% if execute.testrun_results %}
+                            {
+                                "type": "mrkdwn",
+                                "text": "\n> *Testrun Results* \n>
+                                         \n> *Total Tests:* {{ execute.testrun_results.aggregate_testrun_results.total_tests }}
+                                         \n> *Passed Tests:* {{ execute.testrun_results.aggregate_testrun_results.passed_tests }}
+                                         \n> *Failed Tests:* {{ execute.testrun_results.aggregate_testrun_results.failed_tests }}
+                                         \n> *Skipped Tests:* {{ execute.testrun_results.aggregate_testrun_results.skipped_tests }}"
+                            }
+                        {% else %}
+                            {
+                                    "type": "mrkdwn",
+                                    "text": "No test run results generated for this execute task"
+                            }
+                        {% endif %}
+                        {% if not loop.last  %}
+                        ,
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                {
+                    "type": "mrkdwn",
+                    "text": "*Execute task:* No execute tasks were run"
+                }
+                {% endif %}
+            ]
+        },
+        {
+            "type": "divider"
+        },
+        {
+            "type": "section",
+            "fields":
+            [
+                {% if scenario.reports %}
+                    {% for report in scenario.reports %}
+                        {
+                                "type": "mrkdwn",
+                                "text": "*Report task :* {{ report.name }}"
+
+                        } ,
+
+                        {% if (report.provider == 'polarion' or report.importer_plugin_name == 'polarion') and (report.import_results) %}
+                             {
+                                    "type": "mrkdwn",
+                                    "text": "{% for results in report.import_results %}\n> <{{ results['testrun-url'] }} |Polarion_testrun_url_{{ loop.index }}> \n{% endfor %}"
+                             }
+                        {% elif (report.provider == 'reportportal' or report.importer_plugin_name == 'reportportal') and (report.import_results) %}
+
+                            {
+                                    "type": "mrkdwn",
+                                    "text": "\n> <{{ report.import_results.dashboard_url }} |RP_dashboard_url> \n>"
+
+                            }
+
+                        {% else %}
+                             {
+                                 "type": "mrkdwn",
+                                 "text": "*Imports:* No imports were generated for this run"
+                             }
+                        {% endif %}
+                        {% if not loop.last %}
+                                ,
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                {
+                    "type": "mrkdwn",
+                    "text": "*Report task:* No report tasks were run"
+                }
+                {% endif %}
+            ]
+        }
+    ]
+}
