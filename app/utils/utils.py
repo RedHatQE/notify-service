@@ -79,7 +79,12 @@ async def get_template(name: str, url: Optional[AnyHttpUrl] = None,
             template_dir.append(settings.TEMPLATE_MOUNT_DIR)
         jinja_env = Environment(
             loader=FileSystemLoader(template_dir))
-        template = jinja_env.get_template(name + suffix).render(env)
+        try:
+            template = jinja_env.get_template(name + suffix).render(env)
+        except Exception as e:
+            raise HTTPException(
+                status_code=400,
+                detail=f"{e}")
 
     if not template:
         raise HTTPException(
