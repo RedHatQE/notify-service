@@ -30,7 +30,7 @@ async def send_message(
             "body": "SAMPLE MESSAGE."
         },
         description="The body values for parse with the template, "
-        "check sample at https://github.com/waynesun09/notify-service/tree/main/docs/sample"
+        "check samples at https://github.com/waynesun09/notify-service/tree/main/docs/sample"
     ),
     webhook_url: Optional[AnyHttpUrl] = Query(
         None,
@@ -49,6 +49,7 @@ async def send_message(
     - **webhook_url**: chat webhook url address, optional
     - **template_name**: template name in local template list, default is "default"
     - **template_url**: template url, optional
+    - **Request Body**: Check samples at https://github.com/waynesun09/notify-service/tree/main/docs/sample
     """
     if webhook_url:
         url = webhook_url

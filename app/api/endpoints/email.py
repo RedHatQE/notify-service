@@ -32,7 +32,7 @@ async def send_email(
             "body": "SAMPLE MESSAGE"
         },
         description="The body values for parse with the template. "
-        "Check sample at: https://github.com/waynesun09/notify-service/tree/main/docs/sample"
+        "Check samples at: https://github.com/waynesun09/notify-service/tree/main/docs/sample"
     ),
     template_url: Optional[AnyHttpUrl] = Query(
         None,
@@ -43,8 +43,10 @@ async def send_email(
     Send email with template
 
     - **email_to**: email address, required
+    - **subject**: email subject, optional
     - **template_name**: template name in local template list, default is "default"
     - **template_url**: template url, optional
+    - **Request Body**: Check samples at https://github.com/waynesun09/notify-service/tree/main/docs/sample
     """
     env = {}
     if isinstance(environment.body, str):
