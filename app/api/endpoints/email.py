@@ -1,4 +1,4 @@
-from typing import Any, Optional, Union
+from typing import Any, List, Optional, Union
 
 from fastapi import APIRouter, Query, Body
 from pydantic.networks import AnyHttpUrl, EmailStr
@@ -12,7 +12,7 @@ router = APIRouter()
 
 @router.post("/", response_model=schemas.Msg)
 async def send_email(
-    email_to: EmailStr = Query(
+    email_to: List[EmailStr] = Query(
         ..., description="Email address, e.g. abc@example.com"
     ),
     subject: str = Query("", description="The email subject"),

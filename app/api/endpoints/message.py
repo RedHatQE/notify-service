@@ -1,4 +1,4 @@
-from typing import Any, Optional, Union
+from typing import Any, List, Optional, Union
 from pydantic.networks import AnyHttpUrl, EmailStr
 
 from fastapi import APIRouter, Query, Body, status, HTTPException
@@ -28,7 +28,7 @@ async def msg_multi_tgts(
         None,
         description="IRC channel name start with '#' or a user name, e.g. channel #test or user john"
     ),
-    email_to: EmailStr = Query(
+    email_to: List[EmailStr] = Query(
         None, description="Email address, e.g. abc@example.com"
     ),
     email_template_name: str = Query(
