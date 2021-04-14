@@ -37,7 +37,7 @@
 			"reports":
 			[
 				{
-					"provider": "reportportal",
+					"importer_plugin_name": "reportportal",
 					"name": "SCENARIO SAMPLE",
 					"import_results":
 					{
@@ -46,7 +46,7 @@
 				}
 			]
 		},
-		"passed_tasks": "TEST1, TEST2, TEST3",
-		"failed_tasks": "TEST4, TEST5"
+		"passed_tasks": ["validate", "provision", "orchestrate"],
+		"failed_tasks": ["execute"]
 	}
 }
