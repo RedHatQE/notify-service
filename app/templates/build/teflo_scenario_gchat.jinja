@@ -1,0 +1,140 @@
+{# TEFLO gchat card template: https://github.com/RedHatQE/teflo_webhooks_notification_plugin/blob/master/teflo_webhooks_notification_plugin/templates/gchat_template.jinja #}
+{
+    "cards": [
+        {
+            "header": {
+                        "title": "{{ subject }}",
+                        "subtitle": "{{ scenario.name }}"
+                       },
+            "sections": [
+                {
+                      "widgets": [
+                          {
+                                "keyValue": {
+                                "topLabel": "Overall Status",
+                                {% if scenario.overall_status == 0 %}
+                                    "content": "Passed"
+                                {% else %}
+                                    "content": "Failed"
+                                {% endif %}
+                                  }
+                          }
+                          {% if passed_tasks %}
+                          ,
+                              {
+                                    "keyValue": {
+                                      "topLabel": "Passed Tasks",
+                                      "content": "{{ passed_tasks }}"
+                                    }
+                              }
+                          {% endif %}
+                          {% if failed_tasks %}
+                              ,
+                              {
+                                    "keyValue": {
+                                      "topLabel": "Failed Tasks",
+                                      "content": "{{ failed_tasks }}"
+                                    }
+                              }
+                          {% endif %}
+                      ]
+                },
+                {
+                    "header": "Execute Task Testrun Results",
+                    "widgets": [
+                            {% if scenario.executes %}
+                                {% for execute in scenario.executes %}
+                                    {
+                                        "keyValue":{
+                                        "topLabel": "Task Name : {{ execute.name }} ",
+                                        {% if execute.testrun_results %}
+                                            "contentMultiline": "true",
+                                            "content" : "Total Tests: {{ execute.testrun_results.aggregate_testrun_results.total_tests }}
+                                                         Passed Tests: {{ execute.testrun_results.aggregate_testrun_results.passed_tests }}
+                                                         Failed Tests: {{ execute.testrun_results.aggregate_testrun_results.failed_tests }}
+                                                         Skipped Tests: {{ execute.testrun_results.aggregate_testrun_results.skipped_tests }}"
+                                        {% else %}
+                                            "content": "No testrun results"
+                                        {% endif %}
+                                        }
+                                    }
+                                {% if not loop.last %}
+                                    ,
+                                {% endif %}
+                                {% endfor %}
+                            {% else %}
+                             {
+                                "keyValue" : {
+                                "topLabel": "Execute Task ",
+                                "content": "No Execute tasks"
+                                 }
+                             }
+                            {% endif %}
+                    ]
+                },
+                {
+                    "header": "Report Task Import Urls",
+                    "widgets": [
+                        {% if scenario.reports %}
+                            {% for report in scenario.reports %}
+                                {% if (report.provider == 'polarion' or report.importer_plugin_name == 'polarion') and (report.import_results) %}
+                                    {
+                                        "keyValue":{
+                                            "topLabel": "Task Name : {{ report.name }} ",
+                                            "content": " Polarion testrun urls: "
+                                        }
+                                    },
+                                    {% for results in report.import_results %}
+                                        {
+                                            "keyValue":{
+                                                "content": " import_url_" + "{{ loop.index }}" ,
+                                                "onClick": {
+                                                        "openLink": {
+                                                        "url": "{{ results['testrun-url'] }}"
+                                                        }
+                                                }
+                                            }
+
+                                        }
+                                    {% if not loop.last %}
+                                         ,
+                                    {% endif %}
+                                    {% endfor %}
+                                {% elif (report.provider == 'reportportal' or report.importer_plugin_name == 'reportportal') and (report.import_results) %}
+                                    {
+                                        "keyValue":{
+                                            "topLabel": "Task Name : {{ report.name }} ",
+                                            "content": "Report_Portal_Dashboard_Url" ,
+                                            "onClick": {
+                                                        "openLink": {
+                                                        "url": "{{ report.import_results['dashboard_url'] }}"
+                                                        }
+                                                       }
+                                        }
+                                    }
+                                {% else %}
+                                    {
+                                            "keyValue":{
+                                            "topLabel": "Report Task : {{ report.name }} ",
+                                            "content": "No imports generated"
+                                        }
+                                    }
+                                {% endif %}
+                            {% if not loop.last %}
+                                     ,
+                            {% endif %}
+                            {% endfor %}
+                        {% else %}
+                             {
+                                "keyValue" : {
+                                "topLabel": "Report Task ",
+                                "content": "No Report tasks"
+                                 }
+                             }
+                        {% endif %}
+                    ]
+                }
+            ]
+        }
+    ]
+}

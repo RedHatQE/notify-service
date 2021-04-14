@@ -1,0 +1,52 @@
+{
+	"body":
+	{
+		"scenario":
+		{
+			"name": "SCENARIO SAMPLE",
+			"overall_status": 1,
+			"executes":
+			[
+				{
+					"name": "TESTRUN SAMPLE 1",
+					"testrun_results" :
+					{
+						"aggregate_testrun_results":
+						{
+							"total_tests": 35,
+							"passed_tests": 30,
+							"failed_tests": 4,
+							"skipped_tests": 1
+						}
+					}
+				},
+				{
+					"name": "TESTRUN SAMPLE 2",
+					"testrun_results" :
+					{
+						"aggregate_testrun_results":
+						{
+							"total_tests": 30,
+							"passed_tests": 15,
+							"failed_tests": 5,
+							"skipped_tests": 10
+						}
+					}
+				}
+			],
+			"reports":
+			[
+				{
+					"importer_plugin_name": "reportportal",
+					"name": "SCENARIO SAMPLE",
+					"import_results":
+					{
+						"dashboard_url": "https://github.com/waynesun09/notify-service"
+					}
+				}
+			]
+		},
+		"passed_tasks": ["validate", "provision", "orchestrate"],
+		"failed_tasks": ["execute"]
+	}
+}

@@ -36,6 +36,16 @@ async def msg_multi_tgts(
         description="The jinja template name without subfix, e.g. default. "
         "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/"
     ),
+    gchat_template_name: str = Query(
+        "chat_default",
+        description="The jinja template name without subfix, e.g. default. "
+        "Check gchat jinja at: https://github.com/waynesun09/notify-service/blob/main/app/templates/build/"
+    ),
+    slack_template_name: str = Query(
+        "chat_default",
+        description="The jinja template name without subfix, e.g. default. "
+        "Check slack jinja at: https://github.com/waynesun09/notify-service/blob/main/app/templates/build/"
+    ),
     subject: str = Query(
         f"Notification from {settings.PROJECT_NAME}",
         description="The message subject"
@@ -68,6 +78,9 @@ async def msg_multi_tgts(
     - **subject**: message subject, optional
     - **channel**: The irc channel name start with '#' or a user name, optional
     - **email_to**: email address, optional
+    - **email_template_name**: email template name, optional
+    - **gchat_template_name**: gchat template name, optional
+    - **slack_template_name**: slack template name, optional
     - **gchat_webhook_url**: gchat webhook url address, optional
     - **slack_webhook_url**: slack webhook url address, optional
     - **Request Body**: Check samples at https://github.com/waynesun09/notify-service/tree/main/docs/sample
@@ -103,7 +116,7 @@ async def msg_multi_tgts(
             'gchat',
             subject=subject,
             environment=environment,
-            template_name="chat_default",
+            template_name=gchat_template_name,
             webhook_url=gchat_webhook_url,
             template_url=None
         )
@@ -113,7 +126,7 @@ async def msg_multi_tgts(
             'slack',
             subject=subject,
             environment=environment,
-            template_name="chat_default",
+            template_name=slack_template_name,
             webhook_url=slack_webhook_url,
             template_url=None
         )
