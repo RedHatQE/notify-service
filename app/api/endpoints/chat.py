@@ -22,7 +22,7 @@ async def send_message(
     template_name: str = Query(
         "chat_default",
         description="The jinja template name without suffix, e.g. chat_default, default to 'chat_default' for gchat. "
-        "Check sample at https://raw.githubusercontent.com/waynesun09/notify-service/main/app/templates/build/"
+        "Check sample at https://github.com/waynesun09/notify-service/tree/main/app/templates/build"
     ),
     environment: Union[schemas.DictBody, schemas.TxtBody, schemas.BaseResultBody] = Body(
         ...,
