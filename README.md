@@ -22,6 +22,9 @@ Check Pipfile for python packages.
 
 ## Deploy with Helm
 
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/S0Vn9BM3iMA/0.jpg)](https://youtu.be/S0Vn9BM3iMA)
+
+
 ### Update Helm chart value
 
 Make a copy of the `chart/values.yaml`, e.g. dev.value.yaml and update.
