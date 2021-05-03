@@ -39,7 +39,7 @@
               <li style="padding-bottom: 1px"> Passed Tasks:  {{ passed_tasks }}</li>
               {% endif %}
               {% if failed_tasks %}
-              <li style="padding-bottom: 1px"> Passed Tasks:  {{ failed_tasks }}</li>
+              <li style="padding-bottom: 1px"> Failed Tasks:  {{ failed_tasks }}</li>
               {% endif %}
             </ul>
           </mj-text>
