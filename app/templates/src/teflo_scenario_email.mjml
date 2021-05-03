@@ -31,6 +31,7 @@
         <mj-column width="100%">
           <mj-text color="#212b35" font-weight="bold" font-size="20px">{{ subject }}</mj-text>
           <mj-text color="#637381" font-size="16px">Hi,</mj-text>
+          <mj-text color="#637382" font-size="16px">{{ scenario.name }}</mj-text>
           <mj-text color="#637381" font-size="16px">Overall Status: {% if scenario.overall_status == 0 %}Passed{% else %}Failed{% endif %}
           </mj-text>
           <mj-text color="#637381" font-size="16px">
@@ -43,7 +44,7 @@
               {% endif %}
             </ul>
           </mj-text>
-          <mj-text color="#637381" font-size="16px" padding-top="0px" padding-bottom="0px">Execute Task Testrun Results:{% if scenario.executes %}{% for execute in scenario.executes %}</mj-text>
+          <mj-text color="#637381" font-size="16px" padding-top="0px" padding-bottom="0px">{% if scenario.executes %}{% for execute in scenario.executes %}Execute Task Testrun Results:</mj-text>
       </mj-column>>
       </mj-section>
       <mj-section background-color="#ffffff" padding-left="15px" padding-right="15px" padding-top="0px" padding-bottom="0px">
