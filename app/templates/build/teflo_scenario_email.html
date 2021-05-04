@@ -212,19 +212,24 @@
                             </tr>
                             <tr>
                               <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                                <div style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:24px;text-align:left;color:#637382;">{{ scenario.name }}</div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
                                 <div style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:24px;text-align:left;color:#637381;">Overall Status: {% if scenario.overall_status == 0 %}Passed{% else %}Failed{% endif %}</div>
                               </td>
                             </tr>
                             <tr>
                               <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
                                 <div style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:24px;text-align:left;color:#637381;">
-                                  <ul> {% if passed_tasks %} <li style="padding-bottom: 1px"> Passed Tasks: {{ passed_tasks }}</li> {% endif %} {% if failed_tasks %} <li style="padding-bottom: 1px"> Passed Tasks: {{ failed_tasks }}</li> {% endif %} </ul>
+                                  <ul> {% if passed_tasks %} <li style="padding-bottom: 1px"> Passed Tasks: {{ passed_tasks }}</li> {% endif %} {% if failed_tasks %} <li style="padding-bottom: 1px"> Failed Tasks: {{ failed_tasks }}</li> {% endif %} </ul>
                                 </div>
                               </td>
                             </tr>
                             <tr>
                               <td align="left" style="font-size:0px;padding:10px 25px;padding-top:0px;padding-bottom:0px;word-break:break-word;">
-                                <div style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:24px;text-align:left;color:#637381;">Execute Task Testrun Results:{% if scenario.executes %}{% for execute in scenario.executes %}</div>
+                                <div style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:400;line-height:24px;text-align:left;color:#637381;">{% if scenario.executes %}{% for execute in scenario.executes %}Execute Task Testrun Results:</div>
                               </td>
                             </tr>
                           </table>
