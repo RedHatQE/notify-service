@@ -38,7 +38,7 @@ async def send_message(
     ),
     template_url: Optional[AnyHttpUrl] = Query(
         None,
-        description="The remote template url, it will overide the template_name if given"
+        description="The remote template url, it will override the template_name if given"
     )
 ) -> Any:
     """

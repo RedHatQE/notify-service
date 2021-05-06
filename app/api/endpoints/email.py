@@ -36,7 +36,7 @@ async def send_email(
     ),
     template_url: Optional[AnyHttpUrl] = Query(
         None,
-        description="The remote teamplate url, it will overide the template_name if given"
+        description="The remote teamplate url, it will override the template_name if given"
     )
 ) -> Any:
     """

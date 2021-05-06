@@ -36,15 +36,27 @@ async def msg_multi_tgts(
         description="The jinja template name without subfix, e.g. default. "
         "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/"
     ),
+    email_template_url: Optional[AnyHttpUrl] = Query(
+        None,
+        description="The remote teamplate url, it will override the email_template_name if given"
+    ),
     gchat_template_name: str = Query(
         "chat_default",
         description="The jinja template name without subfix, e.g. default. "
         "Check gchat jinja at: https://github.com/waynesun09/notify-service/blob/main/app/templates/build/"
     ),
+    gchat_template_url: Optional[AnyHttpUrl] = Query(
+        None,
+        description="The remote teamplate url, it will override the gchat_template_name if given"
+    ),
     slack_template_name: str = Query(
         "chat_default",
         description="The jinja template name without subfix, e.g. default. "
         "Check slack jinja at: https://github.com/waynesun09/notify-service/blob/main/app/templates/build/"
+    ),
+    slack_template_url: Optional[AnyHttpUrl] = Query(
+        None,
+        description="The remote teamplate url, it will override the slack_template_name if given"
     ),
     subject: str = Query(
         f"Notification from {settings.PROJECT_NAME}",
@@ -120,7 +132,7 @@ async def msg_multi_tgts(
             environment=environment,
             template_name=gchat_template_name,
             webhook_url=gchat_webhook_url,
-            template_url=None
+            template_url=gchat_template_url
         )
 
     if 'slack' in target:
@@ -132,7 +144,7 @@ async def msg_multi_tgts(
             environment=environment,
             template_name=slack_template_name,
             webhook_url=slack_webhook_url,
-            template_url=None
+            template_url=slack_template_url
         )
 
     if 'irc' in target:
@@ -149,7 +161,7 @@ async def msg_multi_tgts(
             subject=subject,
             template_name=email_template_name,
             environment=environment,
-            template_url=None
+            template_url=email_template_url
         )
 
     # Use environment copy as message bus backend could parse both random dict and text
