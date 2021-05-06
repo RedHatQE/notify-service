@@ -63,11 +63,11 @@ async def msg_multi_tgts(
         "Check samples at https://github.com/waynesun09/notify-service/tree/main/docs/sample"
     ),
     gchat_webhook_url: Optional[AnyHttpUrl] = Query(
-        settings.GCHAT_WEBHOOK_URL,
+        None,
         description="The gchat webhook url"
     ),
     slack_webhook_url: Optional[AnyHttpUrl] = Query(
-        settings.SLACK_WEBHOOK_URL,
+        None,
         description="The slack webhook url"
     )
 ) -> Any:
@@ -112,6 +112,8 @@ async def msg_multi_tgts(
     env = environment.copy()
 
     if 'gchat' in target:
+        if not gchat_webhook_url:
+            gchat_webhook_url = settings.GCHAT_WEBHOOK_URL
         await chat.send_message(
             'gchat',
             subject=subject,
@@ -122,6 +124,8 @@ async def msg_multi_tgts(
         )
 
     if 'slack' in target:
+        if not slack_webhook_url:
+            slack_webhook_url = settings.SLACK_WEBHOOK_URL
         await chat.send_message(
             'slack',
             subject=subject,
