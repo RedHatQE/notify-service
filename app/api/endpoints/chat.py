@@ -72,9 +72,10 @@ async def send_message(
 
     chunks = []
     n = 4095
-    if (isinstance(environment.body, str) or
-            (template_name == "chat_default" and isinstance(environment.body, dict)
-                and not hasattr(environment.body, "body"))):
+    if (not template_url and
+            (isinstance(environment.body, str) or
+                (template_name == "chat_default" and isinstance(environment.body, dict) and
+                    not hasattr(environment.body, "body")))):
         # Pure text message, put the subject into body and add new line
         # Set 'body' value in env dict, this will work with chat default template
         text = "\n".join((subject, str(environment.body)))
