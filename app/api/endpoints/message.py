@@ -103,8 +103,8 @@ async def msg_multi_tgts(
             detail = f"The target {t} is not supported"
             param_err(detail)
 
-    if (("gchat" in target and not gchat_webhook_url) or
-            ("slack" in target and not slack_webhook_url)):
+    if (("gchat" in target and not (gchat_webhook_url or settings.GCHAT_WEBHOOK_URL)) or
+            ("slack" in target and not (slack_webhook_url or settings.SLACK_WEBHOOK_URL))):
         detail = "The chat webhook url have not been provided"
         param_err(detail)
 
