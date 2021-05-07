@@ -36,7 +36,7 @@ async def send_email(
     ),
     template_url: Optional[AnyHttpUrl] = Query(
         None,
-        description="The remote teamplate url, it will overide the template_name if given"
+        description="The remote teamplate url, it will override the template_name if given"
     )
 ) -> Any:
     """
@@ -49,7 +49,9 @@ async def send_email(
     - **Request Body**: Check samples at https://github.com/waynesun09/notify-service/tree/main/docs/sample
     """
     env = {}
-    if isinstance(environment.body, str) or (template_name == 'default' and "body" not in environment.body):
+    if (not template_url and
+            (isinstance(environment.body, str) or
+                (template_name == 'default' and "body" not in environment.body))):
         # Set 'body' in env dict, this will work with default template
         env["body"] = environment.body
     else:
