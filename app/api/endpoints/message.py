@@ -91,8 +91,11 @@ async def msg_multi_tgts(
     - **channel**: The irc channel name start with '#' or a user name, optional
     - **email_to**: email address, optional
     - **email_template_name**: email template name, optional
+    - **email_template_url**: email template url, optional
     - **gchat_template_name**: gchat template name, optional
+    - **gchat_template_url**: gchat template url, optional
     - **slack_template_name**: slack template name, optional
+    - **slack_template_url**: slack template url, optional
     - **gchat_webhook_url**: gchat webhook url address, optional
     - **slack_webhook_url**: slack webhook url address, optional
     - **Request Body**: Check samples at https://github.com/waynesun09/notify-service/tree/main/docs/sample
