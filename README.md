@@ -97,13 +97,23 @@ Make sure you have login your cluster, run with updated chart values:
 
     $ helm install ns chart/ -f dev.value.yaml
 
-After deploy done access the app Swagger UI:
+## Access the service and API docs
+
+### Swagger UI
+
+After deployment is done access the app Swagger UI:
 
     http://${ openshift.hosts }:8080/docs
 
-And Redoc UI with different code examples:
+You could try the apis on Swagger UI and check parameters and request body samples in description.
+
+### Redoc
+
+After the deployment is done, Redoc UI could be accessed at:
 
     http://${ openshift.hosts }:8080/redoc
+
+The Redoc UI is more developer friendly with detail on descriptins, parameters, schemas, payload, code samples, etc.
 
 ### Request body template and samples
 
