@@ -2,6 +2,7 @@ from typing import Dict, Generator
 
 import pytest
 from fastapi.testclient import TestClient
+from unittest.mock import patch
 
 from app.core.config import settings
 from app.main import app
@@ -9,8 +10,10 @@ from app.main import app
 
 @pytest.fixture(scope="module")
 def client() -> Generator:
-    with TestClient(app) as c:
-        yield c
+    with patch('aioredis.create_redis_pool'):
+        with patch('fastapi_cache.FastAPICache'):
+            with TestClient(app) as c:
+                yield c
 
 
 @pytest.fixture(scope="module")
