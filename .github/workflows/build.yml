@@ -29,4 +29,5 @@ jobs:
         docker pull quay.io/centos7/redis-5-centos7
         docker run -d --name redis -e REDIS_PASSWORD=test -p 35525:6379 quay.io/centos7/redis-5-centos7
         docker run -d --name notify --env-file .test.env -p 8080:8080 -t notify-service
+        sleep 8
         curl --fail http://localhost:8080/status
