@@ -80,11 +80,11 @@ Start Redis server at local:
 
 Run with production image:
 
-    $ podman run -d --name notify --env-file dev.env --volume ./extra-template:/var/tmp:Z --volume ./certs/:/var/certs:Z -p 8080:80 -t quay.io/waynesun09/notify-service:latest
+    $ podman run -d --name notify --env-file dev.env --volume ./extra-template:/var/tmp:Z --volume ./certs/:/var/certs:Z -p 8080:8080 -t quay.io/waynesun09/notify-service:latest
 
 Run dev image:
 
-    $ podman run --name notify --env-file dev.env --rm --volume ./extra-template:/var/tmp:Z --volume ./certs/:/var/certs:Z --volume ./app:/app:Z -p 8080:80 -t localhost/notify-service:dev
+    $ podman run --name notify --env-file dev.env --rm --volume ./extra-template:/var/tmp:Z --volume ./certs/:/var/certs:Z --volume ./app:/app:Z -p 8080:8080 -t localhost/notify-service:dev
 
 **Note**: Copy the cert files to the ./certs dir if enalbed ActiveMQ config
 
@@ -100,13 +100,8 @@ Open browser and access:
 
     http://localhost:8080/redoc
 
-## Run pytest
+## Run pytest with podman
 
-Install pytest:
+Tests are added under app/tests, make sure you have updated parameters in .test.env or export them in env, then run:
 
-    $ pipenv shell
-    $ pip install pytest py pytest-dotenv
-
-Tests are added under app/tests, make sure you have updated parameters or export them in env, then run:
-
-    $ py.test --rootdir app/ --envfile dev.env
+    $ podman run --name notify-test --env-file .test.env --entrypoint= --rm -i --volume ./extra-template:/var/tmp:Z --volume ./app:/opt/app-root/app:Z  -p 8080:8080 -t quay.io/waynesun09/notify-service:latest /bin/bash -c 'pipenv run pytest app/'
