@@ -1,0 +1,32 @@
+name: Build
+
+on:
+  push:
+    paths:
+    - "app/**/*.py"
+  pull_request:
+    paths:
+    - "app/**/*.py"
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout notify-service
+      uses: actions/checkout@v2
+
+    - name: Build docker image
+      run: docker build . -t notify-service
+
+    - name: Run pytest
+      run: |
+        docker run --name notify-test --env-file .test.env --entrypoint= --rm -p 8080:8080 -t notify-service /bin/bash -c 'pipenv run pytest app/'
+
+    - name: Test image
+      run: |
+        docker pull centos7/redis-5-centos7
+        docker run -d --name redis -e REDIS_PASSWORD=test -p 35525:6379 quay.io/centos7/redis-5-centos7
+        docker run -d --name notify --env-file .test.env -p 8080:8080 -t notify-service
+        curl --fail http://localhost:8080/status
