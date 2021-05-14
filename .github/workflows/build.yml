@@ -1,0 +1,47 @@
+name: Build
+
+on:
+  push:
+    paths:
+    - "app/**/*.py"
+  pull_request:
+    paths:
+    - "app/**/*.py"
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    services:
+      # Label used to access the service container
+      redis:
+        # Docker Hub image
+        image: redis
+        # Set health checks to wait until redis has started
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps port 6379 on service container to the host
+          - 6379:6379
+
+    steps:
+    - name: Checkout notify-service
+      uses: actions/checkout@v2
+
+    - name: Build docker image
+      run: docker build . -t notify-service
+
+    - name: Run pytest
+      run: |
+        docker run --name notify-test --env-file .test.env --entrypoint= --rm -p 8080:8080 -t notify-service /bin/bash -c 'pipenv run pytest app/'
+
+    - name: Start the service
+      run: |
+        docker run -d --name notify --env-file .test.env -p 8080:8080 -t notify-service;
+        # curl --connect-timeout 30 --retry 3 --retry-delay 5 http://localhost:8080
+      env:
+        REDIS_URI: redis://redis:6379

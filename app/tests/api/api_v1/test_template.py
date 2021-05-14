@@ -3,6 +3,7 @@ import uuid
 from http import HTTPStatus
 from pathlib import Path
 from typing import Dict
+from unittest import mock
 
 from fastapi.testclient import TestClient
 
@@ -18,6 +19,7 @@ def test_get_template_list(
     assert "customized" in tmplt
 
 
+@mock.patch('app.utils.utils.read_file')
 def test_get_template(
         client: TestClient, api_key_headers: Dict[str, str]) -> None:
     _file_name = "default"
