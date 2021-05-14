@@ -42,7 +42,7 @@ jobs:
     - name: Test image
       run: |
         docker run -d --name notify --env-file .test.env -p 8080:8080 -t notify-service
-        sleep 8
+        sleep 8s
         curl --fail http://localhost:8080/status
       env:
         REDIS_URI: redis://redis:6379
