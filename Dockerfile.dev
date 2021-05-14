@@ -4,7 +4,7 @@ LABEL maintainer="Wayne Sun <gsun@redhat.com>"
 
 ENV PIPENV_VENV_IN_PROJECT 1
 WORKDIR /
-COPY start.sh Pipfile Pipfile.lock .
+COPY start.sh Pipfile Pipfile.lock ./
 RUN chmod +x /start.sh
 
 RUN pip install pip pipenv && \

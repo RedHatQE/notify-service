@@ -10,7 +10,7 @@ WORKDIR ${APP_ROOT}/
 
 USER 0
 
-COPY start.sh Pipfile Pipfile.lock .
+COPY start.sh Pipfile Pipfile.lock ./
 RUN chown -R 1001:0 ${APP_ROOT} && chmod -R ug+rwx ${APP_ROOT} && \
     rpm-file-permissions
 
