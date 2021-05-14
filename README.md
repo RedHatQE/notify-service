@@ -137,4 +137,4 @@ You can contribute by:
 All bugs, tasks or enhancements are tracked as [GitHub issues](https://github.com/waynesun09/notify-service/issues).
 
 ## CI
-The Github Action will run flake8 against .py files.
+The Github Action will run flake8 against .py files, pytest and helm chart test.
