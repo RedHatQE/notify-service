@@ -99,6 +99,8 @@ Make sure you have login your cluster, run with updated chart values:
 
 ## Access the service and API docs
 
+The API docs are automatically generated on Swagger UI and Redoc UI.
+
 ### Swagger UI
 
 After deployment is done access the app Swagger UI:
@@ -120,6 +122,62 @@ The Redoc UI is more developer friendly with detail on descriptins, parameters, 
 For each API, both Swagger UI and Redoc UI provide request body schema, while Redoc UI with more details and provide drop list with different supported schemas and details.
 
 Check [sample](docs/sample) dir under doc for some request body with the matching template names under [app/templates/build](app/templates/build) or [app/templates/src](app/templates/src).
+
+## Templates
+
+The repo have provided few templates under `app/templates/`, which includes templates for email, Google Chat and Slack.
+
+All templates are Jinja templates. Check following for how each target templates are generated, remember to add new request body sample under [sample](docs/sample) dir for each templates.
+
+### Email MJML template
+
+The email templates are generated with [MJML](https://mjml.io/documentation/), you could create a mjml template online with [try-it-live](https://mjml.io/try-it-live/).
+
+After edit done, you could save the mjml file with suffix `.mjml` under [app/templates/src](app/templates/src), and SAVE THE HTML file with suffix '.html' under [app/templates/build](app/templates/build), the `HTML` file will be directly used as email template.
+Then you could raise PR for adding new templates, make sure your template is unique.
+
+**Note:** Use Jinja semantic for templating.
+
+### Google Chat template
+
+Google chat message support simple text and cards:
+
+- [Simple text](https://developers.google.com/hangouts/chat/reference/message-formats/basic) contains plain text content with limited text formatting.
+- [Cards](https://developers.google.com/hangouts/chat/reference/message-formats/cards) define the format, content, and behavior of cards to be displayed in the target space.
+
+Follow the docs and create your own google chat templates and save the template file with suffix '.jinja' under [app/templates/build](app/templates/build).
+Then you could raise PR for adding new templates, make sure your template is unique.
+
+**Note:** Use Jinja semantic for templating.
+
+### Slack template
+
+Slace message use mrkdwn formatting syntax and support layouts, check:
+
+- [Formatting text](https://api.slack.com/messaging/composing/formatting) in messages
+- [Composing layouts](https://api.slack.com/messaging/composing/layouts) for layouts
+
+Follow the docs and create your own slack templates and save the template file with suffix '.jinja' under [app/templates/build](app/templates/build).
+Then you could raise PR for adding new templates, make sure your template is unique.
+
+**Note:** Use Jinja semantic for templating.
+
+### Upload templates
+
+No need to raise PRs for each template, if the template is not for common use for all users, user could choose upload templates to a running instance use the Update Tempalte API.
+Check on the Swagger UI or Redoc UI with PUT method under template APIs on a running instance.
+
+The templates are saved on a volume mounted to dir specified as `templateMountDir` in helm chart, make sure `persistence.enabled` is true. Then the templates will be saved in a persistent volumn on your OCP cluster.
+
+TODO: Supprt S3 storage
+
+### Remote url templates
+
+User could also store templates on a github repo or other places which could be accessed by url, then could specify the template url in email, gchat, slack target apis.
+
+For remote urls, cache with default 300 secs timeout will be enabled, so no fetching if request same template between 300 secs.
+
+**Note:** Make sure you have matching request body for Jinja templating.
 
 ## Development
 
