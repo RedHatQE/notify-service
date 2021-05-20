@@ -93,7 +93,23 @@ or else update the ingress part.
 
 ### Run helm install
 
-Make sure you have login your cluster, run with updated chart values:
+Make sure you have login your cluster.
+
+#### Install latest from helm repo
+    
+Add helm repo with:
+
+    $ helm repo add notify https://waynesun09.github.io/notify-service/
+    
+Check the latest release on the project with:
+
+    $ helm search repo notify-service
+    
+Then install with:
+
+    $ helm install ns notify-service -f dev.value.yaml
+    
+#### Install from current repo:
 
     $ helm install ns chart/ -f dev.value.yaml
 
