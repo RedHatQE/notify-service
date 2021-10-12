@@ -54,5 +54,5 @@ app.include_router(api_router, prefix=settings.API_V1_STR, dependencies=[Securit
 
 @app.on_event("startup")
 async def startup():
-    redis = await aioredis.create_redis_pool(settings.REDIS_URI, password=settings.REDIS_PASSWORD, encoding="utf8")
+    redis =  aioredis.from_url(settings.REDIS_URI, password=settings.REDIS_PASSWORD, encoding="utf8", decode_responses=True)
     FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")

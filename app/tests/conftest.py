@@ -10,7 +10,7 @@ from app.main import app
 
 @pytest.fixture(scope="module")
 def client() -> Generator:
-    with patch('aioredis.create_redis_pool'):
+    with patch('aioredis.from_url'):
         with patch('fastapi_cache.FastAPICache'):
             with TestClient(app) as c:
                 yield c
