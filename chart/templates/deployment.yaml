@@ -30,7 +30,13 @@ spec:
       containers:
       - env:
         - name: DOMAIN
+          {{- if .Values.openshift.enabled }}
+          {{- with (index .Values.openshift.hosts 0) }}
+          value: {{ . | quote }}
+          {{- end }}
+          {{- else }}
           value: localhost
+          {{- end }}
         - name: PORT
           value: {{ .Values.httpPort | quote }}
         - name: MAX_WORKERS

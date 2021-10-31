@@ -42,6 +42,16 @@ def custom_openapi():
     openapi_schema["info"]["x-logo"] = {
         "url": "https://raw.githubusercontent.com/waynesun09/notify-service/main/docs/static/notify-logo.png"
     }
+
+    # Set servers in the schema
+    server = {}
+    # TODO: Fix hard code https head
+    server["url"] = "https://" + settings.DOMAIN
+    server["description"] = "Service url"
+    openapi_schema["servers"] = []
+    openapi_schema["servers"].append(server)
+
+    # Set language code samples
     openapi_schema = utils.add_examples(openapi_schema)
     app.openapi_schema = openapi_schema
     return app.openapi_schema
@@ -51,6 +61,7 @@ app.openapi = custom_openapi
 
 app.include_router(router, prefix="/status")
 app.include_router(api_router, prefix=settings.API_V1_STR, dependencies=[Security(get_api_key)])
+
 
 @app.on_event("startup")
 async def startup():
