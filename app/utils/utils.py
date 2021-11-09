@@ -72,13 +72,16 @@ async def get_template(name: str, url: Optional[AnyHttpUrl] = None,
     """
     if url:
         r = await request_get_text(url=url)
-        template = Environment(loader=BaseLoader()).from_string(r).render(env)
+        template = Environment(
+            loader=BaseLoader(),
+            autoescape=True).from_string(r).render(env)
     else:
         template_dir = [settings.EMAIL_TEMPLATES_DIR]
         if settings.TEMPLATE_MOUNT_DIR:
             template_dir.append(settings.TEMPLATE_MOUNT_DIR)
         jinja_env = Environment(
-            loader=FileSystemLoader(template_dir))
+            loader=FileSystemLoader(template_dir),
+            autoescape=True)
         try:
             template = jinja_env.get_template(name + suffix).render(env)
         except Exception as e:
