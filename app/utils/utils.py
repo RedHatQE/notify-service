@@ -62,7 +62,7 @@ def get_file_path(path_name: str, tmplt_name: str) -> str:
         file_list = [i.split(".")[0] for i in files]
         if tmplt_name in file_list:
             return os.path.join(root, files[file_list.index(tmplt_name)])
-    return None
+    return ''
 
 
 async def get_template(name: str, url: Optional[AnyHttpUrl] = None,
