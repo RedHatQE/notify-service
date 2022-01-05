@@ -19,11 +19,22 @@ app = FastAPI(
     openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
 
+if settings.SSL_ENABLED:
+    HTTP_URL = "https://" + settings.DOMAIN
+else:
+    HTTP_URL = "http://" + settings.DOMAIN
+
+if settings.TARGET == "local":
+    HTTP_URL = HTTP_URL + ":" + settings.PORT
+
 # Set all CORS enabled origins
 if settings.BACKEND_CORS_ORIGINS:
+    BACKEND_CORS_ORIGINS = settings.BACKEND_CORS_ORIGINS
+    if HTTP_URL not in settings.BACKEND_CORS_ORIGINS:
+        BACKEND_CORS_ORIGINS.append(HTTPS_DOMAIN)
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
+        allow_origins=[str(origin) for origin in BACKEND_CORS_ORIGINS],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -45,11 +56,10 @@ def custom_openapi():
 
     # Set servers in the schema
     server = {}
-    # TODO: Fix hard code https head
-    server["url"] = "https://" + settings.DOMAIN
-    server["description"] = "Service url"
     openapi_schema["servers"] = []
-    openapi_schema["servers"].append(server)
+    server["url"] = HTTP_URL
+    server["description"] = "Service url"
+    openapi_schema["servers"].append(server.copy())
 
     # Set language code samples
     openapi_schema = utils.add_examples(openapi_schema)
