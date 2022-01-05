@@ -24,7 +24,7 @@
   kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
 {{- else if .Values.openshift.enabled }}
 {{- range $host := .Values.openshift.hosts }}
-  export HTTP_URL=https://{{ $host }}:{{ $.Values.httpPort }}
+  export HTTP_URL=https://{{ $host }}
 {{- end }}
 {{- end }}
 

@@ -7,6 +7,11 @@ from pydantic import AnyHttpUrl, BaseSettings, EmailStr, HttpUrl, validator, Red
 
 class Settings(BaseSettings):
     DOMAIN: str
+    PORT: str
+    # Default deploy target is openshift
+    TARGET: str = "openshift"
+    # Default ssl is enabled with openshift route tls termination set as edge
+    SSL_ENABLED: bool = True
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)
     # 60 minutes * 24 hours * 8 days = 8 days
