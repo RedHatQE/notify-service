@@ -12,7 +12,7 @@ This is a backend service build with FastAPI.
 
 ## Requirement
 
-  - Python 3.8
+  - Python 3.9
   - Pipenv
   - Podman, buildah on Linux host
   - Helm 3
