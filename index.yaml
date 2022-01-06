@@ -16,7 +16,7 @@ entries:
     name: notify-service
     type: application
     urls:
-    - https://github.com/waynesun09/notify-service/releases/download/notify-service-0.0.2/notify-service-0.0.2.tgz
+    - https://github.com/RedHatQE/notify-service/releases/download/notify-service-0.0.2/notify-service-0.0.2.tgz
     version: 0.0.2
   - apiVersion: v2
     appVersion: 0.0.1
@@ -33,6 +33,6 @@ entries:
     name: notify-service
     type: application
     urls:
-    - https://github.com/waynesun09/notify-service/releases/download/notify-service-0.0.1/notify-service-0.0.1.tgz
+    - https://github.com/RedHatQE/notify-service/releases/download/notify-service-0.0.1/notify-service-0.0.1.tgz
     version: 0.0.1
 generated: "2022-01-06T10:46:01.06068293-05:00"
