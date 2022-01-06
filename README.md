@@ -199,6 +199,10 @@ For remote urls, cache with default 300 secs timeout will be enabled, so no fetc
 
 For develop, build, test and debug, please check [Development Doc](docs/development.md) for more info.
 
+## Helm Chart Release
+
+For update and release the Helm chart of the repo to github webpage, please check [Helm Chart Release Doc](docs/chart_release.md) for more info.
+
 ## Contributing
 You can contribute by:
 
