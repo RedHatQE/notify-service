@@ -2,7 +2,7 @@
 
 The notify-service Helm Chart repo is hosted on the repo github webpage:
 
-https://waynesun09.github.io/notify-service/
+https://RedHatQE.github.io/notify-service/
 
 To generate new release and update the webpage repo, do the following steps.
 
@@ -43,9 +43,7 @@ Replace the GH_TOKEN value with real GH token.
 
 Run upload command:
 
-    $ cr upload -o waynesun09 -r notify-service --config ~/.cr.yaml -p .deploy/
-
-Replace the OWNER with the github user.
+    $ cr upload -o RedHatQE -r notify-service --config ~/.cr.yaml -p .deploy/
 
 ## Create Helm repo index
 
@@ -55,7 +53,7 @@ After the package have been uploaded, checkout to the github page branch gh-page
 
 Update index with:
 
-    $ cr index -i ./index.yaml -p .deploy -o waynesun09 -r notify-service -c https://waynesun09.github.io/notify-service
+    $ cr index -i ./index.yaml -p .deploy -o RedHatQE -r notify-service -c https://RedHatQE.github.io/notify-service
 
 Then commit the change and push to the repo, now the helm chart repo should be updated.
 
@@ -63,7 +61,7 @@ Then commit the change and push to the repo, now the helm chart repo should be u
 
 Add the helm chart repo:
 
-    $ helm repo add notify https://waynesun09.github.io/notify-service/
+    $ helm repo add notify https://RedHatQE.github.io/notify-service/
 
 Check the latest release on the project with:
 
