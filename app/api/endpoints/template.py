@@ -6,6 +6,8 @@ from typing import Any
 
 from fastapi import APIRouter, Path, Query, File, UploadFile, HTTPException
 
+from werkzeug.utils import secure_filename
+
 from app.core.config import settings
 from app.utils.utils import get_file_path, read_file
 
@@ -61,7 +63,8 @@ def update_template(
     """
     Create or update a template under template mount dir
     """
-    destination = pathlib.Path(settings.TEMPLATE_MOUNT_DIR).joinpath(tmplt_name + suffix)
+    filename = secure_filename(tmplt_name + suffix)
+    destination = pathlib.Path(settings.TEMPLATE_MOUNT_DIR).joinpath(filename)
     try:
         with destination.open("wb") as f:
             shutil.copyfileobj(tmplt.file, f)
