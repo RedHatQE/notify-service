@@ -203,6 +203,11 @@ For develop, build, test and debug, please check [Development Doc](docs/developm
 
 For update and release the Helm chart of the repo to github webpage, please check [Helm Chart Release Doc](docs/chart_release.md) for more info.
 
+## Container Images
+
+The latest build images are published on:
+https://quay.io/repository/waynesun09/notify-service
+
 ## Contributing
 You can contribute by:
 
