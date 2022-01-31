@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-fastapi = {extras = ["all"], version = "*"}
 pydantic = "*"
 flake8 = "*"
 requests = "*"
@@ -21,7 +20,7 @@ pytest-dotenv = "*"
 "stomp.py" = "*"
 irc = "*"
 werkzeug = "*"
-ujson = ">=5.1.0"
+fastapi = {version = "==0.73.0", extras = ["all"]}
 
 [dev-packages]
 
