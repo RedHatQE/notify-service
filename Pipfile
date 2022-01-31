@@ -21,6 +21,7 @@ pytest-dotenv = "*"
 "stomp.py" = "*"
 irc = "*"
 werkzeug = "*"
+ujson = ">=5.1.0"
 
 [dev-packages]
 

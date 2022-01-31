@@ -41,7 +41,7 @@ if settings.BACKEND_CORS_ORIGINS:
     )
 
 
-def custom_openapi():
+def custom_openapi(root_path):
     if app.openapi_schema:
         return app.openapi_schema
     openapi_schema = get_openapi(
