@@ -3,6 +3,7 @@ import aioredis
 from fastapi import FastAPI, Security
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
+from fastapi.responses import ORJSONResponse
 from starlette.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 
@@ -16,7 +17,8 @@ from app.api.endpoints.status import router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json"
+    openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    default_response_class=ORJSONResponse
 )
 
 if settings.SSL_ENABLED:
