@@ -17,10 +17,15 @@ aioredis = "*"
 aiofile = "*"
 pytest = "*"
 pytest-dotenv = "*"
-"stomp.py" = "*"
+"stomp.py" = "==7.0.0"
 irc = "*"
 werkzeug = "*"
-fastapi = {version = "==0.73.0", extras = ["all"]}
+fastapi = "==0.75.0"
+email-validator = "*"
+jinja2 = "*"
+python-multipart = "*"
+pyyaml = "*"
+orjson = "*"
 
 [dev-packages]
 
