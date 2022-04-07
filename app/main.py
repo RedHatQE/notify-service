@@ -7,7 +7,6 @@ from fastapi.responses import ORJSONResponse
 from starlette.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 
-
 from app.api.api import api_router
 from app.core.config import settings
 from app.core.security import get_api_key
@@ -18,7 +17,8 @@ from app.api.endpoints.status import router
 app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
-    default_response_class=ORJSONResponse
+    default_response_class=ORJSONResponse,
+    redoc_url=None
 )
 
 if settings.SSL_ENABLED:
@@ -63,8 +63,9 @@ def custom_openapi():
     server["description"] = "Service url"
     openapi_schema["servers"].append(server.copy())
 
-    # Set language code samples
-    openapi_schema = utils.add_examples(openapi_schema)
+    # Set language code samples with openapi-snippet
+    # openapi_schema = utils.add_examples(openapi_schema)
+
     app.openapi_schema = openapi_schema
     return app.openapi_schema
 
@@ -73,6 +74,16 @@ app.openapi = custom_openapi
 
 app.include_router(router, prefix="/status")
 app.include_router(api_router, prefix=settings.API_V1_STR, dependencies=[Security(get_api_key)])
+
+
+# Override the default redoc api with specify the customized Redoc standalone javascript
+@app.get("/redoc", include_in_schema=False)
+async def redoc_html():
+    return utils.get_redoc_html(
+        openapi_url=app.openapi_url,
+        title=app.title + " - ReDoc",
+        redoc_js_url="https://cdn.jsdelivr.net/gh/DaoDaoNoCode/redoc@v1.0.1-codeSamples/bundles/redoc.standalone.js"
+    )
 
 
 @app.on_event("startup")

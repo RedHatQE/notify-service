@@ -23,6 +23,10 @@ class Settings(BaseSettings):
     # "http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]'
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
 
+    # Redoc code sample language list seperated with ','
+    # The supported list could be found at https://github.com/ErikWittern/openapi-snippet#targets
+    REDOC_CODE_SAMPLE_LANS: str = "shell_curl,python_python3,go_native,java_unirest,node_native,javascript_xhr"
+
     @validator("BACKEND_CORS_ORIGINS", pre=True)
     def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
         if isinstance(v, str) and not v.startswith("["):
