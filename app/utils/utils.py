@@ -15,6 +15,7 @@ from jose import jwt
 from jinja2 import BaseLoader, Environment, FileSystemLoader
 from pathlib import Path
 from pydantic.networks import AnyHttpUrl
+from starlette.responses import HTMLResponse
 from typing import Any, Dict, Optional
 
 from app.core.config import settings
@@ -25,6 +26,48 @@ async def request_get_text(url: AnyHttpUrl):
     async with httpx.AsyncClient(verify=False) as client:
         r = await client.get(url)
         return r.text
+
+
+def get_redoc_html(
+    *,
+    openapi_url: str,
+    title: str,
+    redoc_js_url: str = "https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js",
+    redoc_favicon_url: str = "https://fastapi.tiangolo.com/img/favicon.png",
+    with_google_fonts: bool = True,
+) -> HTMLResponse:
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>{title}</title>
+    <!-- needed for adaptive design -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    """
+    if with_google_fonts:
+        html += """
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700" rel="stylesheet">
+    """
+    html += f"""
+    <link rel="shortcut icon" href="{redoc_favicon_url}">
+    <!--
+    ReDoc doesn't change outer page styles
+    -->
+    <style>
+      body {{
+        margin: 0;
+        padding: 0;
+      }}
+    </style>
+    </head>
+    <body>
+    <redoc spec-url="{openapi_url}" code-samples-language="{settings.REDOC_CODE_SAMPLE_LANS}"></redoc>
+    <script src="{redoc_js_url}"> </script>
+    </body>
+    </html>
+    """
+    return HTMLResponse(html)
 
 
 def add_examples(openapi_schema: dict) -> dict:
