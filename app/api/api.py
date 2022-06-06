@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.endpoints import email, chat, irc, message_bus, sms, template, utils, message, jira
+from app.api.endpoints import email, chat, irc, jira_new_issue, jira_add_comment, message_bus, sms, template, utils, message
 
 api_router = APIRouter()
 api_router.include_router(email.router, prefix="/email", tags=["email"])
@@ -11,4 +11,5 @@ api_router.include_router(irc.router, prefix="/irc", tags=["irc"])
 api_router.include_router(message_bus.router, prefix="/message_bus", tags=["message_bus"])
 api_router.include_router(message.router, prefix="/message_multi_targets", tags=["message_multi_targets"])
 api_router.include_router(sms.router, prefix="/sms", tags=["sms"])
-api_router.include_router(jira.router, prefix="/jira", tags=["jira"])
+api_router.include_router(jira_new_issue.router, prefix="/jira_new_issue", tags=["jira_new_issue"])
+api_router.include_router(jira_add_comment.router, prefix="/jira_add_comment", tags=["jira_add_comment"])

@@ -69,6 +69,11 @@ Template mount dir:
 
     TEMPLATE_MOUNT_DIR: target dir where extra templates could be provided or uploaded to, default to /var/tmp
 
+Jira congif:
+
+    JIRA_URL: Your Jira instance URL, required, e.g. https://issues.redhat.com
+    JIRA_TOKEN: Your Jira personal token, required
+
 ### Run with Podman
 
 Start Redis server at local:
