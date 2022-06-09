@@ -1,6 +1,5 @@
-import enum
 from typing import Optional, Union
-from fastapi import FastAPI, Query, APIRouter, HTTPException, Body
+from fastapi import Query, APIRouter, HTTPException, Body
 from pydantic.networks import AnyHttpUrl
 
 from app import schemas
@@ -31,9 +30,8 @@ async def add_a_jira_comment(
     ),
     template_url: Optional[AnyHttpUrl] = Query(
         None,
-        description="The remote teamplate url, it will override the template_name if given"
-    )):
-    
+        description="The remote teamplate url, it will override the template_name if given")):
+
     env = {}
     if (not template_url and
             (isinstance(environment.body, str) or
@@ -44,14 +42,14 @@ async def add_a_jira_comment(
         # Pass the body dict value to the env dict, it will be parsed by specific template
         env = environment.body
     data = await utils.get_template(template_name, None, '.jinja', env)
-    
+
     token = settings.JIRA_TOKEN
 
-    options = { 'server': settings.JIRA_URL }
+    options = {'server': settings.JIRA_URL}
     conn = JIRA(options, token_auth=token)
-    
-    if comment_key == None:
+
+    if comment_key is None:
         raise HTTPException(status_code=404, detail="Please input values for comment_key")
-        
+
     comment = conn.add_comment(comment_key, data)
     return {"msg": "Successfully added a comment"}

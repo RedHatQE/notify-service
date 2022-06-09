@@ -1,14 +1,13 @@
 from unittest import mock
 from typing import Dict
-from httpx import Response
 
 from fastapi.testclient import TestClient
 
 from app.core.config import settings
 
-options = { 'server': settings.JIRA_URL }
+options = {'server': settings.JIRA_URL}
 
-@mock.patch(f'jira.JIRA.create_issue')
+@mock.patch('jira.JIRA.create_issue')
 def test_jira_issue_default(
         mock_post, client: TestClient, api_key_headers: Dict[str, str]) -> None:
     params = {
@@ -27,6 +26,5 @@ def test_jira_issue_default(
                     params=params,
                     allow_redirects=True,
                     headers=api_key_headers)
-    
+
     assert r.status_code == 200
-    #assert r.text == '{"msg": "Successfully added a comment"}'

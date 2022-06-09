@@ -1,6 +1,5 @@
-import enum
 from typing import Union, Optional
-from fastapi import FastAPI, Query, APIRouter, HTTPException, Body
+from fastapi import Query, APIRouter, HTTPException, Body
 from pydantic.networks import AnyHttpUrl
 
 from app import schemas
@@ -13,13 +12,13 @@ router = APIRouter()
 
 @router.post("/", response_model=schemas.Msg)
 async def create_a_jira_issue(
-    project_key:str = Query(
+    project_key: str = Query(
         None, description="Project key - i.e. CCITNOTES"
     ),
-    issue_type:str = Query(
+    issue_type: str = Query(
         None, description="Issue type - i.e. Bug/Task/Story/Epic/etc."
     ),
-    issue_summary:str = Query(
+    issue_summary: str = Query(
         None, description="Required or a new ticket: Issue summary"
     ),
     template_name: str = Query(
@@ -39,7 +38,7 @@ async def create_a_jira_issue(
         None,
         description="The remote teamplate url, it will override the template_name if given")):
 
-    if project_key == None or issue_summary == None or issue_type == None:
+    if project_key is None or issue_summary is None or issue_type is None:
         raise HTTPException(status_code=404, detail="Please input values for project_key, issue_summary, issue_description, and issue_type")
 
     env = {}
@@ -54,7 +53,7 @@ async def create_a_jira_issue(
     data = await utils.get_template(template_name, None, '.jinja', env)
 
     token = settings.JIRA_TOKEN
-    options = { 'server': settings.JIRA_URL }
+    options = {'server': settings.JIRA_URL}
     conn = JIRA(options, token_auth=token)
 
     issue_dict = {
