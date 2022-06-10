@@ -5,7 +5,6 @@ from fastapi.testclient import TestClient
 
 from app.core.config import settings
 
-options = {'server': settings.JIRA_URL}
 
 @mock.patch('jira.JIRA.create_issue')
 def test_jira_issue_default(
@@ -18,10 +17,10 @@ def test_jira_issue_default(
     _body = {
         "body": "SAMPLE MESSAGE"
     }
-    api_key_headers.update({"url": settings.JIRA_URL})
+    api_key_headers.update({"url": "https://jira.atlassian.com"})
 
 
-    r = client.post(f"{settings.API_V1_STR}/jira_new_issue",
+    r = client.post(f"{settings.API_V1_STR}/jira/new_issue",
                     json=_body,
                     params=params,
                     allow_redirects=True,

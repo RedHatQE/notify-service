@@ -100,6 +100,7 @@ class Settings(BaseSettings):
     IRC_TARGET: Optional[str] = None
     IRC_PASSWORD: Optional[str] = None
 
+    JIRA_ISSUE_TYPE_LIST: List[str] = []
     JIRA_URL: Optional[AnyHttpUrl] = None
     JIRA_TOKEN: Optional[str] = None
 
