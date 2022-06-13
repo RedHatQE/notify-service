@@ -141,7 +141,7 @@ Check [sample](docs/sample) dir under doc for some request body with the matchin
 
 ## Templates
 
-The repo have provided few templates under `app/templates/`, which includes templates for email, Google Chat and Slack.
+The repo have provided few templates under `app/templates/`, which includes templates for email, Google Chat, Slack, and Jira.
 
 All templates are Jinja templates. Check following for how each target templates are generated, remember to add new request body sample under [sample](docs/sample) dir for each templates.
 
@@ -168,7 +168,7 @@ Then you could raise PR for adding new templates, make sure your template is uni
 
 ### Slack template
 
-Slace message use mrkdwn formatting syntax and support layouts, check:
+Slack message use mrkdwn formatting syntax and support layouts, check:
 
 - [Formatting text](https://api.slack.com/messaging/composing/formatting) in messages
 - [Composing layouts](https://api.slack.com/messaging/composing/layouts) for layouts
@@ -177,6 +177,18 @@ Follow the docs and create your own slack templates and save the template file w
 Then you could raise PR for adding new templates, make sure your template is unique.
 
 **Note:** Use Jinja semantic for templating.
+
+### Jira template
+
+Jira issues and comments use *wikimarkup* formatting syntax check:
+
+- [Formatting text](https://jira.atlassian.com/secure/WikiRendererHelpAction.jspa?section=all) in tickets and comments
+
+Follow the docs and create your own Jira templates and save the template file with suffix '.jinja' under [app/templates/build](app/templates/build).
+Then you could raise PR for adding new templates, make sure your template is unique.
+
+**Note:** Use Jinja semantic for templating.
+***Advanced Fields (Creating a new issue):*** In order to specify Components, Labels, Affect Versions, and Fix Versions when you create a new issue on Jira, please check under [app/templates/sample](app/templates/sample) the file jira_new_issue_extra_fields.jinja. Adding the fields to any Jira sample will allow you to specify Components, Labels, Affect Versions, and Fix Versions under your new issue.
 
 ### Upload templates
 
