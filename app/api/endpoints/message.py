@@ -20,7 +20,8 @@ def param_err(err: str) -> Any:
 @router.post("/", response_model=schemas.Msg)
 async def msg_multi_tgts(
     target: List[str] = Query(
-        "email", enum=["email", "gchat", "slack", "irc", "message_bus", 'jira'], 
+        ..., 
+        enum=["email", "gchat", "slack", "irc", "message_bus", 'jira'],
         description="Targets: email, gchat, slack, irc, message_bus, jira"
     ),
     irc_channel: str = Query(
@@ -92,8 +93,8 @@ async def msg_multi_tgts(
     ),
     jira_template_name: str = Query(
         "jira_default",
-        description="The jinja html template name without subfix, e.g. default. "
-        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/"
+        description="The jinja html template name without subfix, e.g. jira_default. "
+        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/build"
     ),
     jira_template_url: Optional[AnyHttpUrl] = Query(
         None,
