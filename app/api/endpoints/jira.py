@@ -18,8 +18,8 @@ async def add_a_jira_comment(
     ),
     template_name: str = Query(
         "jira_default",
-        description="The jinja html template name without subfix, e.g. default. "
-        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/"
+        description="The jinja html template name without subfix, e.g. jira_default. "
+        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/build"
     ),
     environment: Union[schemas.DictBody, schemas.TxtBody, schemas.BaseResultBody] = Body(
         ...,
