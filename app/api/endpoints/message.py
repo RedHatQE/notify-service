@@ -20,7 +20,8 @@ def param_err(err: str) -> Any:
 @router.post("/", response_model=schemas.Msg)
 async def msg_multi_tgts(
     target: List[str] = Query(
-        ..., enum=["email", "gchat", "slack", "irc", "message_bus", 'jira'], 
+        ..., 
+        enum=["email", "gchat", "slack", "irc", "message_bus", 'jira'],
         description="Targets: email, gchat, slack, irc, message_bus, jira"
     ),
     irc_channel: str = Query(
