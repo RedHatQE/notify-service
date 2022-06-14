@@ -16,6 +16,10 @@ class DictBody(BaseModel):
     body: dict
     project_name: Optional[str] = None
     headers: Optional[dict] = None
+    components: Optional[List[str]] = []
+    labels: Optional[List[str]] = []
+    affects_versions: Optional[List[str]] = []
+    fix_versions: Optional[List[str]] = []
 
 class BaseResultBody(DictBody):
     body: result.Content

@@ -5,12 +5,11 @@ from fastapi import APIRouter, Query, Body, status, HTTPException
 
 from app import schemas
 from app.core.config import settings
-from app.api.endpoints import email, chat, irc, message_bus
+from app.api.endpoints import email, chat, irc, message_bus, jira
 
 router = APIRouter()
 
-TARGET = ['email', 'gchat', 'slack', 'irc', 'message_bus']
-
+TARGET = ['email', 'gchat', 'slack', 'irc', 'message_bus', 'jira']
 
 def param_err(err: str) -> Any:
     raise HTTPException(
@@ -20,9 +19,9 @@ def param_err(err: str) -> Any:
 
 @router.post("/", response_model=schemas.Msg)
 async def msg_multi_tgts(
-    target: str = Query(
-        ...,
-        description="The message targets seperate by ',', e.g. email,gchat,slack,irc,message_bus"
+    target: List[str] = Query(
+        "email", enum=["email", "gchat", "slack", "irc", "message_bus", 'jira'], 
+        description="Targets: email, gchat, slack, irc, message_bus, jira"
     ),
     irc_channel: str = Query(
         None,
@@ -81,12 +80,28 @@ async def msg_multi_tgts(
     slack_webhook_url: Optional[AnyHttpUrl] = Query(
         None,
         description="The slack webhook url"
-    )
-) -> Any:
+    ),
+    jira_project_issue_key: str = Query(
+        None, description="The issue key for adding a comment - i.e. CCITNOTES-50, project key for new issue - i.e. CCITNOTES"
+    ),
+    jira_issue_type: str = Query(
+        "Task", enum=settings.JIRA_ISSUE_TYPE_LIST, description="Required for a new issue: - Issue type - i.e. Bug/Task/Story/Epic/etc."
+    ),
+    jira_issue_summary: str = Query(
+        None, description="Required for a new issue: Issue summary"
+    ),
+    jira_template_name: str = Query(
+        "jira_default",
+        description="The jinja html template name without subfix, e.g. default. "
+        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/"
+    ),
+    jira_template_url: Optional[AnyHttpUrl] = Query(
+        None,
+        description="The remote teamplate url, it will override the jira_template_name if given")) -> Any:
     """
     Send text messages to multiple supported backends
 
-    - **target**: target backend seperate by ',', e.g. email,gchat,slack,irc,message_bus, required
+    - **target**: target backend list of strings, i.e. ["email", "gchat", "slack"] required
     - **subject**: message subject, optional
     - **channel**: The irc channel name start with '#' or a user name, optional
     - **email_to**: email address, optional
@@ -98,9 +113,14 @@ async def msg_multi_tgts(
     - **slack_template_url**: slack template url, optional
     - **gchat_webhook_url**: gchat webhook url address, optional
     - **slack_webhook_url**: slack webhook url address, optional
+    - **jira_project_issue_key**: Jira project/issue key, optional
+    - **jira_issue_type**: Jira issue type, optional
+    - **jira_issue_summary**: Jira issue summary, optional
+    - **jira_template_name**: Jira template name, optional
+    - **jira_template_url**: Jira template url, optional
     - **Request Body**: Check samples at https://github.com/waynesun09/notify-service/tree/main/docs/sample
     """
-    target = [i.strip() for i in target.split(',')]
+
     for t in target:
         if t not in TARGET:
             detail = f"The target {t} is not supported"
@@ -108,19 +128,29 @@ async def msg_multi_tgts(
 
     if (("gchat" in target and not (gchat_webhook_url or settings.GCHAT_WEBHOOK_URL)) or
             ("slack" in target and not (slack_webhook_url or settings.SLACK_WEBHOOK_URL))):
-        detail = "The chat webhook url have not been provided"
+        detail = "The chat webhook url has not been provided"
         param_err(detail)
 
     if 'irc' in target and not irc_channel:
-        detail = "The IRC channel have not been provided"
+        detail = "The IRC channel has not been provided"
         param_err(detail)
 
     if "email" in target and not email_to:
-        detail = "The email address have not been provided"
+        detail = "The email address has not been provided"
         param_err(detail)
 
     if 'message_bus' in target and not message_bus_topic:
-        detail = "The message bus topic have not been provided"
+        detail = "The message bus topic has not been provided"
+        param_err(detail)
+
+    if 'jira' in target and not jira_project_issue_key:
+        detail = "The Jira project/issue key has not been provided"
+        param_err(detail)
+
+    # Checking if the last char in the key is a digit - if it is not
+    # it means that the user wanted to add a new issue
+    if (not jira_project_issue_key[-1].isdigit()) and (not jira_issue_type or not jira_issue_summary):
+        detail = "When creating a new Jira issue - jira_issue_type and jira_issue_summary are required"
         param_err(detail)
 
     body = environment.body
@@ -173,5 +203,24 @@ async def msg_multi_tgts(
             topic=message_bus_topic,
             environment=env
         )
+
+    if 'jira' in target:
+        # Means that it's a new comment
+        if jira_project_issue_key[-1].isdigit():
+            await jira.add_a_jira_comment(
+                issue_key=jira_project_issue_key,
+                template_name=jira_template_name,
+                environment=environment,
+                template_url=jira_template_url
+            )
+        else:
+            await jira.create_a_jira_issue(
+                project_key=jira_project_issue_key,
+                issue_type=jira_issue_type,
+                issue_summary=jira_issue_summary,
+                template_name=jira_template_name,
+                environment=environment,
+                template_url=jira_template_url
+            )
 
     return {"msg": f"Message have been send to all targets {target}"}

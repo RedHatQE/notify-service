@@ -67,7 +67,7 @@ async def create_a_jira_issue(
         "Task", enum=settings.JIRA_ISSUE_TYPE_LIST, description="Issue type - i.e. Bug/Task/Story/Epic/etc."
     ),
     issue_summary: str = Query(
-        None, description="Required or a new ticket: Issue summary"
+        None, description="Required for a new ticket: Issue summary"
     ),
     template_name: str = Query(
         "jira_default",
