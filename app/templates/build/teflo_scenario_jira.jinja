@@ -1,6 +1,6 @@
 *{{ scenario.name }}*
 
-Overall Status: 
+Overall Status:
 
 {% if scenario.overall_status == 0 %}
     Content:{color:green} Passed {color}
@@ -13,7 +13,7 @@ Overall Status:
 
 Execute Task Testrun Results:
 ----
-{% if scenario.executes %} 
+{% if scenario.executes %}
 {% for execute in scenario.executes %}
 Task Name: {{ execute.name }}
 {% if execute.testrun_results %}
@@ -35,7 +35,7 @@ No Execute tasks
 {% if scenario.reports %}
 {% for report in scenario.reports %}
 {% if (report.provider == 'polarion' or report.importer_plugin_name == 'polarion') and (report.import_results) %}
-Task Name : {{ report.name }}                           
+Task Name : {{ report.name }}
 Polarion testrun urls:
 {% for results in report.import_results %}
 content: {{ results['testrun-url'] }}
@@ -43,13 +43,13 @@ content: {{ results['testrun-url'] }}
 ,
 {% endif %}
 {% endfor %}
-                                    
+
 {% elif (report.provider == 'reportportal' or report.importer_plugin_name == 'reportportal') and (report.import_results) %}
-Task Name : {{ report.name }}    
+Task Name : {{ report.name }}
 Report_Portal_Dashboard_Url: {{ report.import_results['dashboard_url'] }}
 {% else %}
 Report Task : {{ report.name }}
-No imports generated                                                        
+No imports generated
 {% endif %}
 {% if not loop.last %}
 ,
