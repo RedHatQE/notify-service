@@ -18,8 +18,8 @@ async def add_a_jira_comment(
     ),
     template_name: str = Query(
         "jira_default",
-        description="The jinja html template name without subfix, e.g. default. "
-        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/"
+        description="The jinja html template name without subfix, e.g. jira_default. "
+        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/build"
     ),
     environment: Union[schemas.DictBody, schemas.TxtBody, schemas.BaseResultBody] = Body(
         ...,
@@ -67,14 +67,14 @@ async def create_a_jira_issue(
         "Task", enum=settings.JIRA_ISSUE_TYPE_LIST, description="Issue type - i.e. Bug/Task/Story/Epic/etc."
     ),
     issue_summary: str = Query(
-        None, description="Required or a new ticket: Issue summary"
+        None, description="Required for a new ticket: Issue summary"
     ),
     template_name: str = Query(
         "jira_default",
         description="The jinja html template name without subfix, e.g. default. "
         "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/"
     ),
-    environment: Union[schemas.DictBody, schemas.TxtBody, schemas.BaseResultBody] = Body(
+    environment: Union[schemas.TxtBody, schemas.JiraBody, schemas.BaseResultBody] = Body(
         ...,
         example={
             "body": "SAMPLE MESSAGE."
@@ -98,19 +98,31 @@ async def create_a_jira_issue(
     else:
         # Pass the body dict value to the env dict, it will be parsed by specific template
         env = environment.body
-    data = await utils.get_template(template_name, None, '.jinja', env)
 
+    data = await utils.get_template(template_name, None, '.jinja', env)
     token = settings.JIRA_TOKEN
     options = {'server': settings.JIRA_URL}
+
     try:
         conn = JIRA(options, token_auth=token)
+        # Extract components and reformat to match Jira API
+        components = []
+        if environment.components != []:
+            for component in environment.components:
+                components.append({'name': component})
+
         issue_dict = {
             'project': project_key,
             'summary': issue_summary,
             'description': data,
             'issuetype': {'name': issue_type},
+            'components': components,
+            'labels': environment.labels,
+            'versions': environment.affects_versions,
+            'fixVersions': environment.fix_versions
         }
         new_issue = conn.create_issue(fields=issue_dict)
         return {"msg": "Success - Posted a new ticket!"}
+
     except jira.exceptions.JIRAError:
         raise HTTPException(status_code=500, detail="Failed to connect - please check your token/project_key")
