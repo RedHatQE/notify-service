@@ -38,18 +38,13 @@ async def new_bugzilla_bug(
     data = environment.body
     try:
         bzapi = bugzilla.Bugzilla(settings.BUGZILLA_URL, api_key=settings.BUGZILLA_API_KEY)
-        bzapi.logged_in
-    except xmlrpc.client.Fault:
-        raise HTTPException(status_code=500, detail="Failed to connect - please check your URL / API key")
-
-    createinfo = bzapi.build_createbug(
-        product=product,
-        version=version,
-        component=component,
-        summary=summary,
-        description=data)
-    try:
+        createinfo = bzapi.build_createbug(
+            product=product,
+            version=version,
+            component=component,
+            summary=summary,
+            description=data)
         newbug = bzapi.createbug(createinfo)
         return {"msg": "Created new bug id=%s url=%s" % (newbug.id, newbug.weburl)}
     except xmlrpc.client.Fault:
-        return {"msg": "Failed - please check that your input to the fields is correct and valid"}
+        raise HTTPException(status_code=500, detail="Failed - please check your URL / API key and your input fields are correct")
