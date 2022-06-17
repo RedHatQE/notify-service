@@ -1,6 +1,5 @@
 from unittest import mock
 from typing import Dict
-from httpx import Response
 
 from fastapi.testclient import TestClient
 
