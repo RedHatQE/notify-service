@@ -1,9 +1,12 @@
 from fastapi import Query, APIRouter, HTTPException, Body
 import bugzilla
-from app.core.config import settings
 import xmlrpc.client
+from typing import Union, Optional
+from pydantic.networks import AnyHttpUrl
+
 from app import schemas
-from typing import Union
+from app.utils import utils
+from app.core.config import settings
 
 
 router = APIRouter()
@@ -33,9 +36,28 @@ async def new_bugzilla_bug(
         },
         description="The body values for parse with the template, "
         "check samples at https://github.com/waynesun09/notify-service/tree/main/docs/sample"
-    )):
+    ),
+    template_name: str = Query(
+        "bugzilla_default",
+        description="The jinja html template name without subfix, e.g. bugzilla_default. "
+        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/build"
+    ),
+    template_url: Optional[AnyHttpUrl] = Query(
+        None,
+        description="The remote teamplate url, it will override the template_name if given")):
 
-    data = environment.body
+    env = {}
+    if (not template_url and
+            (isinstance(environment.body, str) or
+                (template_name == 'jira_default' and "body" not in environment.body))):
+        # Set 'body' in env dict, this will work with default template
+        env["body"] = environment.body
+    else:
+        # Pass the body dict value to the env dict, it will be parsed by specific template
+        env = environment.body
+
+    data = await utils.get_template(template_name, None, '.jinja', env)
+
     try:
         bzapi = bugzilla.Bugzilla(settings.BUGZILLA_URL, api_key=settings.BUGZILLA_API_KEY)
         createinfo = bzapi.build_createbug(
