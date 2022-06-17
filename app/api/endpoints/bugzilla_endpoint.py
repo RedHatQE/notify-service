@@ -70,3 +70,46 @@ async def new_bugzilla_bug(
         return {"msg": "Created new bug id=%s url=%s" % (newbug.id, newbug.weburl)}
     except xmlrpc.client.Fault:
         raise HTTPException(status_code=500, detail="Failed - please check your URL / API key and your input fields are correct")
+
+
+@router.post("/new_comment", response_model=schemas.Msg)
+async def new_bugzilla_comment(
+    bug_id: int = Query(
+        ...,
+        description="The bug_id - i.e. 1997649"
+    ),
+    environment: Union[schemas.DictBody, schemas.TxtBody, schemas.BaseResultBody] = Body(
+        ...,
+        example={
+            "body": "SAMPLE MESSAGE."
+        },
+        description="The body values for parse with the template, "
+        "check samples at https://github.com/waynesun09/notify-service/tree/main/docs/sample"
+    ),
+    template_name: str = Query(
+        "bugzilla_default",
+        description="The jinja html template name without subfix, e.g. bugzilla_default. "
+        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/build"
+    ),
+    template_url: Optional[AnyHttpUrl] = Query(
+        None,
+        description="The remote teamplate url, it will override the template_name if given")):
+
+    env = {}
+    if (not template_url and
+            (isinstance(environment.body, str) or
+                (template_name == 'jira_default' and "body" not in environment.body))):
+        # Set 'body' in env dict, this will work with default template
+        env["body"] = environment.body
+    else:
+        # Pass the body dict value to the env dict, it will be parsed by specific template
+        env = environment.body
+
+    data = await utils.get_template(template_name, None, '.jinja', env)
+    try:
+        bzapi = bugzilla.Bugzilla(settings.BUGZILLA_URL, api_key=settings.BUGZILLA_API_KEY)
+        update = bzapi.build_update(comment=data)
+        bzapi.update_bugs([bug_id], update)
+        return {"msg": f"Successfully added a comment to a bug with id: {bug_id}"}
+    except xmlrpc.client.Fault:
+        raise HTTPException(status_code=500, detail="Failed - please check your URL / API key and your bug id")
