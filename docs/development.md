@@ -69,10 +69,16 @@ Template mount dir:
 
     TEMPLATE_MOUNT_DIR: target dir where extra templates could be provided or uploaded to, default to /var/tmp
 
-Jira congif:
+Jira config:
 
+    JIRA_ISSUE_TYPE_LIST: All of your issue types, required
     JIRA_URL: Your Jira instance URL, required, e.g. https://issues.redhat.com
     JIRA_TOKEN: Your Jira personal token, required
+
+Bugzilla config:
+
+    BUGZILLA_URL: Your Bugzilla instance URL, required, e.g. https://bugzilla.redhat.com/
+    BUGZILLA_API_KEY: Your Bugzilla personal API key, required
 
 ### Run with Podman
 
