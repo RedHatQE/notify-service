@@ -12,7 +12,7 @@ from app.core.config import settings
 router = APIRouter()
 
 @router.post("/new_bug", response_model=schemas.Msg)
-async def new_bugzilla_bug(
+async def new_bug(
     product: str = Query(
         ...,
         description="The product - i.e. Fedora"
@@ -39,7 +39,7 @@ async def new_bugzilla_bug(
     ),
     template_name: str = Query(
         "bugzilla_default",
-        description="The jinja html template name without subfix, e.g. bugzilla_default. "
+        description="The jinja template name without subfix, e.g. bugzilla_default. "
         "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/build"
     ),
     template_url: Optional[AnyHttpUrl] = Query(
@@ -49,7 +49,7 @@ async def new_bugzilla_bug(
     env = {}
     if (not template_url and
             (isinstance(environment.body, str) or
-                (template_name == 'jira_default' and "body" not in environment.body))):
+                (template_name == 'bugzilla_default' and "body" not in environment.body))):
         # Set 'body' in env dict, this will work with default template
         env["body"] = environment.body
     else:
@@ -59,21 +59,21 @@ async def new_bugzilla_bug(
     data = await utils.get_template(template_name, None, '.jinja', env)
 
     try:
-        bzapi = bugzilla.Bugzilla(settings.BUGZILLA_URL, api_key=settings.BUGZILLA_API_KEY)
-        createinfo = bzapi.build_createbug(
+        bz_api = bugzilla.Bugzilla(settings.BUGZILLA_URL, api_key=settings.BUGZILLA_API_KEY)
+        bug_info = bz_api.build_createbug(
             product=product,
             version=version,
             component=component,
             summary=summary,
             description=data)
-        newbug = bzapi.createbug(createinfo)
-        return {"msg": "Created new bug id=%s url=%s" % (newbug.id, newbug.weburl)}
+        bug = bz_api.createbug(bug_info)
+        return {"msg": "Created new bug id=%s url=%s" % (bug.id, bug.weburl)}
     except xmlrpc.client.Fault:
         raise HTTPException(status_code=500, detail="Failed - please check your URL / API key and your input fields are correct")
 
 
 @router.post("/new_comment", response_model=schemas.Msg)
-async def new_bugzilla_comment(
+async def add_comment(
     bug_id: int = Query(
         ...,
         description="The bug_id - i.e. 1997649"
@@ -88,7 +88,7 @@ async def new_bugzilla_comment(
     ),
     template_name: str = Query(
         "bugzilla_default",
-        description="The jinja html template name without subfix, e.g. bugzilla_default. "
+        description="The jinja template name without subfix, e.g. bugzilla_default. "
         "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/build"
     ),
     template_url: Optional[AnyHttpUrl] = Query(
@@ -98,7 +98,7 @@ async def new_bugzilla_comment(
     env = {}
     if (not template_url and
             (isinstance(environment.body, str) or
-                (template_name == 'jira_default' and "body" not in environment.body))):
+                (template_name == 'bugzilla_default' and "body" not in environment.body))):
         # Set 'body' in env dict, this will work with default template
         env["body"] = environment.body
     else:
@@ -107,9 +107,9 @@ async def new_bugzilla_comment(
 
     data = await utils.get_template(template_name, None, '.jinja', env)
     try:
-        bzapi = bugzilla.Bugzilla(settings.BUGZILLA_URL, api_key=settings.BUGZILLA_API_KEY)
-        update = bzapi.build_update(comment=data)
-        bzapi.update_bugs([bug_id], update)
+        bz_api = bugzilla.Bugzilla(settings.BUGZILLA_URL, api_key=settings.BUGZILLA_API_KEY)
+        update = bz_api.build_update(comment=data)
+        bz_api.update_bugs([bug_id], update)
         return {"msg": f"Successfully added a comment to a bug with id: {bug_id}"}
     except xmlrpc.client.Fault:
         raise HTTPException(status_code=500, detail="Failed - please check your URL / API key and your bug id")
