@@ -18,7 +18,7 @@ def test_bugzilla_new_bug(
         "body": "SAMPLE MESSAGE"
     }
 
-    r = client.post(f"{settings.API_V1_STR}/bugzilla/new_bugzilla_bug",
+    r = client.post(f"{settings.API_V1_STR}/bugzilla/new_bug",
                     json=_body,
                     params=params,
                     allow_redirects=True,
@@ -37,7 +37,7 @@ def test_bugzilla_new_comment(
         "body": "SAMPLE MESSAGE"
     }
 
-    r = client.post(f"{settings.API_V1_STR}/bugzilla/new_bugzilla_comment",
+    r = client.post(f"{settings.API_V1_STR}/bugzilla/add_comment",
                     json=_body,
                     params=params,
                     allow_redirects=True,

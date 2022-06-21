@@ -72,7 +72,7 @@ async def new_bug(
         raise HTTPException(status_code=500, detail="Failed - please check your URL / API key and your input fields are correct")
 
 
-@router.post("/new_comment", response_model=schemas.Msg)
+@router.post("/add_comment", response_model=schemas.Msg)
 async def add_comment(
     bug_id: int = Query(
         ...,
