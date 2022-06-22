@@ -27,6 +27,7 @@ python-multipart = "*"
 pyyaml = "*"
 orjson = "*"
 jira = "==3.2.0"
+python-bugzilla = "*"
 
 [dev-packages]
 

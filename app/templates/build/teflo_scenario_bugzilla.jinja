@@ -1,0 +1,62 @@
+{{ scenario.name }}
+
+Overall Status:
+
+{% if scenario.overall_status == 0 %}
+    Content: Passed
+{% else %}
+    Content: Failed
+{% endif %}
+
+- Passed Tasks: {% if passed_tasks %} {% for task in passed_tasks %} {{ task }}{% if not loop.last %}, {% endif %} {% endfor %} {% endif %}
+- Failed Tasks: {% if failed_tasks %} {% for task in failed_tasks %} {{ task }}{% if not loop.last %}, {% endif %} {% endfor %} {% endif %}
+
+Execute Task Testrun Results:
+----
+{% if scenario.executes %}
+{% for execute in scenario.executes %}
+Task Name: {{ execute.name }}
+{% if execute.testrun_results %}
+- Total Tests: {{ execute.testrun_results.aggregate_testrun_results.total_tests }}
+- Passed Tests: {{ execute.testrun_results.aggregate_testrun_results.passed_tests }}
+- Failed Tests: {{ execute.testrun_results.aggregate_testrun_results.failed_tests }}
+- Skipped Tests: {{ execute.testrun_results.aggregate_testrun_results.skipped_tests }}
+{% else %}
+Content: No testrun results
+{% endif %}
+{% if not loop.last %},{% endif %}
+{% endfor %}
+{% else %}
+Execute Task
+No Execute tasks
+{% endif %}
+
+
+{% if scenario.reports %}
+{% for report in scenario.reports %}
+{% if (report.provider == 'polarion' or report.importer_plugin_name == 'polarion') and (report.import_results) %}
+Task Name : {{ report.name }}
+Polarion testrun urls:
+{% for results in report.import_results %}
+content: {{ results['testrun-url'] }}
+{% if not loop.last %}
+,
+{% endif %}
+{% endfor %}
+
+{% elif (report.provider == 'reportportal' or report.importer_plugin_name == 'reportportal') and (report.import_results) %}
+Task Name : {{ report.name }}
+Report_Portal_Dashboard_Url: {{ report.import_results['dashboard_url'] }}
+{% else %}
+Report Task : {{ report.name }}
+No imports generated
+{% endif %}
+{% if not loop.last %}
+,
+{% endif %}
+{% endfor %}
+{% else %}
+
+Report Task
+No Report tasks
+{% endif %}
