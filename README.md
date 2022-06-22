@@ -96,19 +96,19 @@ or else update the ingress part.
 Make sure you have login your cluster.
 
 #### Install latest from helm repo
-    
+
 Add helm repo with:
 
     $ helm repo add notify https://waynesun09.github.io/notify-service/
-    
+
 Check the latest release on the project with:
 
     $ helm search repo notify-service
-    
+
 Then install with:
 
     $ helm install ns notify-service -f dev.value.yaml
-    
+
 #### Install from current repo:
 
     $ helm install ns chart/ -f dev.value.yaml
@@ -189,6 +189,15 @@ Then you could raise PR for adding new templates, make sure your template is uni
 
 **Note:** Use Jinja semantic for templating.
 ***Advanced Fields (Creating a new issue):*** In order to specify Components, Labels, Affect Versions, and Fix Versions when you create a new issue on Jira, please check under [app/templates/sample](app/templates/sample) the file jira_new_issue_extra_fields.jinja. Adding the fields to any Jira sample will allow you to specify Components, Labels, Affect Versions, and Fix Versions under your new issue.
+
+### Bugzilla template
+
+Bugzilla comments templates (in the current Bugzilla version) only support basic text and hyper-links:
+
+Follow the docs and create your own Bugzilla templates and save the template file with suffix '.jinja' under [app/templates/build](app/templates/build).
+Then you could raise PR for adding new templates, make sure your template is unique.
+
+**Note:** Use Jinja semantic for templating.
 
 ### Upload templates
 

@@ -104,6 +104,9 @@ class Settings(BaseSettings):
     JIRA_URL: Optional[AnyHttpUrl] = None
     JIRA_TOKEN: Optional[str] = None
 
+    BUGZILLA_URL: Optional[AnyHttpUrl] = None
+    BUGZILLA_API_KEY: Optional[str] = None
+
     class Config:
         case_sensitive = True
 

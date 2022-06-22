@@ -1,15 +1,15 @@
-*{{ scenario.name }}*
+{{ scenario.name }}
 
 Overall Status:
 
 {% if scenario.overall_status == 0 %}
-    Content:{color:green} Passed {color}
+    Content: Passed
 {% else %}
-    Content:{color:red} Failed {color}
+    Content: Failed
 {% endif %}
 
-- (/) Passed Tasks: {% if passed_tasks %} {% for task in passed_tasks %} {{task}}{% if not loop.last %}, {% endif %} {% endfor %} {% endif %}
-- (x) Failed Tasks: {% if failed_tasks %} {% for task in failed_tasks %} {{ task }}{% if not loop.last %}, {% endif %} {% endfor %} {% endif %}
+- Passed Tasks: {% if passed_tasks %} {% for task in passed_tasks %} {{ task }}{% if not loop.last %}, {% endif %} {% endfor %} {% endif %}
+- Failed Tasks: {% if failed_tasks %} {% for task in failed_tasks %} {{ task }}{% if not loop.last %}, {% endif %} {% endfor %} {% endif %}
 
 Execute Task Testrun Results:
 ----
