@@ -100,22 +100,6 @@ async def msg_multi_tgts(
         None,
         description="The remote teamplate url, it will override the jira_template_name if given"
     ),
-    bugzilla_product: str = Query(
-        None,
-        description="The product - i.e. Fedora"
-    ),
-    bugzilla_version: str = Query(
-        None,
-        description="The product's version - i.e. rawhide"
-    ),
-    bugzilla_component: str = Query(
-        None,
-        description="The product's component - i.e. python-bugzilla"
-    ),
-    bugzilla_summary: str = Query(
-        None,
-        description="The summary of the bug"
-    ),
     bugzilla_bug_id: int = Query(
         None,
         description="The bug_id - i.e. 1997649"
@@ -148,10 +132,6 @@ async def msg_multi_tgts(
     - **jira_issue_summary**: Jira issue summary, optional
     - **jira_template_name**: Jira template name, optional
     - **jira_template_url**: Jira template url, optional
-    - **bugzilla_product**: Bugzilla bug product, optional
-    - **bugzilla_version**: Bugzilla bug version, optional
-    - **bugzilla_component**: Bugzilla bug component, optional
-    - **bugzilla_summary**: Bugzilla bug summary, optional
     - **bugzilla_bug_id**: Bugzilla bug id, optional
     - **bugzilla_template_name**: Bugzilla template name, optional
     - **bugzilla_template_url**: Bugzilla template url, optional
@@ -190,13 +170,8 @@ async def msg_multi_tgts(
         detail = "When creating a new Jira issue - jira_issue_type and jira_issue_summary are required"
         param_err(detail)
 
-    if 'bugzilla' in target and not bugzilla_product and not bugzilla_bug_id:
-        detail = "The Bugzilla product/bug id has not been provided"
-        param_err(detail)
-
-    if 'bugzilla' in target and bugzilla_product and not (bugzilla_version and bugzilla_component and bugzilla_summary):
-        detail = """When creating a Bugzilla bug the fields: bugzilla_product, bugzilla_version,
-        bugzilla_component, bugzilla_summary are required"""
+    if 'bugzilla' in target and not bugzilla_bug_id:
+        detail = "The Bugzilla bug id has not been provided"
         param_err(detail)
 
     body = environment.body
@@ -270,22 +245,11 @@ async def msg_multi_tgts(
             )
 
     if 'bugzilla' in target:
-        if bugzilla_product:
-            await bugzilla_endpoint.new_bug(
-                product=bugzilla_product,
-                version=bugzilla_version,
-                component=bugzilla_component,
-                summary=bugzilla_summary,
-                environment=environment,
-                template_name=bugzilla_template_name,
-                template_url=bugzilla_template_url
-            )
-        else:
-            await bugzilla_endpoint.add_comment(
-                bug_id=bugzilla_bug_id,
-                environment=environment,
-                template_name=bugzilla_template_name,
-                template_url=bugzilla_template_url
-            )
+        await bugzilla_endpoint.add_comment(
+            bug_id=bugzilla_bug_id,
+            environment=environment,
+            template_name=bugzilla_template_name,
+            template_url=bugzilla_template_url
+        )
 
     return {"msg": f"Message have been send to all targets {target}"}
