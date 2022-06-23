@@ -31,7 +31,11 @@ async def add_a_jira_comment(
     ),
     template_url: Optional[AnyHttpUrl] = Query(
         None,
-        description="The remote teamplate url, it will override the template_name if given")):
+        description="The remote teamplate url, it will override the template_name if given"
+    ),
+    personal_token: Optional[str] = Query(
+        None,
+        description="A Jira personal token, it will overring the existing api key in the environment configuration")):
 
     if issue_key is None:
         raise HTTPException(status_code=404, detail="Please input values for issue_key")
@@ -47,7 +51,10 @@ async def add_a_jira_comment(
         env = environment.body
     data = await utils.get_template(template_name, None, '.jinja', env)
 
-    token = settings.JIRA_TOKEN
+    if personal_token is None:
+        token = settings.JIRA_TOKEN
+    else:
+        token = personal_token
 
     options = {'server': settings.JIRA_URL}
     try:
@@ -84,7 +91,11 @@ async def create_a_jira_issue(
     ),
     template_url: Optional[AnyHttpUrl] = Query(
         None,
-        description="The remote teamplate url, it will override the template_name if given")):
+        description="The remote teamplate url, it will override the template_name if given"
+    ),
+    personal_token: Optional[str] = Query(
+        None,
+        description="A Jira personal token, it will overring the existing api key in the environment configuration")):
 
     if project_key is None or issue_summary is None or issue_type is None:
         raise HTTPException(status_code=400, detail="Please input values for project_key, issue_summary, issue_description, and issue_type")
@@ -100,7 +111,11 @@ async def create_a_jira_issue(
         env = environment.body
 
     data = await utils.get_template(template_name, None, '.jinja', env)
-    token = settings.JIRA_TOKEN
+
+    if personal_token is None:
+        token = settings.JIRA_TOKEN
+    else:
+        token = personal_token
     options = {'server': settings.JIRA_URL}
 
     try:
