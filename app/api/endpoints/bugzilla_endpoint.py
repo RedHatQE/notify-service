@@ -44,7 +44,11 @@ async def new_bug(
     ),
     template_url: Optional[AnyHttpUrl] = Query(
         None,
-        description="The remote teamplate url, it will override the template_name if given")):
+        description="The remote teamplate url, it will override the template_name if given"
+    ),
+    api_key: Optional[str] = Query(
+        None,
+        description="A Bugzilla API key, it will overring the existing api key in the environment configuration")):
 
     env = {}
     if (not template_url and
@@ -58,8 +62,13 @@ async def new_bug(
 
     data = await utils.get_template(template_name, None, '.jinja', env)
 
+    if api_key is None:
+        current_api_key = settings.BUGZILLA_API_KEY
+    else:
+        current_api_key = api_key
+
     try:
-        bz_api = bugzilla.Bugzilla(settings.BUGZILLA_URL, api_key=settings.BUGZILLA_API_KEY)
+        bz_api = bugzilla.Bugzilla(settings.BUGZILLA_URL, api_key=current_api_key)
         bug_info = bz_api.build_createbug(
             product=product,
             version=version,
@@ -93,7 +102,11 @@ async def add_comment(
     ),
     template_url: Optional[AnyHttpUrl] = Query(
         None,
-        description="The remote teamplate url, it will override the template_name if given")):
+        description="The remote teamplate url, it will override the template_name if given"
+    ),
+    api_key: Optional[str] = Query(
+        None,
+        description="A Bugzilla API key, it will overring the existing api key in the environment configuration")):
 
     env = {}
     if (not template_url and
@@ -106,8 +119,14 @@ async def add_comment(
         env = environment.body
 
     data = await utils.get_template(template_name, None, '.jinja', env)
+
+    if api_key is None:
+        current_api_key = settings.BUGZILLA_API_KEY
+    else:
+        current_api_key = api_key
+
     try:
-        bz_api = bugzilla.Bugzilla(settings.BUGZILLA_URL, api_key=settings.BUGZILLA_API_KEY)
+        bz_api = bugzilla.Bugzilla(settings.BUGZILLA_URL, api_key=current_api_key)
         update = bz_api.build_update(comment=data)
         bz_api.update_bugs([bug_id], update)
         return {"msg": f"Successfully added a comment to a bug with id: {bug_id}"}
