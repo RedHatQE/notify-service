@@ -33,7 +33,7 @@ async def add_a_jira_comment(
         None,
         description="The remote teamplate url, it will override the template_name if given"
     ),
-    personal_token: Optional[str] = Query(
+    jira_token: Optional[str] = Query(
         None,
         description="A Jira personal token, it will overring the existing api key in the environment configuration")):
 
@@ -51,10 +51,10 @@ async def add_a_jira_comment(
         env = environment.body
     data = await utils.get_template(template_name, None, '.jinja', env)
 
-    if personal_token is None:
+    if jira_token is None:
         token = settings.JIRA_TOKEN
     else:
-        token = personal_token
+        token = jira_token
 
     options = {'server': settings.JIRA_URL}
     try:
@@ -93,7 +93,7 @@ async def create_a_jira_issue(
         None,
         description="The remote teamplate url, it will override the template_name if given"
     ),
-    personal_token: Optional[str] = Query(
+    jira_token: Optional[str] = Query(
         None,
         description="A Jira personal token, it will overring the existing api key in the environment configuration")):
 
@@ -112,10 +112,10 @@ async def create_a_jira_issue(
 
     data = await utils.get_template(template_name, None, '.jinja', env)
 
-    if personal_token is None:
+    if jira_token is None:
         token = settings.JIRA_TOKEN
     else:
-        token = personal_token
+        token = jira_token
     options = {'server': settings.JIRA_URL}
 
     try:

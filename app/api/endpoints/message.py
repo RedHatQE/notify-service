@@ -100,9 +100,9 @@ async def msg_multi_tgts(
         None,
         description="The remote teamplate url, it will override the jira_template_name if given"
     ),
-    jira_personal_token: Optional[str] = Query(
+    jira_token: Optional[str] = Query(
         None,
-        description="A Jira personal token, it will overring the existing api key in the environment configuration"
+        description="A Jira token, it will overring the existing api key in the environment configuration"
     ),
     bugzilla_bug_id: int = Query(
         None,
@@ -140,7 +140,7 @@ async def msg_multi_tgts(
     - **jira_issue_summary**: Jira issue summary, optional
     - **jira_template_name**: Jira template name, optional
     - **jira_template_url**: Jira template url, optional
-    - **jira_personal_token**: Jira personal token, optional
+    - **jira_token**: Jira token, optional
     - **bugzilla_bug_id**: Bugzilla bug id, optional
     - **bugzilla_template_name**: Bugzilla template name, optional
     - **bugzilla_template_url**: Bugzilla template url, optional
@@ -243,7 +243,7 @@ async def msg_multi_tgts(
                 template_name=jira_template_name,
                 environment=environment,
                 template_url=jira_template_url,
-                personal_token=jira_personal_token
+                jira_token=jira_token
             )
         else:
             await jira.create_a_jira_issue(
@@ -253,7 +253,7 @@ async def msg_multi_tgts(
                 template_name=jira_template_name,
                 environment=environment,
                 template_url=jira_template_url,
-                personal_token=jira_personal_token
+                jira_token=jira_token
             )
 
     if 'bugzilla' in target:
