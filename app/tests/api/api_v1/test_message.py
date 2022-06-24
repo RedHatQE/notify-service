@@ -51,4 +51,4 @@ def test_multi_message_default(
                     allow_redirects=True,
                     headers=api_key_headers)
     assert r.status_code == 200
-    assert r.text == '{"msg":"Message have been send to all targets [\'email\', \'gchat\', \'slack\', \'irc\', \'message_bus\', \'jira\', \'bugzilla\']"}'
+    assert r.text == '{"msg":"Message have been sent to all targets [\'email\', \'gchat\', \'slack\', \'irc\', \'message_bus\', \'jira\', \'bugzilla\']"}'
