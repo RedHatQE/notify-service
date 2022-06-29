@@ -88,6 +88,17 @@ irc:
   # The default channel name start with '#' or a username
   default_target:
 
+jira:
+  enabled: false
+  issue_type_list:
+  url:
+  token:
+
+bugzilla:
+  enabled: false
+  url:
+  api_key:
+
 replicaCount: 1
 
 image:

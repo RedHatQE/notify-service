@@ -99,7 +99,7 @@ Make sure you have login your cluster.
 
 Add helm repo with:
 
-    $ helm repo add notify https://waynesun09.github.io/notify-service/
+    $ helm repo add notify https://RedHatQE.github.io/notify-service/
 
 Check the latest release on the project with:
 
