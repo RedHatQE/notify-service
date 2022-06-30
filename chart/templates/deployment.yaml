@@ -108,11 +108,20 @@ spec:
         - name: CERT_PATH
           value: {{ .Values.activeMQ.cert_mount_path | quote }}
         - name: KEY_FILE_NAME
-          value: {{ .Values.activeMQ.client_key | quote }}
+          valueFrom:
+            secretKeyRef:
+              key: "client_key"
+              name: {{ include "..fullname" . }}-msg-certs
         - name: CERT_FILE_NAME
-          value: {{ .Values.activeMQ.client_cert | quote }}
+          valueFrom:
+            secretKeyRef:
+              key: "client_cert"
+              name: {{ include "..fullname" . }}-msg-certs
         - name: CA_CERTS_NAME
-          value: {{ .Values.activeMQ.ca_certs | quote }}
+          valueFrom:
+            secretKeyRef:
+              key: "ca_certs"
+              name: {{ include "..fullname" . }}-msg-certs
         - name: MSG_BUS_HOST_1
           value: {{ .Values.activeMQ.msg_bus_host_1 | quote }}
         - name: MSG_BUS_PORT_1
@@ -152,13 +161,19 @@ spec:
         - name: JIRA_URL
           value: {{ .Values.jira.url | quote }}
         - name: JIRA_TOKEN
-          value: {{ .Values.jira.token | quote }}
+          valueFrom:
+            secretKeyRef:
+              key: "token"
+              name: {{ include "..fullname" . }}-jira
         {{- end }}
         {{- if .Values.bugzilla.enabled }}
         - name: BUGZILLA_URL
           value: {{ .Values.bugzilla.url | quote }}
         - name: BUGZILLA_API_KEY
-          value: {{ .Values.bugzilla.api_key | quote }}
+          valueFrom:
+            secretKeyRef:
+              key: "api_key"
+              name: {{ include "..fullname" . }}-bugzilla
         {{- end }}
         name: {{ .Chart.Name }}
         securityContext:
