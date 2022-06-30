@@ -108,11 +108,11 @@ spec:
         - name: CERT_PATH
           value: {{ .Values.activeMQ.cert_mount_path | quote }}
         - name: KEY_FILE_NAME
-          value: client_key
+          value: {{ .Values.activeMQ.client_key | quote }}
         - name: CERT_FILE_NAME
-          value: client_cert
+          value: {{ .Values.activeMQ.client_cert | quote }}
         - name: CA_CERTS_NAME
-          value: ca_certs
+          value: {{ .Values.activeMQ.ca_certs | quote }}
         - name: MSG_BUS_HOST_1
           value: {{ .Values.activeMQ.msg_bus_host_1 | quote }}
         - name: MSG_BUS_PORT_1
@@ -148,19 +148,17 @@ spec:
         {{- end }}
         {{- if .Values.jira.enabled }}
         - name: JIRA_ISSUE_TYPE_LIST
-          value: {{ .Values.jira.issue_type_list | quote }}
+          value: {{ .Values.jira.issue_type_list | toJson | indent 4 }}
         - name: JIRA_URL
           value: {{ .Values.jira.url | quote }}
         - name: JIRA_TOKEN
           value: {{ .Values.jira.token | quote }}
-          {{- end }}
         {{- end }}
         {{- if .Values.bugzilla.enabled }}
         - name: BUGZILLA_URL
           value: {{ .Values.bugzilla.url | quote }}
         - name: BUGZILLA_API_KEY
           value: {{ .Values.bugzilla.api_key | quote }}
-          {{- end }}
         {{- end }}
         name: {{ .Chart.Name }}
         securityContext:
