@@ -146,6 +146,26 @@ spec:
           value: {{ .Values.irc.default_target | quote }}
           {{- end }}
         {{- end }}
+        {{- if .Values.jira.enabled }}
+        - name: JIRA_ISSUE_TYPE_LIST
+          value: {{ .Values.jira.issue_type_list | toJson | indent 4 }}
+        - name: JIRA_URL
+          value: {{ .Values.jira.url | quote }}
+        - name: JIRA_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: "token"
+              name: {{ include "..fullname" . }}-jira
+        {{- end }}
+        {{- if .Values.bugzilla.enabled }}
+        - name: BUGZILLA_URL
+          value: {{ .Values.bugzilla.url | quote }}
+        - name: BUGZILLA_API_KEY
+          valueFrom:
+            secretKeyRef:
+              key: "api_key"
+              name: {{ include "..fullname" . }}-bugzilla
+        {{- end }}
         name: {{ .Chart.Name }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
