@@ -67,11 +67,11 @@ activeMQ:
   #   ...
   #   -----END RSA PRIVATE KEY-----
   # The CA Server certificate
-  ca_certs:
+  ca_certs: ""
   # The ActiveMQ cliet certificate
-  client_cert:
+  client_cert: ""
   # The ActiveMQ cliet key
-  client_key:
+  client_key: ""
   msg_bus_host_1:
   msg_bus_port_1:
   msg_bus_host_2:
@@ -87,6 +87,18 @@ irc:
   password:
   # The default channel name start with '#' or a username
   default_target:
+
+jira:
+  enabled: false
+  issue_type_list: |
+    ["Bug"]
+  url:
+  token:
+
+bugzilla:
+  enabled: false
+  url:
+  api_key:
 
 replicaCount: 1
 
