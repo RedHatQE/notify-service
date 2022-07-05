@@ -24,7 +24,7 @@ appVersion: 0.0.2
 
 dependencies:
 - name: redis
-  version: "~12.3.3"
+  version: "~15.7.1"
   repository: "https://charts.bitnami.com/bitnami"
   condition: redis.installdep.enable
   tags:
