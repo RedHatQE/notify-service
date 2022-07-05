@@ -18,6 +18,13 @@ Then update the version in:
 
 if plan to have a new release.
 
+Update Redis dependency version:
+
+    $ cd ../
+    $ helm dependency update chart/
+    $ git add $the_new_redis_pacakge_file
+    $ git commit
+
 And package new chart with:
 
     $ helm package chart/ --destination .deploy
@@ -43,7 +50,7 @@ Replace the GH_TOKEN value with real GH token.
 
 Run upload command:
 
-    $ cr upload -o RedHatQE -r notify-service --config ~/.cr.yaml -p .deploy/
+    $ cr upload -o RedHatQE -r notify-service -t $YOUR_TOKEN --config ~/.cr.yaml -p .deploy/
 
 ## Create Helm repo index
 
@@ -65,4 +72,5 @@ Add the helm chart repo:
 
 Check the latest release on the project with:
 
+    $ helm repo update notify
     $ helm search repo notify-service
