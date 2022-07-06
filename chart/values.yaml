@@ -10,18 +10,28 @@ apiKeyValue: ""
 redis:
   installdep:
     enable: true
-  password:
-  image:
-    registry: quay.io
-  cluster:
-    enabled: false
-  securityContext:
-    # readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    fsGroup: null
-  containerSecurityContext:
-    runAsUser: null
-  redisPort: 6379
+  global:
+    imageRegistry: quay.io
+    redis:
+      password:
+  clusterDomain: cluster.local
+  master:
+    podSecurityContext:
+      # readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      fsGroup: null
+    containerSecurityContext:
+      runAsUser: null
+  replica:
+    podSecurityContext:
+      # readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      fsGroup: null
+    containerSecurityContext:
+      runAsUser: null
+      runAsNonRoot: true
+  service:
+    port: 6379
 
 smtp:
   endpoint:
