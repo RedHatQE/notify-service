@@ -74,6 +74,19 @@ IRC config:
     irc.password: str, set if password exist
     irc.default_target: str, the default channel name start with '#' or username
 
+Jira config:
+
+   jira.enabled: boolen, enable or disable Jira config
+   jira.issue_type_list: list of str, include all the available Jira issue types
+   jira.url: str, the Jira instance url
+   jira.token: str, the user's personal Jira token
+
+Bugzilla config:
+
+   bugzilla.enabled: boolen, enable or disable Bugzilla config
+   bugzilla.url: str, the Bugzilla instance url
+   bugzilla.api_key: str, the user's personal Bugzilla API key
+
 Persistent volume config:
 
     persistence.enabled: boolen, true or false
