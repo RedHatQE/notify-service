@@ -22,8 +22,8 @@
   <mj-body background-color="#E7E7E7" width="600px">
     <mj-section full-width="full-width" background-color="#c4fdff" padding-bottom="0px">
       <mj-column width="100%">
-        <mj-image src="https://github.com/waynesun09/notify-service/raw/main/docs/static/notify-logo.png" alt="" align="center" width="150px"></mj-image>
-        <mj-image src="https://images.pexels.com/photos/1655166/pexels-photo-1655166.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" width="600px" height="200px" alt="" padding="0px" href="https://github.com/waynesun09/notify-service/"></mj-image>
+        <mj-image src="https://github.com/RedHatQE/notify-service/raw/main/docs/static/notify-logo.png" alt="" align="center" width="150px"></mj-image>
+        <mj-image src="https://images.pexels.com/photos/1655166/pexels-photo-1655166.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" width="600px" height="200px" alt="" padding="0px" href="https://github.com/RedHatQE/notify-service/"></mj-image>
       </mj-column>
     </mj-section>
     <mj-wrapper padding-top="0" padding-bottom="0px" css-class="body-section">

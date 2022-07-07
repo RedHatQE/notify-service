@@ -53,7 +53,7 @@ def custom_openapi():
         routes=app.routes,
     )
     openapi_schema["info"]["x-logo"] = {
-        "url": "https://raw.githubusercontent.com/waynesun09/notify-service/main/docs/static/notify-logo.png"
+        "url": "https://raw.githubusercontent.com/RedHatQE/notify-service/main/docs/static/notify-logo.png"
     }
 
     # Set servers in the schema

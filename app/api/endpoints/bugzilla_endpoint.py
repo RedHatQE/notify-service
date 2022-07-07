@@ -35,12 +35,12 @@ async def new_bug(
             "body": "SAMPLE MESSAGE."
         },
         description="The body values for parse with the template, "
-        "check samples at https://github.com/waynesun09/notify-service/tree/main/docs/sample"
+        "check samples at https://github.com/RedHatQE/notify-service/tree/main/docs/sample"
     ),
     template_name: str = Query(
         "bugzilla_default",
         description="The jinja template name without subfix, e.g. bugzilla_default. "
-        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/build"
+        "Check jinja templates at: https://github.com/RedHatQE/notify-service/tree/main/app/templates/build"
     ),
     template_url: Optional[AnyHttpUrl] = Query(
         None,
@@ -93,12 +93,12 @@ async def add_comment(
             "body": "SAMPLE MESSAGE."
         },
         description="The body values for parse with the template, "
-        "check samples at https://github.com/waynesun09/notify-service/tree/main/docs/sample"
+        "check samples at https://github.com/RedHatQE/notify-service/tree/main/docs/sample"
     ),
     template_name: str = Query(
         "bugzilla_default",
         description="The jinja template name without subfix, e.g. bugzilla_default. "
-        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/build"
+        "Check jinja template at: https://github.com/RedHatQE/notify-service/tree/main/app/templates/build"
     ),
     template_url: Optional[AnyHttpUrl] = Query(
         None,

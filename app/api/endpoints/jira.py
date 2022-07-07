@@ -19,7 +19,7 @@ async def add_a_jira_comment(
     template_name: str = Query(
         "jira_default",
         description="The jinja html template name without subfix, e.g. jira_default. "
-        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/build"
+        "Check jinja template at: https://github.com/RedHatQE/notify-service/tree/main/app/templates/build"
     ),
     environment: Union[schemas.DictBody, schemas.TxtBody, schemas.BaseResultBody] = Body(
         ...,
@@ -27,7 +27,7 @@ async def add_a_jira_comment(
             "body": "SAMPLE MESSAGE."
         },
         description="The body values for parse with the template, "
-        "check samples at https://github.com/waynesun09/notify-service/tree/main/docs/sample"
+        "check samples at https://github.com/RedHatQE/notify-service/tree/main/docs/sample"
     ),
     template_url: Optional[AnyHttpUrl] = Query(
         None,
@@ -79,7 +79,7 @@ async def create_a_jira_issue(
     template_name: str = Query(
         "jira_default",
         description="The jinja html template name without subfix, e.g. default. "
-        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/"
+        "Check jinja template at: https://github.com/RedHatQE/notify-service/tree/main/app/templates/build"
     ),
     environment: Union[schemas.TxtBody, schemas.JiraBody, schemas.BaseResultBody] = Body(
         ...,
@@ -87,7 +87,7 @@ async def create_a_jira_issue(
             "body": "SAMPLE MESSAGE."
         },
         description="The body values for parse with the template, "
-        "check samples at https://github.com/waynesun09/notify-service/tree/main/docs/sample"
+        "check samples at https://github.com/RedHatQE/notify-service/tree/main/docs/sample"
     ),
     template_url: Optional[AnyHttpUrl] = Query(
         None,
