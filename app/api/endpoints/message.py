@@ -34,7 +34,7 @@ async def msg_multi_tgts(
     email_template_name: str = Query(
         "default",
         description="The jinja template name without subfix, e.g. default. "
-        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/"
+        "Check jinja mjml at: https://github.com/RedHatQE/notify-service/blob/main/app/templates/src/"
     ),
     email_template_url: Optional[AnyHttpUrl] = Query(
         None,
@@ -43,7 +43,7 @@ async def msg_multi_tgts(
     gchat_template_name: str = Query(
         "chat_default",
         description="The jinja template name without subfix, e.g. default. "
-        "Check gchat jinja at: https://github.com/waynesun09/notify-service/blob/main/app/templates/build/"
+        "Check gchat jinja at: https://github.com/RedHatQE/notify-service/blob/main/app/templates/build/"
     ),
     gchat_template_url: Optional[AnyHttpUrl] = Query(
         None,
@@ -52,7 +52,7 @@ async def msg_multi_tgts(
     slack_template_name: str = Query(
         "chat_default",
         description="The jinja template name without subfix, e.g. default. "
-        "Check slack jinja at: https://github.com/waynesun09/notify-service/blob/main/app/templates/build/"
+        "Check slack jinja at: https://github.com/RedHatQE/notify-service/blob/main/app/templates/build/"
     ),
     slack_template_url: Optional[AnyHttpUrl] = Query(
         None,
@@ -72,7 +72,7 @@ async def msg_multi_tgts(
             "body": "SAMPLE PLAIN TEXT MESSAGE OR JSON DICT."
         },
         description="The body values for parse with template or send "
-        "Check samples at https://github.com/waynesun09/notify-service/tree/main/docs/sample"
+        "Check samples at https://github.com/RedHatQE/notify-service/tree/main/docs/sample"
     ),
     gchat_webhook_url: Optional[AnyHttpUrl] = Query(
         None,
@@ -94,7 +94,7 @@ async def msg_multi_tgts(
     jira_template_name: str = Query(
         "jira_default",
         description="The jinja html template name without subfix, e.g. jira_default. "
-        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/build"
+        "Check JIRA jinja at: https://github.com/RedHatQE/notify-service/blob/main/app/templates/build/"
     ),
     jira_template_url: Optional[AnyHttpUrl] = Query(
         None,
@@ -111,7 +111,7 @@ async def msg_multi_tgts(
     bugzilla_template_name: str = Query(
         "bugzilla_default",
         description="The jinja html template name without subfix, e.g. bugzilla_default. "
-        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/build"
+        "Check Bugzilla jinja at: https://github.com/RedHatQE/notify-service/blob/main/app/templates/build/"
     ),
     bugzilla_template_url: Optional[AnyHttpUrl] = Query(
         None,
@@ -145,7 +145,7 @@ async def msg_multi_tgts(
     - **bugzilla_template_name**: Bugzilla template name, optional
     - **bugzilla_template_url**: Bugzilla template url, optional
     - **bugzilla_api_key**: Bugzilla API key, optional
-    - **Request Body**: Check samples at https://github.com/waynesun09/notify-service/tree/main/docs/sample
+    - **Request Body**: Check samples at https://github.com/RedHatQE/notify-service/tree/main/docs/sample
     """
 
     for t in target:

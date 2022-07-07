@@ -19,7 +19,7 @@ async def send_email(
     template_name: str = Query(
         "default",
         description="The jinja html template name without subfix, e.g. default. "
-        "Check jinja mjml at: https://github.com/waynesun09/notify-service/blob/main/app/templates/src/"
+        "Check jinja mjml at: https://github.com/RedHatQE/notify-service/blob/main/app/templates/src/"
     ),
     environment: Union[
         schemas.DictBody,
@@ -32,7 +32,7 @@ async def send_email(
             "body": "SAMPLE MESSAGE"
         },
         description="The body values for parse with the template. "
-        "Check samples at: https://github.com/waynesun09/notify-service/tree/main/docs/sample"
+        "Check samples at: https://github.com/RedHatQE/notify-service/tree/main/docs/sample"
     ),
     template_url: Optional[AnyHttpUrl] = Query(
         None,
@@ -46,7 +46,7 @@ async def send_email(
     - **subject**: email subject, optional
     - **template_name**: template name in local template list, default is "default"
     - **template_url**: template url, optional
-    - **Request Body**: Check samples at https://github.com/waynesun09/notify-service/tree/main/docs/sample
+    - **Request Body**: Check samples at https://github.com/RedHatQE/notify-service/tree/main/docs/sample
     """
     env = {}
     if (not template_url and
