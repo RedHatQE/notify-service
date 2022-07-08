@@ -10,18 +10,38 @@ apiKeyValue: ""
 redis:
   installdep:
     enable: true
-  password:
+  global:
+    imageRegistry: docker.io
+    redis:
+      password:
+  clusterDomain: cluster.local
+  master:
+    podSecurityContext:
+      # readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      fsGroup: null
+    containerSecurityContext:
+      runAsUser: null
+  replica:
+    replicaCount: 1
+    podSecurityContext:
+      # readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      fsGroup: null
+    containerSecurityContext:
+      runAsUser: null
+      runAsNonRoot: true
+  service:
+    port: 6379
   image:
-    registry: quay.io
-  cluster:
-    enabled: false
-  securityContext:
-    # readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    fsGroup: null
-  containerSecurityContext:
-    runAsUser: null
-  redisPort: 6379
+    registry: docker.io
+    repository: bitnami/redis
+    tag: 6.2.6-debian-10-r97
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
 
 smtp:
   endpoint:
