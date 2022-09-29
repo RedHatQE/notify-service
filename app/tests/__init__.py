@@ -1,9 +1,10 @@
 from functools import wraps
-from typing import Callable, Optional, Type
+from typing import Callable
+from typing import Optional
+from typing import Type
+from unittest.mock import patch
 
 from fastapi_cache.coder import Coder
-
-from unittest.mock import patch
 
 
 def mock_cache(
@@ -24,4 +25,4 @@ def mock_cache(
 
 
 # Patch cache decorator without access cache at init
-patch('fastapi_cache.decorator.cache', mock_cache).start()
+patch("fastapi_cache.decorator.cache", mock_cache).start()

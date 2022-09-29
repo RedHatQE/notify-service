@@ -1,11 +1,17 @@
-from typing import Any, List, Optional, Union
+from typing import Any
+from typing import List
+from typing import Optional
+from typing import Union
 
-from fastapi import APIRouter, Query, Body
-from pydantic.networks import AnyHttpUrl, EmailStr
+from fastapi import APIRouter
+from fastapi import Body
+from fastapi import Query
+from pydantic.networks import AnyHttpUrl
+from pydantic.networks import EmailStr
 
 from app import schemas
-from app.utils import utils
 from app.core.config import settings
+from app.utils import utils
 
 router = APIRouter()
 
@@ -19,25 +25,20 @@ async def send_email(
     template_name: str = Query(
         "default",
         description="The jinja html template name without subfix, e.g. default. "
-        "Check jinja mjml at: https://github.com/RedHatQE/notify-service/blob/main/app/templates/src/"
+        "Check jinja mjml at: https://github.com/RedHatQE/notify-service/blob/main/app/templates/src/",
     ),
     environment: Union[
-        schemas.DictBody,
-        schemas.TxtBody,
-        schemas.EmailResult,
-        schemas.BaseResultBody
+        schemas.DictBody, schemas.TxtBody, schemas.EmailResult, schemas.BaseResultBody
     ] = Body(
         ...,
-        example={
-            "body": "SAMPLE MESSAGE"
-        },
+        example={"body": "SAMPLE MESSAGE"},
         description="The body values for parse with the template. "
-        "Check samples at: https://github.com/RedHatQE/notify-service/tree/main/docs/sample"
+        "Check samples at: https://github.com/RedHatQE/notify-service/tree/main/docs/sample",
     ),
     template_url: Optional[AnyHttpUrl] = Query(
         None,
-        description="The remote teamplate url, it will override the template_name if given"
-    )
+        description="The remote teamplate url, it will override the template_name if given",
+    ),
 ) -> Any:
     """
     Send email with template
@@ -49,9 +50,10 @@ async def send_email(
     - **Request Body**: Check samples at https://github.com/RedHatQE/notify-service/tree/main/docs/sample
     """
     env = {}
-    if (not template_url and
-            (isinstance(environment.body, str) or
-                (template_name == 'default' and "body" not in environment.body))):
+    if not template_url and (
+        isinstance(environment.body, str)
+        or (template_name == "default" and "body" not in environment.body)
+    ):
         # Set 'body' in env dict, this will work with default template
         env["body"] = environment.body
     else:
@@ -63,10 +65,10 @@ async def send_email(
     else:
         env["project_name"] = settings.PROJECT_NAME
 
-    data = await utils.get_template(template_name, template_url, '.html', env)
+    data = await utils.get_template(template_name, template_url, ".html", env)
 
     utils.send_email(
-        email_to=email_to, subject_template=subject,
-        html_template=data, environment={})
+        email_to=email_to, subject_template=subject, html_template=data, environment={}
+    )
 
     return {"msg": "Email have been sent"}

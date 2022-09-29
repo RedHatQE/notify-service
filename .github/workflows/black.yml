@@ -1,0 +1,16 @@
+name: Black
+
+on:
+  push:
+    paths:
+    - "app/**/*.py"
+  pull_request:
+    paths:
+    - "app/**/*.py"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: psf/black@stable

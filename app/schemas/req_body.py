@@ -1,4 +1,6 @@
-from typing import List, Optional
+from typing import List
+from typing import Optional
+
 from pydantic import BaseModel
 
 from . import result
@@ -12,6 +14,7 @@ class TxtBody(BaseModel):
     affects_versions: Optional[List[str]] = []
     fix_versions: Optional[List[str]] = []
 
+
 class DictBody(BaseModel):
     body: dict
     project_name: Optional[str] = None
@@ -21,8 +24,10 @@ class DictBody(BaseModel):
     affects_versions: Optional[List[str]] = []
     fix_versions: Optional[List[str]] = []
 
+
 class BaseResultBody(DictBody):
     body: result.Content
+
 
 class JiraBody(BaseModel):
     body: dict

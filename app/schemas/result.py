@@ -1,4 +1,6 @@
-from typing import Optional, List
+from typing import List
+from typing import Optional
+
 from pydantic import BaseModel
 from pydantic.networks import AnyHttpUrl
 
@@ -8,12 +10,14 @@ class Case(BaseModel):
     href: Optional[AnyHttpUrl] = None
     status: str
 
+
 class Result(BaseModel):
     title: Optional[str] = None
     cases: List[Case]
     name: Optional[str] = None
     link: Optional[AnyHttpUrl] = None
     more: Optional[str] = None
+
 
 class Content(BaseModel):
     content: List[Result]

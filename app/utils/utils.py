@@ -1,22 +1,27 @@
+import json
+import logging
+import os
+import subprocess
+import uuid
+from datetime import datetime
+from datetime import timedelta
+from pathlib import Path
+from typing import Any
+from typing import Dict
+from typing import Optional
+
 import aiofile
 import emails
 import httpx
-import logging
-import os
-import json
-import subprocess
-import uuid
-
-from datetime import datetime, timedelta
 from emails.template import JinjaTemplate
-from fastapi_cache.decorator import cache
 from fastapi import HTTPException
+from fastapi_cache.decorator import cache
+from jinja2 import BaseLoader
+from jinja2 import Environment
+from jinja2 import FileSystemLoader
 from jose import jwt
-from jinja2 import BaseLoader, Environment, FileSystemLoader
-from pathlib import Path
 from pydantic.networks import AnyHttpUrl
 from starlette.responses import HTMLResponse
-from typing import Any, Dict, Optional
 
 from app.core.config import settings
 
@@ -82,13 +87,13 @@ def add_examples(openapi_schema: dict) -> dict:
         if tmp_json.is_file():
             tmp_json.unlink()
 
-        with open(tmp_json, 'w', encoding='utf-8') as f:
+        with open(tmp_json, "w", encoding="utf-8") as f:
             json.dump(openapi_schema, f)
 
         cmd = f"snippet-enricher-cli --targets='{lans}' --input={tmp_json} > {example_json}"
         subprocess.run(cmd, shell=True, check=True)
 
-        with open(example_json, 'r', encoding='utf-8') as f:
+        with open(example_json, "r", encoding="utf-8") as f:
             return json.load(f)
     finally:
         if tmp_json.is_file():
@@ -105,37 +110,35 @@ def get_file_path(path_name: str, tmplt_name: str) -> str:
         file_list = [i.split(".")[0] for i in files]
         if tmplt_name in file_list:
             return os.path.join(root, files[file_list.index(tmplt_name)])
-    return ''
+    return ""
 
 
-async def get_template(name: str, url: Optional[AnyHttpUrl] = None,
-                       suffix: str = '.html', env: Optional[Dict] = None) -> str:
+async def get_template(
+    name: str,
+    url: Optional[AnyHttpUrl] = None,
+    suffix: str = ".html",
+    env: Optional[Dict] = None,
+) -> str:
     """
     Get template from http url or local file and render
     """
     if url:
         r = await request_get_text(url=url)
-        template = Environment(
-            loader=BaseLoader(),
-            autoescape=True).from_string(r).render(env)
+        template = (
+            Environment(loader=BaseLoader(), autoescape=True).from_string(r).render(env)
+        )
     else:
         template_dir = [settings.EMAIL_TEMPLATES_DIR]
         if settings.TEMPLATE_MOUNT_DIR:
             template_dir.append(settings.TEMPLATE_MOUNT_DIR)
-        jinja_env = Environment(
-            loader=FileSystemLoader(template_dir),
-            autoescape=True)
+        jinja_env = Environment(loader=FileSystemLoader(template_dir), autoescape=True)
         try:
             template = jinja_env.get_template(name + suffix).render(env)
         except Exception as e:
-            raise HTTPException(
-                status_code=400,
-                detail=f"{e}")
+            raise HTTPException(status_code=400, detail=f"{e}")
 
     if not template:
-        raise HTTPException(
-            status_code=400,
-            detail="The given template is empty")
+        raise HTTPException(status_code=400, detail="The given template is empty")
 
     return template
 
@@ -145,7 +148,7 @@ async def read_file(path_name: str) -> str:
     """
     Read file with given path
     """
-    async with aiofile.async_open(path_name, 'r') as f:
+    async with aiofile.async_open(path_name, "r") as f:
         tmplt = await f.read()
     return tmplt
 
@@ -233,7 +236,9 @@ def generate_password_reset_token(email: str) -> str:
     expires = now + delta
     exp = expires.timestamp()
     encoded_jwt = jwt.encode(
-        {"exp": exp, "nbf": now, "sub": email}, settings.SECRET_KEY, algorithm="HS256",
+        {"exp": exp, "nbf": now, "sub": email},
+        settings.SECRET_KEY,
+        algorithm="HS256",
     )
     return encoded_jwt
 

@@ -1,24 +1,23 @@
 import aioredis
-
-from fastapi import FastAPI, Security
+from fastapi import FastAPI
+from fastapi import Security
+from fastapi.openapi.utils import get_openapi
+from fastapi.responses import ORJSONResponse
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
-from fastapi.responses import ORJSONResponse
 from starlette.middleware.cors import CORSMiddleware
-from fastapi.openapi.utils import get_openapi
 
 from app.api.api import api_router
+from app.api.endpoints.status import router
 from app.core.config import settings
 from app.core.security import get_api_key
 from app.utils import utils
-
-from app.api.endpoints.status import router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
     default_response_class=ORJSONResponse,
-    redoc_url=None
+    redoc_url=None,
 )
 
 if settings.SSL_ENABLED:
@@ -73,7 +72,9 @@ def custom_openapi():
 app.openapi = custom_openapi
 
 app.include_router(router, prefix="/status")
-app.include_router(api_router, prefix=settings.API_V1_STR, dependencies=[Security(get_api_key)])
+app.include_router(
+    api_router, prefix=settings.API_V1_STR, dependencies=[Security(get_api_key)]
+)
 
 
 # Override the default redoc api with specify the customized Redoc standalone javascript
@@ -82,11 +83,16 @@ async def redoc_html():
     return utils.get_redoc_html(
         openapi_url=app.openapi_url,
         title=app.title + " - ReDoc",
-        redoc_js_url="https://cdn.jsdelivr.net/gh/DaoDaoNoCode/redoc@v1.0.1-codeSamples/bundles/redoc.standalone.js"
+        redoc_js_url="https://cdn.jsdelivr.net/gh/DaoDaoNoCode/redoc@v1.0.1-codeSamples/bundles/redoc.standalone.js",
     )
 
 
 @app.on_event("startup")
 async def startup():
-    redis = aioredis.from_url(settings.REDIS_URI, password=settings.REDIS_PASSWORD, encoding="utf8", decode_responses=True)
+    redis = aioredis.from_url(
+        settings.REDIS_URI,
+        password=settings.REDIS_PASSWORD,
+        encoding="utf8",
+        decode_responses=True,
+    )
     FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
