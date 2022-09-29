@@ -2,6 +2,23 @@ apiVersion: v1
 entries:
   notify-service:
   - apiVersion: v2
+    appVersion: 0.0.6
+    created: "2022-09-29T16:00:12.428784141-04:00"
+    dependencies:
+    - condition: redis.installdep.enable
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - redis
+      version: ~15.7.1
+    description: A Helm chart for Kubernetes
+    digest: 0165773f8e662961f945c8649abf6602f4382fbebf1d09e4401f06a73024f073
+    name: notify-service
+    type: application
+    urls:
+    - https://github.com/RedHatQE/notify-service/releases/download/notify-service-0.0.6/notify-service-0.0.6.tgz
+    version: 0.0.6
+  - apiVersion: v2
     appVersion: 0.0.5
     created: "2022-07-19T15:08:42.784480288-04:00"
     dependencies:
@@ -86,4 +103,4 @@ entries:
     urls:
     - https://github.com/RedHatQE/notify-service/releases/download/notify-service-0.0.1/notify-service-0.0.1.tgz
     version: 0.0.1
-generated: "2022-07-19T15:08:42.784585846-04:00"
+generated: "2022-09-29T16:00:12.428832407-04:00"
