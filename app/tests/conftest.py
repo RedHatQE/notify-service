@@ -1,8 +1,9 @@
-from typing import Dict, Generator
+from typing import Dict
+from typing import Generator
+from unittest.mock import patch
 
 import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import patch
 
 from app.core.config import settings
 from app.main import app
@@ -10,8 +11,8 @@ from app.main import app
 
 @pytest.fixture(scope="module")
 def client() -> Generator:
-    with patch('aioredis.from_url'):
-        with patch('fastapi_cache.FastAPICache'):
+    with patch("aioredis.from_url"):
+        with patch("fastapi_cache.FastAPICache"):
             with TestClient(app) as c:
                 yield c
 

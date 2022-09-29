@@ -73,7 +73,7 @@
         </mj-column>
       </mj-section>
       <mj-section background-color="#ffffff" padding-left="15px" padding-right="15px" padding-top="0px" padding-bottom="0px">
-      <mj-column width="100%">  
+      <mj-column width="100%">
           <mj-text color="#637381" font-size="16px" padding-bottom="0px">{% if scenario.reports %}{% for report in scenario.reports %}{% if (report.provider == 'reportportal' or report.importer_plugin_name == 'reportportal') and (report.import_results) %}Task name: {{ report.name }}</mj-text>
         <mj-text color="#637381" font-size="16px" padding-bottom="0px"><a class="text-link" href="{{ report.import_results['dashboard_url'] }}"> Report_Portal_Dashboard_Url </a>{% else %}</mj-text>
           <mj-text color="#637381" font-size="16px" padding-top="0px">Report Task: {{ report.name }}</mj-text>

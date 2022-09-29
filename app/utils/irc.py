@@ -1,11 +1,11 @@
 import asyncio
 import logging
+from typing import Any
+from typing import Optional
 
-from irc import client_aio
 from irc import client
+from irc import client_aio
 from irc.connection import AioFactory
-
-from typing import Any, Optional
 
 from app.core.config import settings
 
@@ -155,26 +155,18 @@ class AioIRCCat(AioSimpleIRCClient):
         self.target = target
         self.message = message
 
-
     def on_welcome(self, connection, event):
         if client.is_channel(self.target):
             connection.join(self.target)
         else:
-            self.task = asyncio.create_task(
-                self.send_it()
-            )
-
+            self.task = asyncio.create_task(self.send_it())
 
     def on_join(self, connection, event):
-        self.task = asyncio.create_task(
-            self.send_it()
-        )
-
+        self.task = asyncio.create_task(self.send_it())
 
     def on_disconnect(self, connection, event):
         if self.task:
             self.task.cancel()
-
 
     async def send_it(self):
         self.connection.privmsg(self.target, self.message)
@@ -187,7 +179,7 @@ def _handle_task_exception(task: asyncio.Task) -> None:
     except asyncio.CancelledError:
         pass  # Task cancellation should not be logged as an error.
     except Exception as e:  # pylint: disable=broad-except
-        logger.exception(f'Exception raised by task = {task}')
+        logger.exception(f"Exception raised by task = {task}")
         return e
 
 
@@ -197,15 +189,15 @@ async def process_lines(message: str) -> Any:
     """
     lines = []
     new_lines = []
-    lines = message.split('\n')
+    lines = message.split("\n")
     new_lines = lines
     for line in lines:
         # Avoid text limit for 512 bytes, split message with length greater than 420
         if len(line) > 420:
             n = 420
-            chunks = [line[i:i + n] for i in range(0, len(line), n)]
+            chunks = [line[i : i + n] for i in range(0, len(line), n)]
             index = lines.index(line)
-            new_lines = new_lines[:index] + chunks + new_lines[index + 1:]
+            new_lines = new_lines[:index] + chunks + new_lines[index + 1 :]
 
     return new_lines
 
@@ -224,7 +216,9 @@ async def send_message(message: str, target: Optional[str]) -> Any:
         target = settings.IRC_TARGET
 
     c = AioIRCCat(target, message)
-    t = asyncio.create_task(c.connect(server, port, nickname, password=password, ssl=ssl))
+    t = asyncio.create_task(
+        c.connect(server, port, nickname, password=password, ssl=ssl)
+    )
     t.add_done_callback(_handle_task_exception)
     await t
 

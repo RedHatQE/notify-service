@@ -2,6 +2,14 @@
 
 Make sure you have checked the requirement and have checked Pipfile for python packages.
 
+## pre-commit
+
+Make sure pre-commit is installed in your host before commit changes.
+
+More info about install pre-commit and initiate in your local clone repo:
+
+https://pre-commit.com/
+
 ## Build container image
 
 Build production image with:

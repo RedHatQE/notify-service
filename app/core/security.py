@@ -1,4 +1,6 @@
-from fastapi import Security, status, HTTPException
+from fastapi import HTTPException
+from fastapi import Security
+from fastapi import status
 from fastapi.security.api_key import APIKeyHeader
 
 from app.core.config import settings

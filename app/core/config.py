@@ -1,8 +1,17 @@
 import os
 import secrets
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Union
 
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr, HttpUrl, validator, RedisDsn
+from pydantic import AnyHttpUrl
+from pydantic import BaseSettings
+from pydantic import EmailStr
+from pydantic import HttpUrl
+from pydantic import RedisDsn
+from pydantic import validator
 
 
 class Settings(BaseSettings):
@@ -25,7 +34,9 @@ class Settings(BaseSettings):
 
     # Redoc code sample language list seperated with ','
     # The supported list could be found at https://github.com/ErikWittern/openapi-snippet#targets
-    REDOC_CODE_SAMPLE_LANS: str = "shell_curl,python_python3,go_native,java_unirest,node_native,javascript_xhr"
+    REDOC_CODE_SAMPLE_LANS: str = (
+        "shell_curl,python_python3,go_native,java_unirest,node_native,javascript_xhr"
+    )
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)
     def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
@@ -60,7 +71,9 @@ class Settings(BaseSettings):
 
     EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
     os.getcwdb()
-    EMAIL_TEMPLATES_DIR: str = os.path.join(os.getcwdb().decode(), "app/templates/build")
+    EMAIL_TEMPLATES_DIR: str = os.path.join(
+        os.getcwdb().decode(), "app/templates/build"
+    )
     EMAILS_ENABLED: bool = True
 
     TEMPLATE_MOUNT_DIR: Optional[str] = None

@@ -1,15 +1,19 @@
 import os
-import shutil
 import pathlib
-
+import shutil
 from typing import Any
 
-from fastapi import APIRouter, Path, Query, File, UploadFile, HTTPException
-
+from fastapi import APIRouter
+from fastapi import File
+from fastapi import HTTPException
+from fastapi import Path
+from fastapi import Query
+from fastapi import UploadFile
 from werkzeug.utils import secure_filename
 
 from app.core.config import settings
-from app.utils.utils import get_file_path, read_file
+from app.utils.utils import get_file_path
+from app.utils.utils import read_file
 
 router = APIRouter()
 
@@ -29,8 +33,8 @@ def get_template_list() -> Any:
 @router.get("/{tmplt_name}")
 async def get_template(
     tmplt_name: str = Path(
-        None,
-        description="The template name without suffix, e.g. default")
+        None, description="The template name without suffix, e.g. default"
+    )
 ) -> Any:
     """
     Get template content with tmplate name without postfix
@@ -44,21 +48,17 @@ async def get_template(
         return {tmplt_name: await read_file(file_path)}
 
     raise HTTPException(
-        status_code=400,
-        detail="The given template name does not exist")
+        status_code=400, detail="The given template name does not exist"
+    )
 
 
 @router.put("/{tmplt_name}")
 def update_template(
     tmplt_name: str = Query(
-        None,
-        description="The template name without suffix, e.g. test"),
-    suffix: str = Query(
-        '.html',
-        description="The file suffix, e.g. '.html'"),
-    tmplt: UploadFile = File(
-        ...,
-        description="The local file name to be uploaded")
+        None, description="The template name without suffix, e.g. test"
+    ),
+    suffix: str = Query(".html", description="The file suffix, e.g. '.html'"),
+    tmplt: UploadFile = File(..., description="The local file name to be uploaded"),
 ) -> Any:
     """
     Create or update a template under template mount dir

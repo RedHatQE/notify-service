@@ -1,6 +1,8 @@
-from typing import Optional, List
+from typing import List
+from typing import Optional
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
+from pydantic import EmailStr
 
 from . import result
 
@@ -11,6 +13,7 @@ class EmailBase(BaseModel):
 
 class EmailSend(EmailBase):
     msg: str
+
 
 class EmailResult(BaseModel):
     pre_header: Optional[str] = None
