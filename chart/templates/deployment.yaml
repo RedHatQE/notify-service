@@ -176,14 +176,14 @@ spec:
             containerPort: {{ .Values.httpPort }}
             protocol: TCP
         livenessProbe:
-          httpGet:
-            path: /status
+          tcpSocket:
             port: http
+          initialDelaySeconds: 30
           timeoutSeconds: 10
         readinessProbe:
-          httpGet:
-            path: /status
+          tcpSocket:
             port: http
+          initialDelaySeconds: 30
           timeoutSeconds: 10
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
