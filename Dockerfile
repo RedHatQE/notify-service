@@ -1,4 +1,4 @@
-FROM quay.io/waynesun09/uvicorn-gunicorn:python3.9-nodejs18
+FROM quay.io/waynesun09/uvicorn-gunicorn:python3.11-nodejs20
 
 LABEL maintainer="Wayne Sun <gsun@redhat.com>"
 
